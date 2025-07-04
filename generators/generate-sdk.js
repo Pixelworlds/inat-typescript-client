@@ -37,7 +37,7 @@ class INaturalistSDKGenerator {
 
     const files = readdirSync(this.typescriptDir);
     for (const file of files) {
-      if (file.endsWith('.ts') && file !== 'index.ts') {
+      if (file.endsWith('.ts')) {
         const moduleName = file.replace('.ts', '');
         modules.push(moduleName);
       }
