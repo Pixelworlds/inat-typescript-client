@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "iNaturalist API Collection",
-    "description": "Auto-generated Postman collection for iNaturalist API endpoints.\n\nIMPORTANT: Before using this collection, you MUST configure the following variables in your Postman environment:\n\n- inat_base_url: The iNaturalist base URL (https://www.inaturalist.org)\n- access_token: Your OAuth access token for authenticated requests\n- api_token: Your API token for authenticated requests\n\nFor OAuth endpoints, you'll also need:\n- client_id: Your OAuth application client ID\n- client_secret: Your OAuth application client secret\n- redirect_uri: Your OAuth application redirect URI\n\nTo create an environment:\n1. Click the environment dropdown (top right in Postman)\n2. Select \"Manage Environments\"\n3. Click \"Add\" to create a new environment\n4. Add the variables mentioned above with your actual values\n5. Select your environment from the dropdown before running requests",
+    "description": "Auto-generated Postman collection for iNaturalist API endpoints.\n\nIMPORTANT: Before using this collection, you MUST configure the following variables in your Postman environment:\n\n- inat_base_url: The iNaturalist API base URL (https://api.inaturalist.org/v1)\n- inat_api_token: Your API token for authenticated requests\n\nFor OAuth endpoints, you'll also need:\n- inat_client_id: Your OAuth application client ID\n- inat_client_secret: Your OAuth application client secret\n- inat_redirect_uri: Your OAuth application redirect URI\n\nTo create an environment:\n1. Click the environment dropdown (top right in Postman)\n2. Select \"Manage Environments\"\n3. Click \"Add\" to create a new environment\n4. Add the variables mentioned above with your actual values\n5. Select your environment from the dropdown before running requests",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_postman_id": "inat-api-collection"
   },
@@ -10,7 +10,7 @@
       "name": "Authentication",
       "item": [
         {
-          "name": "GET authorize",
+          "name": "oauth/authorize - OAuth authorization endpoint - redirects user to authorize ...",
           "request": {
             "method": "GET",
             "header": [
@@ -18,93 +18,179 @@
                 "key": "Authorization",
                 "value": "Bearer {{access_token}}",
                 "type": "text"
-              }
-            ],
-            "description": "OAuth authorization endpoint - redirects user to authorize your application",
-            "url": "{{inat_base_url}}/oauth/authorize?client_id=&redirect_uri=&response_type=&code_challenge=&code_challenge_method=&scope="
-          },
-          "response": []
-        },
-        {
-          "name": "GET api_token",
-          "request": {
-            "method": "GET",
-            "header": [
+              },
               {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}",
-                "type": "text"
-              }
-            ],
-            "description": "Get user API token for authenticated requests",
-            "url": "{{inat_base_url}}/users/api_token"
-          },
-          "response": []
-        },
-        {
-          "name": "GET edit",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/users/edit"
-          },
-          "response": []
-        },
-        {
-          "name": "GET new_updates",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/users/new_updates"
-          },
-          "response": []
-        },
-        {
-          "name": "POST token",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
+                "key": "Accept",
                 "value": "application/json",
                 "type": "text"
               }
             ],
-            "description": "OAuth token exchange endpoint - exchange authorization code for access token",
-            "url": "{{inat_base_url}}/oauth/token?client_id=&code=&redirect_uri=&grant_type=&code_verifier=",
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+            "description": "OAuth authorization endpoint - redirects user to authorize your application",
+            "url": "https://www.inaturalist.org/oauth/authorize?client_id=&redirect_uri=&response_type=&code_challenge=&code_challenge_method=&scope=",
+            "auth": {
+              "type": "noauth"
             }
           },
           "response": []
+        },
+        {
+          "name": "users/api_token - Get user API token for authenticated requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get user API token for authenticated requests",
+            "url": "https://www.inaturalist.org/users/api_token",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{inat_access_token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "oauth/token - OAuth token exchange endpoint - exchange authorization code for...",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "description": "OAuth token exchange endpoint - exchange authorization code for access token",
+            "url": "https://www.inaturalist.org/oauth/token",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "{{inat_grant_type}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{inat_client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{inat_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{inat_username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{inat_password}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseJson = pm.response.text();",
+                  "",
+                  "if (responseJson) {",
+                  "  try {",
+                  "    const parsedJson = JSON.parse(responseJson);",
+                  "",
+                  "    if (parsedJson.access_token !== undefined) {",
+                  "      pm.globals.set('inat_access_token', parsedJson.access_token);",
+                  "      pm.globals.set('inat_token_type', parsedJson.token_type);",
+                  "      pm.globals.set('inat_token_scope', parsedJson.scope);",
+                  "      pm.globals.set('inat_token_created_at', parsedJson.created_at);",
+                  "      ",
+                  "      // Now make the second request with the access token",
+                  "      pm.sendRequest({",
+                  "        url: 'https://www.inaturalist.org/users/api_token',",
+                  "        method: 'GET',",
+                  "        header: {",
+                  "          'Authorization': `Bearer ${parsedJson.access_token}`,",
+                  "          'Accept': 'application/json'",
+                  "        }",
+                  "      }, function (err, response) {",
+                  "        if (err) {",
+                  "          console.error('Failed to get JWT token:', err);",
+                  "        } else {",
+                  "          const responseJson = response.text();",
+                  "          if (responseJson) {",
+                  "            try {",
+                  "              const parsedJson = JSON.parse(responseJson);",
+                  "              ",
+                  "              if (parsedJson.api_token !== undefined) {",
+                  "                pm.globals.set('inat_api_token', parsedJson.api_token);",
+                  "                console.log('JWT token retrieved and saved to inat_api_token');",
+                  "              } else {",
+                  "                console.error('No api_token found in response');",
+                  "                console.log('Response body:', JSON.stringify(parsedJson, null, 2));",
+                  "              }",
+                  "            } catch (e) {",
+                  "              console.error('Failed to parse JSON:', e);",
+                  "              console.log('Response body:', responseJson);",
+                  "            }",
+                  "          } else {",
+                  "            console.error('Empty response body');",
+                  "          }",
+                  "        }",
+                  "      });",
+                  "    } else {",
+                  "      console.error('No access_token found in response');",
+                  "      console.log('Response body:', JSON.stringify(parsedJson, null, 2));",
+                  "    }",
+                  "  } catch (e) {",
+                  "    console.error('Failed to parse JSON:', e);",
+                  "    console.log('Response body:', responseJson);",
+                  "  }",
+                  "} else {",
+                  "  console.error('Empty response body');",
+                  "}"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "name": "Comments",
+      "name": "Observations",
       "item": [
         {
-          "name": "DELETE :id",
+          "name": "observations/:id - Auth required",
           "request": {
             "method": "DELETE",
             "header": [
@@ -112,15 +198,155 @@
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
                 "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "description": "Auth required",
-            "url": "{{inat_base_url}}/comments/:id"
+            "url": "{{inat_base_url}}/observations/:id"
           },
           "response": []
         },
         {
-          "name": "POST comments",
+          "name": "observations/:id/quality/:metric - Auth required",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/observations/:id/quality/:metric"
+          },
+          "response": []
+        },
+        {
+          "name": "observations - Primary endpoint for retrieving observations. If you're lookin...",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Primary endpoint for retrieving observations. If you're looking for\npagination info, check the X headers in the response. You should see",
+            "url": "{{inat_base_url}}/observations",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations/:id - Retrieve information about an observation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Retrieve information about an observation",
+            "url": "{{inat_base_url}}/observations/:id",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations/:username - Mostly the same as /observations except filtered by ...",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Mostly the same as /observations except filtered by a username.",
+            "url": "{{inat_base_url}}/observations/:username",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations/project/:id - Just like /observations except filtered by a proje...",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Just like /observations except filtered by a project.  :id can be a project ID or slug. CSV response will return some extra project-specific daa.",
+            "url": "{{inat_base_url}}/observations/project/:id",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations/taxon_stats - Retrieve some stats about taxa within a range of o...",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Retrieve some stats about taxa within a range of observations.",
+            "url": "{{inat_base_url}}/observations/taxon_stats",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations/user_stats - Retrieve some stats about users within a range of o...",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Retrieve some stats about users within a range of observations.\n      You must include the",
+            "url": "{{inat_base_url}}/observations/user_stats",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations - Auth required",
           "request": {
             "method": "POST",
             "header": [
@@ -130,13 +356,18 @@
                 "type": "text"
               },
               {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json",
                 "type": "text"
               }
             ],
             "description": "Auth required",
-            "url": "{{inat_base_url}}/comments",
+            "url": "{{inat_base_url}}/observations",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -150,7 +381,42 @@
           "response": []
         },
         {
-          "name": "PUT :id",
+          "name": "observations/:id/quality/:metric - Auth required",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/observations/:id/quality/:metric",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations/:id - Auth required",
           "request": {
             "method": "PUT",
             "header": [
@@ -160,13 +426,18 @@
                 "type": "text"
               },
               {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json",
                 "type": "text"
               }
             ],
             "description": "Auth required",
-            "url": "{{inat_base_url}}/comments/:id",
+            "url": "{{inat_base_url}}/observations/:id",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -175,6 +446,39 @@
                   "language": "json"
                 }
               }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observations/:id/viewed_updates - Mark updates associated with this observati...",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Mark updates associated with this observation (e.g. new comment notifications) as viewed. Response should be NO CONTENT.",
+            "url": "{{inat_base_url}}/observations/:id/viewed_updates",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
             }
           },
           "response": []
@@ -185,13 +489,18 @@
       "name": "Identifications",
       "item": [
         {
-          "name": "DELETE :id",
+          "name": "identifications/:id - Auth required",
           "request": {
             "method": "DELETE",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               }
             ],
@@ -201,13 +510,18 @@
           "response": []
         },
         {
-          "name": "POST identifications",
+          "name": "identifications - Auth required",
           "request": {
             "method": "POST",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               },
               {
@@ -231,13 +545,18 @@
           "response": []
         },
         {
-          "name": "PUT :id",
+          "name": "identifications/:id - Auth required",
           "request": {
             "method": "PUT",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               },
               {
@@ -263,32 +582,58 @@
       ]
     },
     {
-      "name": "Observation field values",
+      "name": "Users",
       "item": [
         {
-          "name": "DELETE :id",
+          "name": "users/edit - Auth required",
           "request": {
-            "method": "DELETE",
+            "method": "GET",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
                 "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "description": "Auth required",
-            "url": "{{inat_base_url}}/observation_field_values/:id"
+            "url": "{{inat_base_url}}/users/edit"
           },
           "response": []
         },
         {
-          "name": "POST observation_field_values",
+          "name": "users/new_updates - Auth required",
           "request": {
-            "method": "POST",
+            "method": "GET",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/users/new_updates"
+          },
+          "response": []
+        },
+        {
+          "name": "users - Create a new iNaturalist user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               },
               {
@@ -297,8 +642,8 @@
                 "type": "text"
               }
             ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/observation_field_values",
+            "description": "Create a new iNaturalist user",
+            "url": "{{inat_base_url}}/users",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -307,12 +652,15 @@
                   "language": "json"
                 }
               }
+            },
+            "auth": {
+              "type": "noauth"
             }
           },
           "response": []
         },
         {
-          "name": "PUT :id",
+          "name": "users/:id - Auth required",
           "request": {
             "method": "PUT",
             "header": [
@@ -322,53 +670,8 @@
                 "type": "text"
               },
               {
-                "key": "Content-Type",
+                "key": "Accept",
                 "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/observation_field_values/:id",
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Observation fields",
-      "item": [
-        {
-          "name": "GET observation_fields",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "List / search observation fields. ObservationFields are basically\n      typed data fields that users can attach to observation.",
-            "url": "{{inat_base_url}}/observation_fields"
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Observation photos",
-      "item": [
-        {
-          "name": "POST observation_photos",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
                 "type": "text"
               },
               {
@@ -378,7 +681,7 @@
               }
             ],
             "description": "Auth required",
-            "url": "{{inat_base_url}}/observation_photos",
+            "url": "{{inat_base_url}}/users/:id",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -388,263 +691,6 @@
                 }
               }
             }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Observations",
-      "item": [
-        {
-          "name": "DELETE :id",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/observations/:id"
-          },
-          "response": []
-        },
-        {
-          "name": "DELETE :metric",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/observations/:id/quality/:metric"
-          },
-          "response": []
-        },
-        {
-          "name": "GET observations",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "Primary endpoint for retrieving observations. If you're looking for\npagination info, check the X headers in the response. You should see",
-            "url": "{{inat_base_url}}/observations"
-          },
-          "response": []
-        },
-        {
-          "name": "GET :id",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "Retrieve information about an observation",
-            "url": "{{inat_base_url}}/observations/:id"
-          },
-          "response": []
-        },
-        {
-          "name": "GET :username",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "Mostly the same as /observations except filtered by a username.",
-            "url": "{{inat_base_url}}/observations/:username"
-          },
-          "response": []
-        },
-        {
-          "name": "GET :id",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "Just like /observations except filtered by a project.  :id can be a project ID or slug. CSV response will return some extra project-specific daa.",
-            "url": "{{inat_base_url}}/observations/project/:id"
-          },
-          "response": []
-        },
-        {
-          "name": "GET taxon_stats",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "Retrieve some stats about taxa within a range of observations.",
-            "url": "{{inat_base_url}}/observations/taxon_stats"
-          },
-          "response": []
-        },
-        {
-          "name": "GET user_stats",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "Retrieve some stats about users within a range of observations.\n      You must include the",
-            "url": "{{inat_base_url}}/observations/user_stats"
-          },
-          "response": []
-        },
-        {
-          "name": "POST observations",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/observations",
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "POST :metric",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/observations/:id/quality/:metric",
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "POST project_observations",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/project_observations",
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "PUT :id",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{api_token}}",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "description": "Auth required",
-            "url": "{{inat_base_url}}/observations/:id",
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "PUT viewed_updates",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "description": "Mark updates associated with this observation (e.g. new comment notifications) as viewed. Response should be NO CONTENT.",
-            "url": "{{inat_base_url}}/observations/:id/viewed_updates",
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Places",
-      "item": [
-        {
-          "name": "GET places",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "description": "Retrieve information about places.",
-            "url": "{{inat_base_url}}/places"
           },
           "response": []
         }
@@ -654,13 +700,18 @@
       "name": "Projects",
       "item": [
         {
-          "name": "DELETE leave",
+          "name": "projects/:id/leave - Auth required",
           "request": {
             "method": "DELETE",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               }
             ],
@@ -670,53 +721,94 @@
           "response": []
         },
         {
-          "name": "GET projects",
+          "name": "projects - Retrieve information about projects on iNaturalist.",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "description": "Retrieve information about projects on iNaturalist.",
-            "url": "{{inat_base_url}}/projects"
+            "url": "{{inat_base_url}}/projects",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
         {
-          "name": "GET :id",
+          "name": "projects/:id - Retrieve information about a single project.  :id is the proje...",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "description": "Retrieve information about a single project.  :id is the project ID or slug.",
-            "url": "{{inat_base_url}}/projects/:id"
+            "url": "{{inat_base_url}}/projects/:id",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
         {
-          "name": "GET :id?iframe=true",
+          "name": "projects/:id?iframe=true - This returns a complete web page without header or...",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "description": "This returns a complete web page without header or footer suitable for use in an IFRAME.",
-            "url": "{{inat_base_url}}/projects/:id?iframe=true"
+            "url": "{{inat_base_url}}/projects/:id?iframe=true",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
         {
-          "name": "GET contributors.widget",
+          "name": "projects/:id/contributors.widget - JS widget snippet of the top contributors ...",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "description": "JS widget snippet of the top contributors to a project.",
-            "url": "{{inat_base_url}}/projects/:id/contributors.widget"
+            "url": "{{inat_base_url}}/projects/:id/contributors.widget",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
         {
-          "name": "GET members",
+          "name": "projects/:id/members - Auth required",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               }
             ],
@@ -726,13 +818,18 @@
           "response": []
         },
         {
-          "name": "GET :login",
+          "name": "projects/user/:login - Auth required",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               }
             ],
@@ -742,13 +839,18 @@
           "response": []
         },
         {
-          "name": "POST join",
+          "name": "projects/:id/join - Auth required",
           "request": {
             "method": "POST",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
                 "type": "text"
               },
               {
@@ -774,21 +876,116 @@
       ]
     },
     {
-      "name": "Users",
+      "name": "Project Observations",
       "item": [
         {
-          "name": "POST users",
+          "name": "project_observations - Auth required",
           "request": {
             "method": "POST",
             "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
               {
                 "key": "Content-Type",
                 "value": "application/json",
                 "type": "text"
               }
             ],
-            "description": "Create a new iNaturalist user",
-            "url": "{{inat_base_url}}/users",
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/project_observations",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Places",
+      "item": [
+        {
+          "name": "places - Retrieve information about places.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Retrieve information about places.",
+            "url": "{{inat_base_url}}/places",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "comments/:id - Auth required",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/comments/:id"
+          },
+          "response": []
+        },
+        {
+          "name": "comments - Auth required",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/comments",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -802,7 +999,7 @@
           "response": []
         },
         {
-          "name": "PUT :id",
+          "name": "comments/:id - Auth required",
           "request": {
             "method": "PUT",
             "header": [
@@ -812,13 +1009,178 @@
                 "type": "text"
               },
               {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json",
                 "type": "text"
               }
             ],
             "description": "Auth required",
-            "url": "{{inat_base_url}}/users/:id",
+            "url": "{{inat_base_url}}/comments/:id",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Observation Fields",
+      "item": [
+        {
+          "name": "observation_fields - List / search observation fields. ObservationFields are ...",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "List / search observation fields. ObservationFields are basically\n      typed data fields that users can attach to observation.",
+            "url": "{{inat_base_url}}/observation_fields",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Observation Field Values",
+      "item": [
+        {
+          "name": "observation_field_values/:id - Auth required",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/observation_field_values/:id"
+          },
+          "response": []
+        },
+        {
+          "name": "observation_field_values - Auth required",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/observation_field_values",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "observation_field_values/:id - Auth required",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/observation_field_values/:id",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Observation Photos",
+      "item": [
+        {
+          "name": "observation_photos - Auth required",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Auth required",
+            "url": "{{inat_base_url}}/observation_photos",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -834,13 +1196,17 @@
       ]
     }
   ],
-  "variable": [
-    {
-      "key": "inat_base_url",
-      "value": "https://www.inaturalist.org",
-      "type": "string"
-    }
-  ],
+  "variable": [],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{inat_api_token}}",
+        "type": "string"
+      }
+    ]
+  },
   "event": [
     {
       "listen": "prerequest",
