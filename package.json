@@ -1,0 +1,21 @@
+{
+  "name": "inat",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "^1.2.18",
+    "@types/node": "^24.0.10",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "cmd-ts": "^0.13.0",
+    "crawlee": "^3.13.9",
+    "playwright": "^1.48.0"
+  }
+}
