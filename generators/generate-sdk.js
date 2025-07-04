@@ -58,14 +58,8 @@ class INaturalistSDKGenerator {
     transformedContent = transformedContent.replace(/AxiosInstance/g, 'HttpClient');
     transformedContent = transformedContent.replace(/AxiosResponse/g, 'ApiResponse');
 
-    const className = this.getClassName(moduleName);
     transformedContent = transformedContent.replace(
-      /private client: HttpClient;/,
-      'private http: HttpClient;'
-    );
-
-    transformedContent = transformedContent.replace(
-      /constructor\(client: HttpClient\) {\s*this\.client = client;\s*}/,
+      /private client: HttpClient;\s*constructor\(client: HttpClient\) {\s*this\.client = client;\s*}/,
       'constructor(private http: HttpClient) {}'
     );
 
@@ -221,8 +215,8 @@ ${imports}
 export type { INaturalistConfig, RequestConfig, ApiResponse } from './types';
 
 export {
-${modules.map(moduleName => `  ${this.getClassName(moduleName)},`).join('\n')}
-} from './types';
+${modules.map(moduleName => `  ${this.getClassName(moduleName)}`).join(',\n')}
+};
 
 export class INaturalistClient {
   private http: HttpClient;

@@ -7,7 +7,7 @@ import { dts } from 'rollup-plugin-dts';
 
 export default defineConfig([
   {
-    input: 'typescript/index.ts',
+    input: 'src/index.ts',
     external: ['axios'],
     plugins: [
       del({ targets: 'dist/*', runOnce: true }),
@@ -27,7 +27,7 @@ export default defineConfig([
     },
   },
   {
-    input: 'typescript/index.ts',
+    input: 'src/index.ts',
     external: ['axios'],
     plugins: [
       nodeResolve(),
@@ -45,7 +45,7 @@ export default defineConfig([
     },
   },
   {
-    input: 'typescript/index.ts',
+    input: 'src/index.ts',
     plugins: [dts()],
     output: {
       file: 'dist/index.d.ts',
