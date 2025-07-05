@@ -30,21 +30,23 @@ bun add @richard-stovall/inat-typescript-client
 ```typescript
 import { INaturalistClient } from '@richard-stovall/inat-typescript-client';
 
-// Create client instance
+// For public data (no authentication needed)
 const client = new INaturalistClient('https://api.inaturalist.org/v1');
 
-// For authenticated requests, provide your API token
-const authenticatedClient = new INaturalistClient('https://api.inaturalist.org/v1', 'your-api-token');
-
-// Get observations
+// Get public observations
 const observations = await client.observations.get_observations();
 console.log(observations.data);
 
 // Get specific observation
 const observation = await client.observations.get_observations_id(12345);
 
-// Search for users (requires authentication)
-const users = await authenticatedClient.users.get_users_edit();
+// For authenticated requests, use OAuth access token
+const authenticatedClient = new INaturalistClient('https://api.inaturalist.org/v1', 'your-oauth-access-token');
+
+// Get user-specific data (requires authentication)
+const userObservations = await authenticatedClient.observations.get_observations({ 
+  user_login: 'your-username' 
+});
 ```
 
 ## Features
@@ -59,43 +61,94 @@ const users = await authenticatedClient.users.get_users_edit();
 
 The iNaturalist API supports multiple authentication methods:
 
-### 1. API Token (Recommended)
+### 1. No Authentication (Public Data Only)
 
 ```typescript
-const client = new INaturalistClient('https://api.inaturalist.org/v1', 'your-api-token');
+const client = new INaturalistClient('https://api.inaturalist.org/v1');
+
+// Access public observations, projects, etc.
+const observations = await client.observations.get_observations();
 ```
 
-### 2. OAuth 2.0 Flow
+### 2. OAuth 2.0 Flow (Recommended for User Data)
+
+**⚠️ Important:** Use different domains for OAuth vs API calls!
 
 ```typescript
-const client = new INaturalistClient();
+// Step 1: Get OAuth access token (use main domain)
+const authClient = new INaturalistClient('https://www.inaturalist.org');
 
-// Step 1: Get OAuth token using Resource Owner Password Credentials
-const oauthResponse = await client.authentication.post_oauth_token({
-  grant_type: 'password',
-  client_id: 'your-client-id',
-  client_secret: 'your-client-secret',
-  username: 'your-username',
-  password: 'your-password',
+const formData = new URLSearchParams();
+formData.append('grant_type', 'password');
+formData.append('username', 'your-username');
+formData.append('password', 'your-password');
+formData.append('client_id', 'your-client-id');
+formData.append('client_secret', 'your-client-secret');
+
+const oauthResponse = await authClient.authentication.http.post('/oauth/token', formData.toString(), {
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Accept': 'application/json'
+  }
 });
 
-// Step 2: Get API token using OAuth access token
-client.setApiToken(oauthResponse.data.access_token);
-const apiTokenResponse = await client.authentication.get_users_apitoken();
+// Step 2: Use OAuth access token for general API calls (use API subdomain)
+const apiClient = new INaturalistClient('https://api.inaturalist.org/v1');
+apiClient.setApiToken(oauthResponse.data.access_token);
 
-// Step 3: Use the API token for subsequent requests
-client.setApiToken(apiTokenResponse.data.api_token);
+// General API calls work with OAuth token
+const observations = await apiClient.observations.get_observations();
+const projects = await apiClient.projects.get_projects();
+
+// Step 3: Get JWT token for user profile data
+authClient.setApiToken(oauthResponse.data.access_token);
+const jwtResponse = await authClient.authentication.http.get('/users/api_token', {
+  headers: {
+    'Authorization': `Bearer ${oauthResponse.data.access_token}`,
+    'Accept': 'application/json'
+  }
+});
+
+// Step 4: Use JWT token for detailed user profile
+const profileClient = new INaturalistClient('https://api.inaturalist.org/v1');
+profileClient.setApiToken(jwtResponse.data.api_token);
+
+const userProfile = await profileClient.users.http.get('/users/me');
+console.log('User details:', userProfile.data);
+```
+
+### 3. Pre-existing API Token
+
+If you already have an OAuth access token:
+
+```typescript
+const client = new INaturalistClient('https://api.inaturalist.org/v1', 'your-oauth-access-token');
 ```
 
 ### Token Management
 
 ```typescript
-// Set API token
-client.setApiToken('your-api-token');
+// Set OAuth access token (recommended)
+client.setApiToken('your-oauth-access-token');
 
 // Remove API token
 client.removeApiToken();
 ```
+
+### ⚠️ Important Notes
+
+1. **Domain Requirements:**
+   - OAuth authentication: `https://www.inaturalist.org`
+   - API calls: `https://api.inaturalist.org/v1`
+
+2. **Token Types:**
+   - **OAuth Access Token** (43 characters): Use for general API calls (observations, projects, etc.)
+   - **JWT API Token** (191+ characters): Use specifically for `/users/me` and detailed user profile data
+   - **Best Practice**: Use both tokens for different purposes rather than choosing one
+
+3. **Form Encoding:**
+   - OAuth requests require `application/x-www-form-urlencoded` content type
+   - Use `URLSearchParams` for proper encoding
 
 ## API Categories
 

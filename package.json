@@ -3,6 +3,25 @@
   "version": "0.1.0",
   "description": "TypeScript client for iNaturalist API",
   "type": "module",
+  "homepage": "https://github.com/richard-stovall/inat-typescript-client#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richard-stovall/inat-typescript-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/richard-stovall/inat-typescript-client/issues"
+  },
+  "keywords": [
+    "inaturalist",
+    "api",
+    "typescript",
+    "client",
+    "naturalist",
+    "biology",
+    "nature"
+  ],
+  "author": "Richard Stovall",
+  "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
