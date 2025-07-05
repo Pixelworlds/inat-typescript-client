@@ -113,7 +113,7 @@ const jwtResponse = await authClient.authentication.http.get('/users/api_token',
 const profileClient = new INaturalistClient('https://api.inaturalist.org/v1');
 profileClient.setApiToken(jwtResponse.data.api_token);
 
-const userProfile = await profileClient.users.http.get('/users/me');
+const userProfile = await profileClient.users.get_users_me();
 console.log('User details:', userProfile.data);
 ```
 

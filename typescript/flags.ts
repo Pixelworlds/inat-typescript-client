@@ -1,4 +1,5 @@
 import type { AxiosInstance, AxiosResponse } from 'axios';
+import type * as Types from '../src/types/swagger-types';
 
 export class Flags {
   private client: AxiosInstance;
@@ -8,23 +9,36 @@ export class Flags {
   }
 
   /**
-   * Create a flag
+   * Flag Create
+   *
+   * Create a flag. To create a custom flag beyond the standard `spam` and
+   * `inappropriate` flags, set `flag` to `other` and include a `flag_explanation`
+   * 
+   * @requires Authentication
    */
-  async post_flags(data?: any): Promise<AxiosResponse<any>> {
-    return this.client.post(`/flags`, { data });
+  async flag_create(data: Types.PostFlag): Promise<AxiosResponse<any>> {
+    return this.client.post(`/flags`, data);
   }
 
   /**
-   * Update a flag
+   * Flag Update
+   *
+   * Update a flag. Generally only used to resolve the flag.
+   * 
+   * @requires Authentication
    */
-  async put_flags_id(id: string | number, data?: any): Promise<AxiosResponse<any>> {
-    return this.client.put(`/flags/${id}`, { data });
+  async flag_update(id: number, data: Types.PutFlag): Promise<AxiosResponse<any>> {
+    return this.client.put(`/flags/${id}`, data);
   }
 
   /**
+   * Flag Delete
+   *
    * Delete a flag
+   * 
+   * @requires Authentication
    */
-  async delete_flags_id(id: string | number): Promise<AxiosResponse<any>> {
-    return this.client.delete(`/flags/${id}`, {});
+  async flag_delete(id: number): Promise<AxiosResponse<any>> {
+    return this.client.delete(`/flags/${id}`);
   }
 }

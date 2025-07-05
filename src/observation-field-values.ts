@@ -1,17 +1,39 @@
 import type { HttpClient, ApiResponse } from './types';
+import type * as Types from '../src/types/swagger-types';
 
 export class ObservationFieldValues {
   constructor(private http: HttpClient) {}
 
-  async delete_observation_field_values_id(id: string | number): Promise<ApiResponse<any>> {
-    return this.http.delete(`/observation_field_values/${id}`, {});
+  /**
+   * Observation Field Value Update
+   *
+   * Update an observation field value
+   * 
+   * @requires Authentication
+   */
+  async observation_field_value_update(id: number, data: Types.PostObservationFieldValue): Promise<ApiResponse<any>> {
+    return this.http.put(`/observation_field_values/${id}`, data);
   }
 
-  async post_observation_field_values(data?: any): Promise<ApiResponse<any>> {
-    return this.http.post(`/observation_field_values`, { data });
+  /**
+   * Observation Field Value Delete
+   *
+   * Delete an observation field value
+   * 
+   * @requires Authentication
+   */
+  async observation_field_value_delete(id: number): Promise<ApiResponse<any>> {
+    return this.http.delete(`/observation_field_values/${id}`);
   }
 
-  async put_observation_field_values_id(id: string | number, data?: any): Promise<ApiResponse<any>> {
-    return this.http.put(`/observation_field_values/${id}`, { data });
+  /**
+   * Observation Field Value Create
+   *
+   * Create an observation field value
+   * 
+   * @requires Authentication
+   */
+  async observation_field_value_create(data: Types.PostObservationFieldValue): Promise<ApiResponse<any>> {
+    return this.http.post(`/observation_field_values`, data);
   }
 }

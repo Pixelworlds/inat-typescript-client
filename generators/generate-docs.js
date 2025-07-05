@@ -6,27 +6,27 @@ import { dirname, join } from 'path';
 class DocumentationGenerator {
   constructor() {
     this.config = {
-      inputFile: join(process.cwd(), 'postman', 'iNaturalist_API_Collection.postman_collection.json'),
+      inputFile: join(process.cwd(), 'data', 'swagger.json'),
       outputDir: join(process.cwd(), 'docs'),
     };
 
-    this.collectionLoader = new CollectionLoader(this.config);
+    this.swaggerLoader = new SwaggerLoader(this.config);
     this.docBuilder = new DocumentationBuilder();
     this.fileManager = new FileManager(this.config.outputDir);
   }
 
   async generate() {
-    console.log('Loading Postman collection...');
-    const collection = await this.collectionLoader.loadCollection();
+    console.log('Loading Swagger specification...');
+    const swagger = await this.swaggerLoader.loadSwagger();
     
-    console.log('Extracting categories...');
-    const categories = this.collectionLoader.extractCategories(collection);
-    console.log(`Found ${categories.length} categories`);
+    console.log('Extracting API information...');
+    const apiInfo = this.swaggerLoader.extractApiInfo(swagger);
+    console.log(`Found ${apiInfo.categories.length} categories with ${apiInfo.totalEndpoints} endpoints`);
 
     console.log('Generating documentation...');
     this.fileManager.ensureOutputDirectory();
     
-    const documentation = this.docBuilder.buildDocumentation(categories);
+    const documentation = this.docBuilder.buildDocumentation(apiInfo);
     this.fileManager.writeDocumentation(documentation);
 
     console.log('API documentation generated successfully!');
@@ -34,97 +34,98 @@ class DocumentationGenerator {
   }
 }
 
-class CollectionLoader {
+class SwaggerLoader {
   constructor(config) {
     this.config = config;
   }
 
-  async loadCollection() {
+  async loadSwagger() {
     if (!existsSync(this.config.inputFile)) {
-      throw new Error(`Postman collection not found: ${this.config.inputFile}`);
+      throw new Error(`Swagger file not found: ${this.config.inputFile}`);
     }
 
     const data = readFileSync(this.config.inputFile, 'utf8');
     return JSON.parse(data);
   }
 
-  extractCategories(collection) {
-    return collection.item.map(categoryItem => ({
-      name: categoryItem.name,
-      description: this._extractCategoryDescription(categoryItem),
-      endpoints: this._extractEndpoints(categoryItem.item || [])
-    }));
-  }
+  extractApiInfo(swagger) {
+    const categoriesMap = new Map();
+    let totalEndpoints = 0;
+    let totalAuthRequired = 0;
 
-  _extractCategoryDescription(categoryItem) {
-    const endpointCount = categoryItem.item ? categoryItem.item.length : 0;
-    const authRequired = categoryItem.item ? 
-      categoryItem.item.filter(item => this._requiresAuth(item.request)).length : 0;
-    
+    Object.entries(swagger.paths).forEach(([path, pathObj]) => {
+      Object.entries(pathObj).forEach(([method, operation]) => {
+        if (method === 'parameters') return;
+
+        totalEndpoints++;
+        const tags = operation.tags || ['Uncategorized'];
+        const requiresAuth = this._requiresAuth(operation);
+        
+        if (requiresAuth) totalAuthRequired++;
+
+        tags.forEach(tag => {
+          if (!categoriesMap.has(tag)) {
+            categoriesMap.set(tag, {
+              name: tag,
+              endpoints: [],
+              authRequired: 0,
+              authOptional: 0
+            });
+          }
+
+          const category = categoriesMap.get(tag);
+          const endpoint = this._extractEndpoint(path, method, operation);
+          
+          category.endpoints.push(endpoint);
+          if (requiresAuth) {
+            category.authRequired++;
+          } else {
+            category.authOptional++;
+          }
+        });
+      });
+    });
+
+    const categories = Array.from(categoriesMap.values())
+      .sort((a, b) => a.name.localeCompare(b.name));
+
     return {
-      endpointCount,
-      authRequired,
-      authOptional: endpointCount - authRequired
+      swagger,
+      categories,
+      totalEndpoints,
+      totalAuthRequired
     };
   }
 
-  _extractEndpoints(items) {
-    return items.map(item => {
-      const request = item.request;
-      const url = this._extractUrl(request.url);
-      
-      return {
-        name: item.name.split(' - ')[0],
-        method: request.method,
-        url: url,
-        description: request.description || item.name,
-        requiresAuth: this._requiresAuth(request),
-        parameters: this._extractParameters(request),
-        requestBody: this._extractRequestBody(request),
-        headers: this._extractHeaders(request)
-      };
-    });
+  _requiresAuth(operation) {
+    return operation.security && operation.security.length > 0;
   }
 
-  _extractUrl(url) {
-    if (typeof url === 'string') {
-      return url.replace(/^https:\/\/[^/]+/, '').replace(/\{\{inat_base_url\}\}/, '');
-    }
-    return url.raw ? url.raw.replace(/^https:\/\/[^/]+/, '').replace(/\{\{inat_base_url\}\}/, '') : '';
+  _extractEndpoint(path, method, operation) {
+    return {
+      name: operation.operationId || operation.summary || `${method} ${path}`,
+      method: method.toUpperCase(),
+      url: path,
+      summary: operation.summary || '',
+      description: operation.description || operation.summary || '',
+      requiresAuth: this._requiresAuth(operation),
+      parameters: this._extractParameters(operation),
+      requestBody: this._extractRequestBody(operation),
+      responses: this._extractResponses(operation)
+    };
   }
 
-  _requiresAuth(request) {
-    return request.auth?.type !== 'noauth' && 
-           request.header?.some(h => h.key === 'Authorization');
-  }
-
-  _extractParameters(request) {
+  _extractParameters(operation) {
     const params = [];
     
-    if (typeof request.url === 'string' && request.url.includes('?')) {
-      const queryString = request.url.split('?')[1];
-      queryString.split('&').forEach(param => {
-        const [key] = param.split('=');
-        if (key) {
-          params.push({
-            name: key,
-            type: 'query',
-            required: false,
-            description: `Query parameter: ${key}`
-          });
-        }
-      });
-    }
-
-    const url = this._extractUrl(request.url);
-    const pathMatches = url.match(/:([a-zA-Z_][a-zA-Z0-9_]*)/g);
-    if (pathMatches) {
-      pathMatches.forEach(match => {
+    if (operation.parameters) {
+      operation.parameters.forEach(param => {
         params.push({
-          name: match.slice(1),
-          type: 'path',
-          required: true,
-          description: `Path parameter: ${match.slice(1)}`
+          name: param.name,
+          type: param.in,
+          required: param.required || false,
+          description: param.description || '',
+          schema: param.schema || { type: param.type }
         });
       });
     }
@@ -132,45 +133,44 @@ class CollectionLoader {
     return params;
   }
 
-  _extractRequestBody(request) {
-    if (!request.body) return null;
+  _extractRequestBody(operation) {
+    if (!operation.consumes || !operation.parameters) return null;
 
-    if (request.body.mode === 'urlencoded') {
-      return {
-        type: 'application/x-www-form-urlencoded',
-        fields: request.body.urlencoded || []
-      };
-    }
+    const bodyParam = operation.parameters.find(p => p.in === 'body');
+    if (!bodyParam) return null;
 
-    if (request.body.mode === 'raw') {
-      return {
-        type: 'application/json',
-        example: request.body.raw || '{}'
-      };
-    }
-
-    return null;
+    const isFormData = operation.consumes.includes('application/x-www-form-urlencoded');
+    
+    return {
+      type: isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
+      schema: bodyParam.schema,
+      required: bodyParam.required || false
+    };
   }
 
-  _extractHeaders(request) {
-    return (request.header || [])
-      .filter(h => h.key !== 'Authorization')
-      .map(h => ({
-        name: h.key,
-        value: h.value,
-        description: `Header: ${h.key}`
-      }));
+  _extractResponses(operation) {
+    const responses = [];
+    
+    if (operation.responses) {
+      Object.entries(operation.responses).forEach(([code, response]) => {
+        responses.push({
+          code,
+          description: response.description || ''
+        });
+      });
+    }
+
+    return responses;
   }
 }
 
 class DocumentationBuilder {
-  buildDocumentation(categories) {
-    const totalEndpoints = categories.reduce((sum, cat) => sum + cat.endpoints.length, 0);
-    const totalAuthRequired = categories.reduce((sum, cat) => sum + cat.description.authRequired, 0);
+  buildDocumentation(apiInfo) {
+    const { swagger, categories, totalEndpoints, totalAuthRequired } = apiInfo;
 
     let markdown = '# iNaturalist API Documentation\n\n';
     
-    markdown += this._buildOverview(categories, totalEndpoints, totalAuthRequired);
+    markdown += this._buildOverview(swagger, categories, totalEndpoints, totalAuthRequired);
     markdown += this._buildTableOfContents(categories);
     markdown += this._buildCategoryDocumentation(categories);
     markdown += this._buildStatistics(categories, totalEndpoints, totalAuthRequired);
@@ -178,13 +178,22 @@ class DocumentationBuilder {
     return markdown;
   }
 
-  _buildOverview(categories, totalEndpoints, totalAuthRequired) {
+  _buildOverview(swagger, categories, totalEndpoints, totalAuthRequired) {
     let overview = '## Overview\n\n';
-    overview += 'This documentation covers the iNaturalist API endpoints organized by category. ';
+    
+    if (swagger.info && swagger.info.description) {
+      overview += `${swagger.info.description}\n\n`;
+    }
+    
+    overview += `This documentation covers the iNaturalist API endpoints organized by category. `;
     overview += `There are ${categories.length} categories with a total of ${totalEndpoints} endpoints.\n\n`;
-    overview += '**Base URL:** `https://api.inaturalist.org/v1`\n\n';
+    
+    overview += `**Version:** ${swagger.info?.version || 'v1'}\n\n`;
+    overview += `**Base URL:** \`${swagger.schemes?.[0] || 'https'}://${swagger.host || 'api.inaturalist.org'}${swagger.basePath || ''}\`\n\n`;
+    
     overview += '**Authentication:** Many endpoints require authentication using Bearer tokens. ';
     overview += `${totalAuthRequired} out of ${totalEndpoints} endpoints require authentication.\n\n`;
+    
     return overview;
   }
 
@@ -192,7 +201,7 @@ class DocumentationBuilder {
     let toc = '## Table of Contents\n\n';
     categories.forEach(category => {
       const anchor = category.name.toLowerCase().replace(/\s+/g, '-');
-      toc += `- [${category.name}](#${anchor})\n`;
+      toc += `- [${category.name}](#${anchor}) (${category.endpoints.length} endpoints)\n`;
     });
     toc += '\n';
     return toc;
@@ -202,16 +211,18 @@ class DocumentationBuilder {
     let docs = '';
     
     categories.forEach(category => {
+      const anchor = category.name.toLowerCase().replace(/\s+/g, '-');
       docs += `## ${category.name}\n\n`;
       
-      docs += `**Endpoints:** ${category.description.endpointCount}  \n`;
-      docs += `**Authentication Required:** ${category.description.authRequired}  \n`;
-      docs += `**Authentication Optional:** ${category.description.authOptional}  \n\n`;
+      docs += `**Total Endpoints:** ${category.endpoints.length}  \n`;
+      docs += `**Requires Authentication:** ${category.authRequired}  \n`;
+      docs += `**Public Access:** ${category.authOptional}  \n\n`;
 
       docs += '### Endpoints\n\n';
       docs += this._buildEndpointsTable(category.endpoints);
       docs += '\n';
 
+      docs += '### Endpoint Details\n\n';
       category.endpoints.forEach(endpoint => {
         docs += this._buildEndpointDetails(endpoint);
       });
@@ -228,8 +239,8 @@ class DocumentationBuilder {
 
     endpoints.forEach(endpoint => {
       const auth = endpoint.requiresAuth ? '🔒 Required' : '🔓 Optional';
-      const description = endpoint.description.length > 60 ? 
-        endpoint.description.substring(0, 57) + '...' : endpoint.description;
+      const description = endpoint.summary.length > 60 ? 
+        endpoint.summary.substring(0, 57) + '...' : endpoint.summary;
       
       table += `| ${endpoint.method} | \`${endpoint.url}\` | ${auth} | ${description} |\n`;
     });
@@ -240,44 +251,77 @@ class DocumentationBuilder {
   _buildEndpointDetails(endpoint) {
     let details = `#### ${endpoint.method} ${endpoint.url}\n\n`;
     
-    details += `**Description:** ${endpoint.description}\n\n`;
-    details += `**Authentication:** ${endpoint.requiresAuth ? 'Required' : 'Optional'}\n\n`;
+    if (endpoint.summary) {
+      details += `**${endpoint.summary}**\n\n`;
+    }
+    
+    if (endpoint.description && endpoint.description !== endpoint.summary) {
+      details += `${endpoint.description}\n\n`;
+    }
+    
+    details += `**Authentication:** ${endpoint.requiresAuth ? 'Required (Bearer token)' : 'Not required'}\n\n`;
 
     if (endpoint.parameters.length > 0) {
       details += '**Parameters:**\n\n';
-      details += '| Name | Type | Required | Description |\n';
-      details += '|------|------|----------|-------------|\n';
       
-      endpoint.parameters.forEach(param => {
-        const required = param.required ? 'Yes' : 'No';
-        details += `| ${param.name} | ${param.type} | ${required} | ${param.description} |\n`;
-      });
-      details += '\n';
+      const pathParams = endpoint.parameters.filter(p => p.type === 'path');
+      const queryParams = endpoint.parameters.filter(p => p.type === 'query');
+      const headerParams = endpoint.parameters.filter(p => p.type === 'header');
+      
+      if (pathParams.length > 0) {
+        details += '*Path Parameters:*\n\n';
+        details += '| Name | Required | Description |\n';
+        details += '|------|----------|-------------|\n';
+        pathParams.forEach(param => {
+          const required = param.required ? 'Yes' : 'No';
+          details += `| \`${param.name}\` | ${required} | ${param.description} |\n`;
+        });
+        details += '\n';
+      }
+      
+      if (queryParams.length > 0) {
+        details += '*Query Parameters:*\n\n';
+        details += '| Name | Required | Type | Description |\n';
+        details += '|------|----------|------|-------------|\n';
+        queryParams.forEach(param => {
+          const required = param.required ? 'Yes' : 'No';
+          const type = param.schema?.type || 'string';
+          details += `| \`${param.name}\` | ${required} | ${type} | ${param.description} |\n`;
+        });
+        details += '\n';
+      }
+      
+      if (headerParams.length > 0) {
+        details += '*Header Parameters:*\n\n';
+        details += '| Name | Required | Description |\n';
+        details += '|------|----------|-------------|\n';
+        headerParams.forEach(param => {
+          const required = param.required ? 'Yes' : 'No';
+          details += `| \`${param.name}\` | ${required} | ${param.description} |\n`;
+        });
+        details += '\n';
+      }
     }
 
     if (endpoint.requestBody) {
       details += '**Request Body:**\n\n';
       details += `- **Content-Type:** \`${endpoint.requestBody.type}\`\n`;
+      details += `- **Required:** ${endpoint.requestBody.required ? 'Yes' : 'No'}\n`;
       
-      if (endpoint.requestBody.fields) {
-        details += '- **Fields:**\n';
-        endpoint.requestBody.fields.forEach(field => {
-          details += `  - \`${field.key}\`: ${field.value}\n`;
-        });
+      if (endpoint.requestBody.schema && endpoint.requestBody.schema.$ref) {
+        const schemaName = endpoint.requestBody.schema.$ref.split('/').pop();
+        details += `- **Schema:** [${schemaName}](#schemas)\n`;
       }
       
-      if (endpoint.requestBody.example) {
-        details += '- **Example:**\n```json\n';
-        details += endpoint.requestBody.example;
-        details += '\n```\n';
-      }
       details += '\n';
     }
 
-    if (endpoint.headers.length > 0) {
-      details += '**Headers:**\n\n';
-      endpoint.headers.forEach(header => {
-        details += `- \`${header.name}\`: ${header.value}\n`;
+    if (endpoint.responses.length > 0) {
+      details += '**Responses:**\n\n';
+      details += '| Code | Description |\n';
+      details += '|------|-------------|\n';
+      endpoint.responses.forEach(response => {
+        details += `| ${response.code} | ${response.description} |\n`;
       });
       details += '\n';
     }
@@ -287,17 +331,33 @@ class DocumentationBuilder {
   }
 
   _buildStatistics(categories, totalEndpoints, totalAuthRequired) {
-    let stats = '## Statistics\n\n';
+    let stats = '## API Statistics\n\n';
+    stats += '### Summary\n\n';
     stats += '| Metric | Value |\n';
     stats += '|--------|-------|\n';
     stats += `| Total Categories | ${categories.length} |\n`;
     stats += `| Total Endpoints | ${totalEndpoints} |\n`;
-    stats += `| Endpoints Requiring Auth | ${totalAuthRequired} |\n`;
+    stats += `| Authenticated Endpoints | ${totalAuthRequired} |\n`;
     stats += `| Public Endpoints | ${totalEndpoints - totalAuthRequired} |\n`;
+    stats += `| Auth Percentage | ${((totalAuthRequired / totalEndpoints) * 100).toFixed(1)}% |\n`;
+    stats += '\n';
     
+    stats += '### Endpoints by Method\n\n';
     const methodStats = this._calculateMethodStatistics(categories);
+    stats += '| Method | Count | Percentage |\n';
+    stats += '|--------|-------|------------|\n';
     Object.entries(methodStats).forEach(([method, count]) => {
-      stats += `| ${method} Endpoints | ${count} |\n`;
+      const percentage = ((count / totalEndpoints) * 100).toFixed(1);
+      stats += `| ${method} | ${count} | ${percentage}% |\n`;
+    });
+    stats += '\n';
+    
+    stats += '### Categories by Size\n\n';
+    stats += '| Category | Endpoints | Auth Required |\n';
+    stats += '|----------|-----------|---------------|\n';
+    const sortedCategories = [...categories].sort((a, b) => b.endpoints.length - a.endpoints.length);
+    sortedCategories.forEach(category => {
+      stats += `| ${category.name} | ${category.endpoints.length} | ${category.authRequired} |\n`;
     });
     
     stats += '\n';

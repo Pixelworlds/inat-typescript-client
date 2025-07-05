@@ -1,19 +1,30 @@
 import type { HttpClient, ApiResponse } from './types';
 
+export interface TermsForTaxonParams {
+  /** Filter by this taxon */
+  taxon_id: number;
+}
+
 export class ControlledTerms {
   constructor(private http: HttpClient) {}
 
   /**
-   * Get controlled terms for annotations
+   * Terms Index
+   *
+   * List all attribute controlled terms
+   * 
    */
-  async get_controlled_terms(): Promise<ApiResponse<any>> {
-    return this.http.get(`/controlled_terms`, {});
+  async terms_index(): Promise<ApiResponse<any>> {
+    return this.http.get(`/controlled_terms`);
   }
 
   /**
-   * Get controlled terms for a specific taxon
+   * Terms for Taxon
+   *
+   * Returns attribute controlled terms relevant to a taxon
+   * 
    */
-  async get_controlled_terms_for_taxon(): Promise<ApiResponse<any>> {
-    return this.http.get(`/controlled_terms/for_taxon`, {});
+  async terms_for_taxon(params: TermsForTaxonParams): Promise<ApiResponse<any>> {
+    return this.http.get(`/controlled_terms/for_taxon`, { params });
   }
 }

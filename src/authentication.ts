@@ -1,19 +1,22 @@
 import type { HttpClient, ApiResponse } from './types';
 
+interface Get_oauth_authorizeParams {
+  client_id?: string;
+  redirect_uri?: string;
+  response_type?: string;
+  code_challenge?: string;
+  code_challenge_method?: string;
+  scope?: string;
+}
+
 export class Authentication {
   constructor(private http: HttpClient) {}
 
-  /**
-   * OAuth authorization endpoint - redirects user to authorize your application
-   */
-  async get_oauth_authorize(): Promise<ApiResponse<any>> {
-    return this.http.get(`/oauth/authorize`, {});
+  async get_oauth_authorize(params?: Get_oauth_authorizeParams): Promise<ApiResponse<any>> {
+    return this.http.get(`/oauth/authorize`, { params });
   }
 
-  /**
-   * Get user API token for authenticated requests
-   */
-  async get_users_api_token(): Promise<ApiResponse<any>> {
+  async get_users_apitoken(): Promise<ApiResponse<any>> {
     return this.http.get(`/users/api_token`, {});
   }
 

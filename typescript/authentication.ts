@@ -1,5 +1,14 @@
 import type { AxiosInstance, AxiosResponse } from 'axios';
 
+interface Get_oauth_authorizeParams {
+  client_id?: string;
+  redirect_uri?: string;
+  response_type?: string;
+  code_challenge?: string;
+  code_challenge_method?: string;
+  scope?: string;
+}
+
 export class Authentication {
   private client: AxiosInstance;
 
@@ -7,17 +16,11 @@ export class Authentication {
     this.client = client;
   }
 
-  /**
-   * OAuth authorization endpoint - redirects user to authorize your application
-   */
-  async get_oauth_authorize(): Promise<AxiosResponse<any>> {
-    return this.client.get(`/oauth/authorize`, {});
+  async get_oauth_authorize(params?: Get_oauth_authorizeParams): Promise<AxiosResponse<any>> {
+    return this.client.get(`/oauth/authorize`, { params });
   }
 
-  /**
-   * Get user API token for authenticated requests
-   */
-  async get_users_api_token(): Promise<AxiosResponse<any>> {
+  async get_users_apitoken(): Promise<AxiosResponse<any>> {
     return this.client.get(`/users/api_token`, {});
   }
 
@@ -25,6 +28,19 @@ export class Authentication {
    * OAuth token exchange endpoint - exchange authorization code for access token
    */
   async post_oauth_token(data?: any): Promise<AxiosResponse<any>> {
-    return this.client.post(`/oauth/token`, { data });
+    const formData = new URLSearchParams();
+    if (data) {
+      Object.keys(data).forEach(key => {
+        if (data[key] !== undefined && data[key] !== null) {
+          formData.append(key, data[key].toString());
+        }
+      });
+    }
+    
+    return this.client.post(`/oauth/token`, formData.toString(), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
   }
 }

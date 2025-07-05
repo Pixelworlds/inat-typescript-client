@@ -1,4 +1,5 @@
 import type { AxiosInstance, AxiosResponse } from 'axios';
+import type * as Types from '../src/types/swagger-types';
 
 export class Comments {
   private client: AxiosInstance;
@@ -7,15 +8,36 @@ export class Comments {
     this.client = client;
   }
 
-  async delete_comments_id(id: string | number): Promise<AxiosResponse<any>> {
-    return this.client.delete(`/comments/${id}`, {});
+  /**
+   * Comment Create
+   *
+   * Create a comment
+   * 
+   * @requires Authentication
+   */
+  async comment_create(data: Types.PostComment): Promise<AxiosResponse<any>> {
+    return this.client.post(`/comments`, data);
   }
 
-  async post_comments(data?: any): Promise<AxiosResponse<any>> {
-    return this.client.post(`/comments`, { data });
+  /**
+   * Comment Update
+   *
+   * Update a comment
+   * 
+   * @requires Authentication
+   */
+  async comment_update(id: number, data: Types.PostComment): Promise<AxiosResponse<any>> {
+    return this.client.put(`/comments/${id}`, data);
   }
 
-  async put_comments_id(id: string | number, data?: any): Promise<AxiosResponse<any>> {
-    return this.client.put(`/comments/${id}`, { data });
+  /**
+   * Comment Delete
+   *
+   * Delete a comment
+   * 
+   * @requires Authentication
+   */
+  async comment_delete(id: number): Promise<AxiosResponse<any>> {
+    return this.client.delete(`/comments/${id}`);
   }
 }

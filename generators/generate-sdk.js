@@ -37,7 +37,7 @@ class INaturalistSDKGenerator {
 
     const files = readdirSync(this.typescriptDir);
     for (const file of files) {
-      if (file.endsWith('.ts')) {
+      if (file.endsWith('.ts') && file !== 'index.ts') {
         const moduleName = file.replace('.ts', '');
         modules.push(moduleName);
       }
@@ -125,6 +125,18 @@ export interface INaturalistConfig {
 
     writeFileSync(join(this.srcDir, 'types.ts'), typesContent);
     console.log('Generated shared types');
+    
+    // Also copy swagger types if they exist
+    const swaggerTypesSource = join(this.projectRoot, 'src', 'types', 'swagger-types.ts');
+    const swaggerTypesTarget = join(this.srcDir, 'types');
+    
+    if (existsSync(swaggerTypesSource)) {
+      if (!existsSync(swaggerTypesTarget)) {
+        mkdirSync(swaggerTypesTarget, { recursive: true });
+      }
+      copyFileSync(swaggerTypesSource, join(swaggerTypesTarget, 'swagger-types.ts'));
+      console.log('Copied swagger-generated types');
+    }
   }
 
   generateHttpClient() {
@@ -213,6 +225,7 @@ import type { INaturalistConfig, HttpClient } from './types';
 ${imports}
 
 export type { INaturalistConfig, RequestConfig, ApiResponse } from './types';
+export * from './types/swagger-types';
 
 export {
 ${modules.map(moduleName => `  ${this.getClassName(moduleName)}`).join(',\n')}

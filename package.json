@@ -47,11 +47,12 @@
     "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
     "test": "echo 'No tests specified yet' && exit 0",
+    "generate:types": "bun generators/generate-types-from-swagger.js",
     "generate:modules": "bun generators/generate-modules.js",
     "generate:docs": "bun generators/generate-docs.js",
-    "generate:postman": "bun generators/generate-inat-postman-collection.js",
+    "generate:postman": "bun generators/generate-postman-from-swagger.js",
     "generate:sdk": "bun generators/generate-sdk.js",
-    "parse:swagger": "bun generators/parse-swagger-specs.js"
+    "generate:all": "bun run generate:types && bun run generate:modules && bun run generate:sdk"
   },
   "dependencies": {
     "axios": "^1.10.0"

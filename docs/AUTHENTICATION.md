@@ -276,7 +276,7 @@ class INaturalistAuth {
   // Convenience methods
   async getUserProfile() {
     if (!this.jwtToken) throw new Error('Not authenticated');
-    return this.profileClient.users.http.get('/users/me');
+    return this.profileClient.users.get_users_me();
   }
 
   async getObservations(params = {}) {
@@ -298,7 +298,7 @@ const observations = await apiClient.observations.get_observations();
 const projects = await apiClient.projects.get_projects();
 
 // User profile with JWT token
-const userProfile = await profileClient.users.http.get('/users/me');
+const userProfile = await profileClient.users.get_users_me();
 console.log('User details:', userProfile.data);
 
 // Or use convenience methods
