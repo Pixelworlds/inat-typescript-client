@@ -1,4 +1,4 @@
-import type { ApiResponse, HttpClient } from './types';
+import type { HttpClient, ApiResponse } from './types';
 
 export interface SiteSearchParams {
   /** Search object properties */
@@ -19,11 +19,11 @@ export interface SiteSearchParams {
   per_page?: string;
 
   /** Locale preference for taxon common names
-   */
+ */
   locale?: string;
 
   /** Place preference for regional taxon common names
-   */
+ */
   preferred_place_id?: number;
 }
 
@@ -34,7 +34,7 @@ export class Search {
    * Site Search
    *
    * Given zero to many of following parameters, returns object matching the search criteria
-   *
+   * 
    */
   async site_search(params?: SiteSearchParams): Promise<ApiResponse<any>> {
     return this.http.get(`/search`, { params });

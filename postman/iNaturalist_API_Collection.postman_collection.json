@@ -11151,7 +11151,7 @@
           }
         },
         {
-          "name": "Project Add",
+          "name": "Project Remove",
           "request": {
             "method": "DELETE",
             "header": [

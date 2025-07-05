@@ -296,7 +296,7 @@ import type { INaturalistConfig, HttpClient } from './types';
 ${imports}
 
 export type { INaturalistConfig, RequestConfig, ApiResponse } from './types';
-export * from './types/swagger-types';
+export type * from './types/swagger-types';
 
 export {
 ${modules.map(moduleName => `  ${this.getActualClassName(moduleName)}`).join(',\n')}

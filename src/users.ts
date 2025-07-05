@@ -1,4 +1,4 @@
-import type { ApiResponse, HttpClient } from './types';
+import type { HttpClient, ApiResponse } from './types';
 import type * as Types from './types/swagger-types';
 
 export interface UserProjectsParams {
@@ -8,7 +8,7 @@ taxon object instead of simply an ID
   rule_details?: 'true';
 
   /** Specify the type of project to return
-   */
+ */
   project_type?: 'traditional' | 'collection' | 'umbrella';
 
   /** Pagination `page` number */
@@ -49,7 +49,7 @@ export class Users {
    * User Update
    *
    * Update a user
-   *
+   * 
    * @requires Authentication
    */
   async user_update(id: number): Promise<ApiResponse<any>> {
@@ -60,7 +60,7 @@ export class Users {
    * User Projects
    *
    * Return projects as user has joined / followed
-   *
+   * 
    */
   async user_projects(id: number, params?: UserProjectsParams): Promise<ApiResponse<any>> {
     return this.http.get(`/users/${id}/projects`, { params });
@@ -70,7 +70,7 @@ export class Users {
    * User Autocomplete
    *
    * Given an string, returns users with names or logins starting with the search term
-   *
+   * 
    */
   async user_autocomplete(params: UserAutocompleteParams): Promise<ApiResponse<any>> {
     return this.http.get(`/users/autocomplete`, { params });
@@ -91,7 +91,7 @@ export class Users {
    *
    * Make it so the authenticated user stops receiving notifications about
    * activity by the user specified by {id}.
-   *
+   * 
    * @requires Authentication
    */
   async mute_a_user(id: number): Promise<ApiResponse<any>> {

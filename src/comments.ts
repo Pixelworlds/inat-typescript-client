@@ -1,4 +1,4 @@
-import type { ApiResponse, HttpClient } from './types';
+import type { HttpClient, ApiResponse } from './types';
 import type * as Types from './types/swagger-types';
 
 export class Comments {
@@ -8,7 +8,7 @@ export class Comments {
    * Comment Create
    *
    * Create a comment
-   *
+   * 
    * @requires Authentication
    */
   async comment_create(data: Types.PostComment): Promise<ApiResponse<any>> {
@@ -19,7 +19,7 @@ export class Comments {
    * Comment Update
    *
    * Update a comment
-   *
+   * 
    * @requires Authentication
    */
   async comment_update(id: number, data: Types.PostComment): Promise<ApiResponse<any>> {
@@ -30,7 +30,7 @@ export class Comments {
    * Comment Delete
    *
    * Delete a comment
-   *
+   * 
    * @requires Authentication
    */
   async comment_delete(id: number): Promise<ApiResponse<any>> {

@@ -60,112 +60,16 @@ export interface IdentificationSearchParams {
   observation_iconic_taxon_id?: string[];
 
   /** ID taxon must have this rank or higher */
-  lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** ID taxon must have this rank or lower */
-  hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or higher */
-  observation_lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or lower */
-  observation_hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Exclude IDs of these taxa and their descendants */
   without_taxon_id?: string[];
@@ -274,112 +178,16 @@ export interface IdentificationCategoriesParams {
   observation_iconic_taxon_id?: string[];
 
   /** ID taxon must have this rank or higher */
-  lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** ID taxon must have this rank or lower */
-  hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or higher */
-  observation_lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or lower */
-  observation_hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Exclude IDs of these taxa and their descendants */
   without_taxon_id?: string[];
@@ -488,112 +296,16 @@ export interface IdentificationSpeciesCountsParams {
   observation_iconic_taxon_id?: string[];
 
   /** ID taxon must have this rank or higher */
-  lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** ID taxon must have this rank or lower */
-  hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or higher */
-  observation_lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or lower */
-  observation_hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Exclude IDs of these taxa and their descendants */
   without_taxon_id?: string[];
@@ -644,6 +356,9 @@ export interface IdentificationSpeciesCountsParams {
 
   /** Source of the taxon for counting */
   taxon_of?: 'identification' | 'observation';
+
+  /** Sort order */
+  order?: 'desc' | 'asc';
 }
 
 export interface IdentificationIdentifiersParams {
@@ -705,112 +420,16 @@ export interface IdentificationIdentifiersParams {
   observation_iconic_taxon_id?: string[];
 
   /** ID taxon must have this rank or higher */
-  lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** ID taxon must have this rank or lower */
-  hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or higher */
-  observation_lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or lower */
-  observation_hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Exclude IDs of these taxa and their descendants */
   without_taxon_id?: string[];
@@ -919,112 +538,16 @@ export interface IdentificationObserversParams {
   observation_iconic_taxon_id?: string[];
 
   /** ID taxon must have this rank or higher */
-  lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** ID taxon must have this rank or lower */
-  hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or higher */
-  observation_lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or lower */
-  observation_hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Exclude IDs of these taxa and their descendants */
   without_taxon_id?: string[];
@@ -1133,112 +656,16 @@ export interface IdentificationRecentTaxaParams {
   observation_iconic_taxon_id?: string[];
 
   /** ID taxon must have this rank or higher */
-  lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** ID taxon must have this rank or lower */
-  hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or higher */
-  observation_lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Observation taxon must have this rank or lower */
-  observation_hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  observation_hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Exclude IDs of these taxa and their descendants */
   without_taxon_id?: string[];
@@ -1308,7 +735,7 @@ export interface IdentificationSimilarSpeciesParams {
   identified?: boolean;
 
   /** Observations whose taxa are introduced in their location
-   */
+ */
   introduced?: boolean;
 
   /** Observations that show on map tiles */
@@ -1330,18 +757,18 @@ observations identified by curators of the specified project(s)
   photos?: boolean;
 
   /** Observations that have been favorited by at least one user
-   */
+ */
   popular?: boolean;
 
   /** Observations with sounds */
   sounds?: boolean;
 
   /** Observations of active taxon concepts
-   */
+ */
   taxon_is_active?: boolean;
 
   /** Observations whose taxa are threatened in their location
-   */
+ */
   threatened?: boolean;
 
   /** Observations with a `quality_grade` of either `needs_id` or
@@ -1383,7 +810,7 @@ observations identified by curators of the specified project(s)
   rank?: string[];
 
   /** Must be affiliated with the iNaturalist network website with this ID
-   */
+ */
   site_id?: string[];
 
   /** Must have at least one sound with this license */
@@ -1393,7 +820,7 @@ observations identified by curators of the specified project(s)
   without_taxon_id?: string[];
 
   /** Taxon must have a scientific or common name matching this string
-   */
+ */
   taxon_name?: string[];
 
   /** User must have this ID or login */
@@ -1435,7 +862,7 @@ with the `term_id` parameter
   term_value_id?: number[];
 
   /** Exclude observations with annotations using this controlled value ID.
-   */
+ */
   without_term_id?: number;
 
   /** Exclude observations with annotations using this controlled value ID.
@@ -1450,7 +877,7 @@ or be missing this annotation.
   term_id_or_unknown?: number[];
 
   /** Must have an annotation created by this user
-   */
+ */
   annotation_user_id?: string[];
 
   /** Must have a positional accuracy above this value (meters) */
@@ -1514,62 +941,14 @@ current identifications.
   taxon_geoprivacy?: string[];
 
   /** Must have `geoprivacy` or `taxon_geoprivacy` fields matching these values
-   */
+ */
   obscuration?: string[];
 
   /** Taxon must have this rank or lower */
-  hrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Taxon must have this rank or higher */
-  lrank?:
-    | 'kingdom'
-    | 'phylum'
-    | 'subphylum'
-    | 'superclass'
-    | 'class'
-    | 'subclass'
-    | 'superorder'
-    | 'order'
-    | 'suborder'
-    | 'infraorder'
-    | 'superfamily'
-    | 'epifamily'
-    | 'family'
-    | 'subfamily'
-    | 'supertribe'
-    | 'tribe'
-    | 'subtribe'
-    | 'genus'
-    | 'genushybrid'
-    | 'species'
-    | 'hybrid'
-    | 'subspecies'
-    | 'variety'
-    | 'form';
+  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
 
   /** Taxon must by within this iconic taxon */
   iconic_taxa?: string[];
@@ -1599,19 +978,19 @@ current identifications.
   radius?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
-   */
+ */
   nelat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
-   */
+ */
   nelng?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
-   */
+ */
   swlat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
-   */
+ */
   swlng?: string;
 
   /** Taxon must be in the list with this ID */
@@ -1664,7 +1043,7 @@ export class Identifications {
    *
    * Given an ID, or an array of IDs in comma-delimited format, returns
    * corresponding identifications. A maximum of 30 results will be returned
-   *
+   * 
    */
   async identification_details(id: number[]): Promise<AxiosResponse<any>> {
     return this.client.get(`/identifications/${id}`);
@@ -1680,7 +1059,7 @@ export class Identifications {
    * `current` for a given observation, so if you "restore" one all the other
    * identifications by the authenticated user for the given observation will
    * be withdrawn.
-   *
+   * 
    * @requires Authentication
    */
   async identification_update(id: number, data: Types.PostIdentification): Promise<AxiosResponse<any>> {
@@ -1692,7 +1071,7 @@ export class Identifications {
    *
    * Delete an identification. See description of `PUT /identifications/{id}
    * for notes on withdrawing and restoring identifications.
-   *
+   * 
    * @requires Authentication
    */
   async identification_delete(id: number): Promise<AxiosResponse<any>> {
@@ -1714,7 +1093,7 @@ export class Identifications {
    *
    * Given zero to many of following parameters, returns identifications
    * matching the search criteria
-   *
+   * 
    */
   async identification_search(params?: IdentificationSearchParams): Promise<AxiosResponse<any>> {
     return this.client.get(`/identifications`, { params });
@@ -1725,7 +1104,7 @@ export class Identifications {
    *
    * Given zero to many of following parameters, return counts of the
    * categories of identifications matching the search criteria
-   *
+   * 
    */
   async identification_categories(params?: IdentificationCategoriesParams): Promise<AxiosResponse<any>> {
     return this.client.get(`/identifications/categories`, { params });
@@ -1739,11 +1118,9 @@ export class Identifications {
    * count of identifications they are associated with, ordered by count
    * descending. `Leaf taxa` are the leaves of the taxonomic tree containing
    * only the taxa associated with observations matching the search criteria.
-   *
+   * 
    */
-  async identification_species_counts(
-    params?: IdentificationSpeciesCountsParams
-  ): Promise<AxiosResponse<Types.SpeciesCountsResponse>> {
+  async identification_species_counts(params?: IdentificationSpeciesCountsParams): Promise<AxiosResponse<Types.SpeciesCountsResponse>> {
     return this.client.get(`/identifications/species_counts`, { params });
   }
 
@@ -1754,11 +1131,9 @@ export class Identifications {
    * identifications matching the search criteria and the count of
    * matching identifications, ordered by count descending. A
    * maximum of 500 results will be returned
-   *
+   * 
    */
-  async identification_identifiers(
-    params?: IdentificationIdentifiersParams
-  ): Promise<AxiosResponse<Types.UserCountsResponse>> {
+  async identification_identifiers(params?: IdentificationIdentifiersParams): Promise<AxiosResponse<Types.UserCountsResponse>> {
     return this.client.get(`/identifications/identifiers`, { params });
   }
 
@@ -1768,11 +1143,9 @@ export class Identifications {
    * Given zero to many of following parameters, returns creators of
    * observations of identifications matching the search criteria and
    * the count of matching observations, ordered by count descending
-   *
+   * 
    */
-  async identification_observers(
-    params?: IdentificationObserversParams
-  ): Promise<AxiosResponse<Types.UserCountsResponse>> {
+  async identification_observers(params?: IdentificationObserversParams): Promise<AxiosResponse<Types.UserCountsResponse>> {
     return this.client.get(`/identifications/observers`, { params });
   }
 
@@ -1782,7 +1155,7 @@ export class Identifications {
    * Returns an array of objects each containing an identification and a
    * taxon. Returns IDs representing the earliest occurrence of taxa
    * associated with identifications in the filtered set of results
-   *
+   * 
    */
   async identification_recent_taxa(params?: IdentificationRecentTaxaParams): Promise<AxiosResponse<any>> {
     return this.client.get(`/identifications/recent_taxa`, { params });
@@ -1795,7 +1168,7 @@ export class Identifications {
    * attached to observations identified as this species, ordered by combined
    * frequency descending. This will only return species in the same iconic
    * taxon, and will never return descendants of the chosen taxon
-   *
+   * 
    */
   async identification_similar_species(params: IdentificationSimilarSpeciesParams): Promise<AxiosResponse<any>> {
     return this.client.get(`/identifications/similar_species`, { params });
