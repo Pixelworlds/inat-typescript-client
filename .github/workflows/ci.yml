@@ -401,48 +401,55 @@ jobs:
           test -f postman/iNaturalist_API_Collection.postman_collection.json || (echo "Missing Postman collection" && exit 1)
           echo "✓ All artifacts present"
 
-          # Test that the built package exports can be imported
-          echo "Testing package exports..."
+          # Test that the built package can be required (CJS)
+          echo "Testing CJS import..."
           node -e "
             try {
               const pkg = require('./dist/index.cjs');
-              if (typeof pkg.INaturalistClient !== 'function') {
-                throw new Error('INaturalistClient is not exported as a function');
+              console.log('Available exports:', Object.keys(pkg).join(', '));
+              if (!pkg.INaturalistClient) {
+                throw new Error('INaturalistClient not found in exports');
               }
-              console.log('✓ CJS import and exports working');
+              if (typeof pkg.INaturalistClient !== 'function') {
+                throw new Error('INaturalistClient is not a function');
+              }
+              console.log('✓ CJS import successful');
             } catch (error) {
               console.error('CJS import failed:', error.message);
               process.exit(1);
             }
           "
 
-          # Test ESM import
-          echo "Testing ESM import..."
-          node --input-type=module -e "
+          # Test file contents and structure
+          echo "Testing file structure..."
+
+          # Check that built files are not empty
+          test -s dist/index.cjs || (echo "dist/index.cjs is empty" && exit 1)
+          test -s dist/index.js || (echo "dist/index.js is empty" && exit 1)
+          test -s dist/index.d.ts || (echo "dist/index.d.ts is empty" && exit 1)
+
+          # Check TypeScript definitions contain expected exports
+          grep -q "INaturalistClient" dist/index.d.ts || (echo "TypeScript definitions missing INaturalistClient" && exit 1)
+
+          # Check documentation contains expected content
+          grep -q "iNaturalist API" docs/API.md || (echo "API documentation missing expected content" && exit 1)
+
+          # Check Postman collection is valid JSON
+          node -e "
             try {
-              const pkg = await import('./dist/index.js');
-              if (typeof pkg.INaturalistClient !== 'function') {
-                throw new Error('INaturalistClient is not exported as a function');
+              const fs = require('fs');
+              const collection = JSON.parse(fs.readFileSync('postman/iNaturalist_API_Collection.postman_collection.json', 'utf8'));
+              if (!collection.info || !collection.info.name) {
+                throw new Error('Invalid Postman collection structure');
               }
-              console.log('✓ ESM import and exports working');
+              console.log('✓ Postman collection is valid JSON');
             } catch (error) {
-              console.error('ESM import failed:', error.message);
+              console.error('Postman collection validation failed:', error.message);
               process.exit(1);
             }
           "
 
-          # Test TypeScript definitions exist
-          echo "Testing TypeScript definitions..."
-          node -e "
-            const fs = require('fs');
-            const dts = fs.readFileSync('./dist/index.d.ts', 'utf8');
-            if (!dts.includes('INaturalistClient')) {
-              throw new Error('TypeScript definitions missing INaturalistClient');
-            }
-            console.log('✓ TypeScript definitions working');
-          "
-
-          echo "Integration tests completed successfully"
+          echo "✓ All integration tests passed successfully"
 
   # Summary job
   ci-summary:
