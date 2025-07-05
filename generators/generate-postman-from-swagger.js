@@ -60,7 +60,7 @@ swagger.tags.forEach(tag => {
       type: "bearer",
       bearer: [{
         key: "token",
-        value: "{{jwt_api_token}}",
+        value: "{{inat_api_token}}",
         type: "string"
       }]
     }
@@ -124,7 +124,7 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
               key: param.name,
               value: param.example || '',
               description: param.description || '',
-              disabled: !param.required
+              disabled: true
             });
             break;
           case 'path':
@@ -210,12 +210,44 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
         mode: 'urlencoded',
         urlencoded: [
           { key: 'grant_type', value: 'authorization_code', type: 'text' },
-          { key: 'client_id', value: '{{client_id}}', type: 'text' },
-          { key: 'client_secret', value: '{{client_secret}}', type: 'text' },
-          { key: 'code', value: '{{authorization_code}}', type: 'text' },
-          { key: 'redirect_uri', value: '{{redirect_uri}}', type: 'text' }
+          { key: 'client_id', value: '', type: 'text' },
+          { key: 'client_secret', value: '', type: 'text' },
+          { key: 'code', value: '', type: 'text' },
+          { key: 'redirect_uri', value: '', type: 'text' }
         ]
       };
+      
+      // Add post-response script
+      request.event = [{
+        listen: 'test',
+        script: {
+          type: 'text/javascript',
+          exec: [
+            'const responseJson = pm.response.text();',
+            '',
+            'if (responseJson) {',
+            '  try {',
+            '    const parsedJson = JSON.parse(responseJson);',
+            '',
+            '    if (parsedJson.access_token !== undefined) {',
+            '      pm.globals.set(\'inat_access_token\', parsedJson.access_token);',
+            '      pm.globals.set(\'inat_token_type\', parsedJson.token_type);',
+            '      pm.globals.set(\'inat_token_scope\', parsedJson.scope);',
+            '      pm.globals.set(\'inat_token_created_at\', parsedJson.created_at);',
+            '    } else {',
+            '      console.error(\'No access_token found in response\');',
+            '      console.log(\'Response body:\', JSON.stringify(parsedJson, null, 2));',
+            '    }',
+            '  } catch (e) {',
+            '    console.error(\'Failed to parse JSON:\', e);',
+            '    console.log(\'Response body:\', responseJson);',
+            '  }',
+            '} else {',
+            '  console.error(\'Empty response body\');',
+            '}'
+          ]
+        }
+      }];
     }
 
     // Build the URL object
@@ -292,36 +324,6 @@ const collection = {
       value: "https://api.inaturalist.org/v1",
       type: "string"
     },
-    {
-      key: "jwt_api_token",
-      value: "",
-      type: "string",
-      description: "JWT token obtained from /users/api_token endpoint"
-    },
-    {
-      key: "client_id",
-      value: "",
-      type: "string",
-      description: "OAuth client ID"
-    },
-    {
-      key: "client_secret",
-      value: "",
-      type: "string",
-      description: "OAuth client secret"
-    },
-    {
-      key: "authorization_code",
-      value: "",
-      type: "string",
-      description: "OAuth authorization code"
-    },
-    {
-      key: "redirect_uri",
-      value: "",
-      type: "string", 
-      description: "OAuth redirect URI"
-    }
   ],
   item: Object.values(folders).filter(folder => folder.item.length > 0).sort((a, b) => a.name.localeCompare(b.name))
 };

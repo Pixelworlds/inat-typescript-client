@@ -19,36 +19,6 @@
       "key": "inat_base_url",
       "value": "https://api.inaturalist.org/v1",
       "type": "string"
-    },
-    {
-      "key": "jwt_api_token",
-      "value": "",
-      "type": "string",
-      "description": "JWT token obtained from /users/api_token endpoint"
-    },
-    {
-      "key": "client_id",
-      "value": "",
-      "type": "string",
-      "description": "OAuth client ID"
-    },
-    {
-      "key": "client_secret",
-      "value": "",
-      "type": "string",
-      "description": "OAuth client secret"
-    },
-    {
-      "key": "authorization_code",
-      "value": "",
-      "type": "string",
-      "description": "OAuth authorization code"
-    },
-    {
-      "key": "redirect_uri",
-      "value": "",
-      "type": "string",
-      "description": "OAuth redirect URI"
     }
   ],
   "item": [
@@ -228,7 +198,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -371,7 +341,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -418,7 +388,7 @@
                   "key": "taxon_id",
                   "value": "",
                   "description": "Filter by this taxon",
-                  "disabled": false
+                  "disabled": true
                 }
               ]
             }
@@ -430,7 +400,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -573,7 +543,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -2782,7 +2752,7 @@
                   "key": "taxon_id",
                   "value": "",
                   "description": "Only show observations of these taxa and their descendants",
-                  "disabled": false
+                  "disabled": true
                 }
               ]
             }
@@ -2794,7 +2764,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -3009,7 +2979,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -3039,19 +3009,19 @@
                   "key": "client_id",
                   "value": "",
                   "description": "Your application's client ID",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "redirect_uri",
                   "value": "",
                   "description": "URL to redirect the user after authorization",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "response_type",
                   "value": "",
                   "description": "OAuth response type",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "code_challenge",
@@ -3107,27 +3077,59 @@
                 },
                 {
                   "key": "client_id",
-                  "value": "{{client_id}}",
+                  "value": "",
                   "type": "text"
                 },
                 {
                   "key": "client_secret",
-                  "value": "{{client_secret}}",
+                  "value": "",
                   "type": "text"
                 },
                 {
                   "key": "code",
-                  "value": "{{authorization_code}}",
+                  "value": "",
                   "type": "text"
                 },
                 {
                   "key": "redirect_uri",
-                  "value": "{{redirect_uri}}",
+                  "value": "",
                   "type": "text"
                 }
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseJson = pm.response.text();",
+                  "",
+                  "if (responseJson) {",
+                  "  try {",
+                  "    const parsedJson = JSON.parse(responseJson);",
+                  "",
+                  "    if (parsedJson.access_token !== undefined) {",
+                  "      pm.globals.set('inat_access_token', parsedJson.access_token);",
+                  "      pm.globals.set('inat_token_type', parsedJson.token_type);",
+                  "      pm.globals.set('inat_token_scope', parsedJson.scope);",
+                  "      pm.globals.set('inat_token_created_at', parsedJson.created_at);",
+                  "    } else {",
+                  "      console.error('No access_token found in response');",
+                  "      console.log('Response body:', JSON.stringify(parsedJson, null, 2));",
+                  "    }",
+                  "  } catch (e) {",
+                  "    console.error('Failed to parse JSON:', e);",
+                  "    console.log('Response body:', responseJson);",
+                  "  }",
+                  "} else {",
+                  "  console.error('Empty response body');",
+                  "}"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "OAuth Assertion Token",
@@ -3168,7 +3170,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -3311,7 +3313,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -3469,7 +3471,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -5801,7 +5803,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -7030,7 +7032,7 @@
                   "key": "since",
                   "value": "",
                   "description": "Deleted at or after this time",
-                  "disabled": false
+                  "disabled": true
                 }
               ]
             },
@@ -10038,7 +10040,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -10101,7 +10103,7 @@
                   "key": "q",
                   "value": "",
                   "description": "Search by name (must start with this value) or by ID (exact match).",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "order_by",
@@ -10133,25 +10135,25 @@
                   "key": "nelat",
                   "value": "",
                   "description": "Must be nearby this bounding box (*nelat, *nelng, *swlat, *swlng)\n",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "nelng",
                   "value": "",
                   "description": "Must be nearby this bounding box (*nelat, *nelng, *swlat, *swlng)\n",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "swlat",
                   "value": "",
                   "description": "Must be nearby this bounding box (*nelat, *nelng, *swlat, *swlng)\n",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "swlng",
                   "value": "",
                   "description": "Must be nearby this bounding box (*nelat, *nelng, *swlat, *swlng)\n",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "name",
@@ -10175,7 +10177,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -10350,7 +10352,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -10594,7 +10596,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -10737,7 +10739,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -11219,7 +11221,7 @@
                   "key": "q",
                   "value": "",
                   "description": "Search by name (must start with this value) or by ID (exact match).",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "id",
@@ -11358,7 +11360,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -11435,7 +11437,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -11607,7 +11609,7 @@
                   "key": "q",
                   "value": "",
                   "description": "Search by name (must start with this value) or by ID (exact match).",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "is_active",
@@ -11667,7 +11669,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -11809,7 +11811,7 @@
                   "key": "q",
                   "value": "",
                   "description": "Search by name (must start with this value) or by ID (exact match).",
-                  "disabled": false
+                  "disabled": true
                 },
                 {
                   "key": "project_id",
@@ -12074,7 +12076,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
@@ -14406,7 +14408,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "{{jwt_api_token}}",
+            "value": "{{inat_api_token}}",
             "type": "string"
           }
         ]
