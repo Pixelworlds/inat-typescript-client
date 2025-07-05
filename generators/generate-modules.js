@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
 class TypeScriptModuleGenerator {
   constructor() {
@@ -20,14 +20,14 @@ class TypeScriptModuleGenerator {
   async generate() {
     console.log('Loading Swagger specification...');
     const swagger = await this.swaggerLoader.loadSwagger();
-    
+
     console.log('Extracting modules by tags...');
     const modules = this.swaggerLoader.extractModules(swagger);
     console.log(`Found ${modules.length} modules`);
 
     console.log('Generating TypeScript modules...');
     this.fileManager.ensureOutputDirectory();
-    
+
     for (const module of modules) {
       const moduleContent = this.moduleBuilder.buildModule(module);
       this.fileManager.writeModule(module.fileName, moduleContent);
@@ -54,18 +54,18 @@ class SwaggerLoader {
 
     const data = readFileSync(this.config.inputFile, 'utf8');
     const swagger = JSON.parse(data);
-    
+
     // Also load swagger-auth.json if it exists and merge paths
     if (existsSync(this.config.authInputFile)) {
       const authData = readFileSync(this.config.authInputFile, 'utf8');
       const swaggerAuth = JSON.parse(authData);
-      
+
       // Merge paths
       swagger.paths = {
         ...swagger.paths,
-        ...swaggerAuth.paths
+        ...swaggerAuth.paths,
       };
-      
+
       // Merge tags
       swagger.tags = swagger.tags || [];
       if (swaggerAuth.tags) {
@@ -75,21 +75,21 @@ class SwaggerLoader {
           }
         });
       }
-      
+
       console.log(`Merged ${Object.keys(swaggerAuth.paths || {}).length} paths from swagger-auth.json`);
     }
-    
+
     return swagger;
   }
 
   extractModules(swagger) {
     const moduleMap = new Map();
-    
+
     // Process each path and method
     for (const [path, pathItem] of Object.entries(swagger.paths)) {
       for (const [method, operation] of Object.entries(pathItem)) {
         if (method === 'parameters') continue; // Skip parameter definitions
-        
+
         const tags = operation.tags || ['default'];
         for (const tag of tags) {
           if (!moduleMap.has(tag)) {
@@ -97,16 +97,16 @@ class SwaggerLoader {
               name: tag,
               className: this._toClassName(tag),
               fileName: this._toFileName(tag),
-              endpoints: []
+              endpoints: [],
             });
           }
-          
+
           const module = moduleMap.get(tag);
           module.endpoints.push(this._createEndpoint(path, method, operation, swagger));
         }
       }
     }
-    
+
     return Array.from(moduleMap.values());
   }
 
@@ -115,7 +115,7 @@ class SwaggerLoader {
     const queryParams = this._extractQueryParams(operation, swagger);
     const bodyParam = this._extractBodyParam(operation);
     const methodName = this._generateMethodName(path, method, operation);
-    
+
     return {
       name: methodName,
       method: method.toUpperCase(),
@@ -129,49 +129,49 @@ class SwaggerLoader {
       bodyParam,
       consumes: operation.consumes || [],
       produces: operation.produces || swagger.produces || ['application/json'],
-      responses: operation.responses || {}
+      responses: operation.responses || {},
     };
   }
 
   _extractPathParams(path, operation, swagger) {
     const params = [];
     const pathMatches = path.match(/\{([^}]+)\}/g);
-    
+
     if (pathMatches) {
       for (const match of pathMatches) {
         const paramName = match.slice(1, -1);
         const paramDef = this._findParameter(paramName, operation, swagger);
-        
+
         params.push({
           name: paramName,
           type: this._getParamType(paramDef),
           required: true,
-          description: paramDef?.description || ''
+          description: paramDef?.description || '',
         });
       }
     }
-    
+
     return params;
   }
 
   _extractQueryParams(operation, swagger) {
     const params = [];
-    
+
     if (operation.parameters) {
       for (const param of operation.parameters) {
         const resolvedParam = this._resolveParameter(param, swagger);
-        
+
         if (resolvedParam && resolvedParam.in === 'query') {
           params.push({
             name: resolvedParam.name,
             type: this._getParamType(resolvedParam),
             required: resolvedParam.required || false,
-            description: resolvedParam.description || ''
+            description: resolvedParam.description || '',
           });
         }
       }
     }
-    
+
     return params;
   }
 
@@ -182,7 +182,7 @@ class SwaggerLoader {
           return {
             name: param.name || 'body',
             schema: param.schema,
-            description: param.description || ''
+            description: param.description || '',
           };
         }
       }
@@ -216,7 +216,7 @@ class SwaggerLoader {
 
   _getParamType(param) {
     if (!param) return 'any';
-    
+
     if (param.type === 'integer') return 'number';
     if (param.type === 'boolean') return 'boolean';
     if (param.type === 'array') {
@@ -224,7 +224,7 @@ class SwaggerLoader {
       return itemType === 'integer' ? 'number[]' : `${itemType}[]`;
     }
     if (param.enum) return param.enum.map(v => `'${v}'`).join(' | ');
-    
+
     return 'string';
   }
 
@@ -232,13 +232,13 @@ class SwaggerLoader {
     if (operation.operationId) {
       return this._sanitizeMethodName(operation.operationId);
     }
-    
+
     // Generate from summary or path
     const summary = operation.summary || '';
     if (summary) {
       return this._sanitizeMethodName(summary.toLowerCase().replace(/\s+/g, '_'));
     }
-    
+
     // Generate from path and method
     const pathParts = path.split('/').filter(p => p && !p.startsWith('{'));
     const cleanPath = pathParts.join('_');
@@ -282,15 +282,13 @@ class ModuleBuilder {
     const imports = this._buildImports(module);
     const interfaces = this._buildInterfaces(module);
     const classDefinition = this._buildClass(module);
-    
+
     return [imports, interfaces, classDefinition].filter(Boolean).join('\n\n');
   }
 
   buildIndexModule(modules) {
     const axiosImport = `import axios from 'axios';\nimport type { AxiosInstance } from 'axios';`;
-    const imports = modules.map(mod => 
-      `import { ${mod.className} } from './${mod.fileName}';`
-    ).join('\n');
+    const imports = modules.map(mod => `import { ${mod.className} } from './${mod.fileName}';`).join('\n');
 
     const clientClass = this._buildClientClass(modules);
     const exportStatement = `export { ${modules.map(mod => mod.className).join(', ')} };`;
@@ -299,36 +297,41 @@ class ModuleBuilder {
   }
 
   _buildImports(module) {
-    const imports = [
-      `import type { AxiosInstance, AxiosResponse } from 'axios';`
-    ];
-    
+    const imports = [`import type { AxiosInstance, AxiosResponse } from 'axios';`];
+
     // Check if we need to import types from swagger-types
-    const needsTypes = module.endpoints.some(ep => 
-      ep.bodyParam?.schema?.$ref || 
-      ep.responses['200']?.schema?.$ref
-    );
-    
+    const needsTypes = module.endpoints.some(ep => ep.bodyParam?.schema?.$ref || ep.responses['200']?.schema?.$ref);
+
     if (needsTypes) {
       imports.push(`import type * as Types from '../src/types/swagger-types';`);
     }
-    
+
     return imports.join('\n');
   }
 
   _buildInterfaces(module) {
     const interfaces = new Map();
-    
+
     module.endpoints.forEach(endpoint => {
       if (endpoint.queryParams.length > 0) {
         const interfaceName = `${this._toTitleCase(endpoint.name)}Params`;
         if (!interfaces.has(interfaceName)) {
-          const properties = endpoint.queryParams.map(param => {
-            const optional = param.required ? '' : '?';
-            const comment = param.description ? `\n  /** ${param.description} */` : '';
-            return `${comment}\n  ${param.name}${optional}: ${param.type};`;
-          }).join('\n');
-          
+          // Deduplicate properties by name
+          const uniqueParams = new Map();
+          endpoint.queryParams.forEach(param => {
+            if (!uniqueParams.has(param.name)) {
+              uniqueParams.set(param.name, param);
+            }
+          });
+
+          const properties = Array.from(uniqueParams.values())
+            .map(param => {
+              const optional = param.required ? '' : '?';
+              const comment = param.description ? `\n  /** ${param.description} */` : '';
+              return `${comment}\n  ${param.name}${optional}: ${param.type};`;
+            })
+            .join('\n');
+
           interfaces.set(interfaceName, `export interface ${interfaceName} {${properties}\n}`);
         }
       }
@@ -355,36 +358,37 @@ ${methods}
   _buildMethod(endpoint) {
     const methodName = endpoint.name;
     const jsDoc = this._buildJsDoc(endpoint);
-    
+
     // Build parameters
     const params = [];
-    
+
     // Path parameters
     endpoint.pathParams.forEach(param => {
       params.push(`${param.name}: ${param.type}`);
     });
-    
+
     // Query parameters
     if (endpoint.queryParams.length > 0) {
       const paramTypeName = `${this._toTitleCase(methodName)}Params`;
       const required = endpoint.queryParams.some(p => p.required);
       params.push(`params${required ? '' : '?'}: ${paramTypeName}`);
     }
-    
+
     // Body parameter
     if (endpoint.bodyParam) {
       const bodyType = this._getBodyType(endpoint.bodyParam);
       params.push(`data: ${bodyType}`);
     }
-    
+
     const paramString = params.join(', ');
     const returnType = this._getReturnType(endpoint);
     const url = this._buildUrlTemplate(endpoint.path, endpoint.pathParams);
-    
+
     // Special handling for form-encoded endpoints
     if (endpoint.consumes.includes('application/x-www-form-urlencoded')) {
-      return `${jsDoc}
-  async ${methodName}(${paramString}): Promise<${returnType}> {
+      // Only include form data handling if there's actually a body parameter
+      const formDataHandling = endpoint.bodyParam
+        ? `
     const formData = new URLSearchParams();
     if (data) {
       Object.keys(data).forEach(key => {
@@ -398,13 +402,20 @@ ${methods}
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }${endpoint.queryParams.length > 0 ? ',\n      params' : ''}
-    });
+    });`
+        : `
+    return this.client.${endpoint.method.toLowerCase()}(\`${url}\`${
+            endpoint.queryParams.length > 0 ? ', { params }' : ''
+          });`;
+
+      return `${jsDoc}
+  async ${methodName}(${paramString}): Promise<${returnType}> {${formDataHandling}
   }`;
     }
-    
+
     // Build axios config
     const axiosConfig = this._buildAxiosConfig(endpoint);
-    
+
     return `${jsDoc}
   async ${methodName}(${paramString}): Promise<${returnType}> {
     return this.client.${endpoint.method.toLowerCase()}(\`${url}\`${axiosConfig});
@@ -413,29 +424,29 @@ ${methods}
 
   _buildJsDoc(endpoint) {
     const lines = ['  /**'];
-    
+
     if (endpoint.summary) {
       lines.push(`   * ${endpoint.summary}`);
     }
-    
+
     if (endpoint.description && endpoint.description !== endpoint.summary) {
       lines.push('   *');
       endpoint.description.split('\n').forEach(line => {
         lines.push(`   * ${line.trim()}`);
       });
     }
-    
+
     if (endpoint.requiresAuth) {
       lines.push('   * @requires Authentication');
     }
-    
+
     lines.push('   */');
     return lines.join('\n');
   }
 
   _buildAxiosConfig(endpoint) {
     const configs = [];
-    
+
     if (endpoint.method === 'GET' || endpoint.method === 'DELETE') {
       if (endpoint.queryParams.length > 0) {
         configs.push('{ params }');
@@ -445,12 +456,12 @@ ${methods}
       if (endpoint.bodyParam) {
         configs.push('data');
       }
-      
+
       if (endpoint.queryParams.length > 0) {
         configs.push('{ params }');
       }
     }
-    
+
     return configs.length > 0 ? ', ' + configs.join(', ') : '';
   }
 
@@ -480,15 +491,19 @@ ${methods}
   }
 
   _buildClientClass(modules) {
-    const properties = modules.map(mod => {
-      const propName = mod.fileName.replace(/-/g, '_');
-      return `  public ${propName}: ${mod.className};`;
-    }).join('\n');
+    const properties = modules
+      .map(mod => {
+        const propName = mod.fileName.replace(/-/g, '_');
+        return `  public ${propName}: ${mod.className};`;
+      })
+      .join('\n');
 
-    const initializations = modules.map(mod => {
-      const propName = mod.fileName.replace(/-/g, '_');
-      return `    this.${propName} = new ${mod.className}(this.client);`;
-    }).join('\n');
+    const initializations = modules
+      .map(mod => {
+        const propName = mod.fileName.replace(/-/g, '_');
+        return `    this.${propName} = new ${mod.className}(this.client);`;
+      })
+      .join('\n');
 
     return `export class INaturalistClient {
   private client: AxiosInstance;
