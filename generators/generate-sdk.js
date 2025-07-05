@@ -188,6 +188,10 @@ export interface INaturalistConfig {
     const swaggerTypesSource = join(this.projectRoot, 'src', 'types', 'swagger-types.ts');
     const swaggerTypesTarget = join(this.srcDir, 'types');
 
+    console.log('Checking for swagger types...');
+    console.log('Swagger types source path:', swaggerTypesSource);
+    console.log('Swagger types source exists:', existsSync(swaggerTypesSource));
+
     if (existsSync(swaggerTypesSource)) {
       if (!existsSync(swaggerTypesTarget)) {
         mkdirSync(swaggerTypesTarget, { recursive: true });
@@ -197,15 +201,40 @@ export interface INaturalistConfig {
     } else {
       // Generate the types first if they don't exist
       console.log('Swagger types not found, generating them first...');
+
+      // Check if data files exist
+      const swaggerPath = join(this.projectRoot, 'data', 'swagger.json');
+      const swaggerAuthPath = join(this.projectRoot, 'data', 'swagger-auth.json');
+
+      console.log('Checking data files:');
+      console.log('swagger.json path:', swaggerPath);
+      console.log('swagger.json exists:', existsSync(swaggerPath));
+      console.log('swagger-auth.json path:', swaggerAuthPath);
+      console.log('swagger-auth.json exists:', existsSync(swaggerAuthPath));
+
+      if (!existsSync(swaggerPath)) {
+        throw new Error(`Required data file missing: ${swaggerPath}`);
+      }
+
+      if (!existsSync(swaggerAuthPath)) {
+        throw new Error(`Required data file missing: ${swaggerAuthPath}`);
+      }
+
       try {
+        console.log('Attempting to generate swagger types...');
         execSync('bun run generate:types', {
           cwd: this.projectRoot,
           stdio: 'inherit',
         });
+        console.log('Swagger types generation command completed');
       } catch (error) {
         console.error('Failed to generate swagger types:', error.message);
+        console.error('Error details:', error);
         throw new Error('Swagger types generation failed');
       }
+
+      console.log('Checking if swagger types were generated...');
+      console.log('Swagger types source exists after generation:', existsSync(swaggerTypesSource));
 
       if (existsSync(swaggerTypesSource)) {
         if (!existsSync(swaggerTypesTarget)) {
@@ -215,6 +244,30 @@ export interface INaturalistConfig {
         console.log('Generated and copied swagger types');
       } else {
         console.error('Swagger types still not found after generation');
+        console.error('Expected location:', swaggerTypesSource);
+
+        // Show what's in the src directory
+        const srcDir = join(this.projectRoot, 'src');
+        console.log('Contents of src directory:');
+        if (existsSync(srcDir)) {
+          const srcContents = readdirSync(srcDir);
+          srcContents.forEach(item => {
+            const itemPath = join(srcDir, item);
+            const isDir = statSync(itemPath).isDirectory();
+            console.log(`  ${item} ${isDir ? '(directory)' : '(file)'}`);
+
+            if (isDir && item === 'types') {
+              console.log('    Contents of types directory:');
+              const typesContents = readdirSync(itemPath);
+              typesContents.forEach(typeFile => {
+                console.log(`      ${typeFile}`);
+              });
+            }
+          });
+        } else {
+          console.log('  src directory does not exist');
+        }
+
         throw new Error('Failed to generate swagger types');
       }
     }
