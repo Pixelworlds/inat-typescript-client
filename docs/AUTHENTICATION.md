@@ -47,23 +47,17 @@ async function authenticateWithiNaturalist(username, password, clientId, clientS
   // Step 1: Create auth client (use main domain)
   const authClient = new INaturalistClient('https://www.inaturalist.org');
   
-  // Step 2: Prepare OAuth request data
-  const formData = new URLSearchParams();
-  formData.append('grant_type', 'password');
-  formData.append('username', username);
-  formData.append('password', password);
-  formData.append('client_id', clientId);
-  formData.append('client_secret', clientSecret);
-
-  // Step 3: Get OAuth access token
-  const oauthResponse = await authClient.authentication.http.post('/oauth/token', formData.toString(), {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json'
-    }
+  // Step 2: Get OAuth access token using the convenient method
+  // Note: The SDK automatically handles form-encoding for OAuth requests
+  const oauthResponse = await authClient.authentication.post_oauth_token({
+    grant_type: 'password',
+    username: username,
+    password: password,
+    client_id: clientId,
+    client_secret: clientSecret
   });
 
-  // Step 4: Create API client with access token (use API subdomain)
+  // Step 3: Create API client with access token (use API subdomain)
   const apiClient = new INaturalistClient('https://api.inaturalist.org/v1');
   apiClient.setApiToken(oauthResponse.data.access_token);
 
@@ -124,9 +118,19 @@ The iNaturalist API has two types of tokens with different use cases:
 
 ### Content Type Requirements
 
-OAuth requests must use form encoding:
+OAuth requests must use form encoding. The SDK's `post_oauth_token` method automatically handles this for you:
 
 ```typescript
+// Using the SDK method (recommended) - form encoding is automatic
+const response = await client.authentication.post_oauth_token({
+  grant_type: 'password',
+  username: 'your-username',
+  password: 'your-password',
+  client_id: 'your-client-id',
+  client_secret: 'your-client-secret'
+});
+
+// If making raw HTTP calls, you must set the headers manually:
 headers: {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Accept': 'application/json'
@@ -140,18 +144,13 @@ async function safeAuthentication(username, password, clientId, clientSecret) {
   try {
     const authClient = new INaturalistClient('https://www.inaturalist.org');
     
-    const formData = new URLSearchParams();
-    formData.append('grant_type', 'password');
-    formData.append('username', username);
-    formData.append('password', password);
-    formData.append('client_id', clientId);
-    formData.append('client_secret', clientSecret);
-
-    const oauthResponse = await authClient.authentication.http.post('/oauth/token', formData.toString(), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      }
+    // The SDK automatically handles form-encoding for OAuth requests
+    const oauthResponse = await authClient.authentication.post_oauth_token({
+      grant_type: 'password',
+      username: username,
+      password: password,
+      client_id: clientId,
+      client_secret: clientSecret
     });
 
     return {
@@ -223,18 +222,13 @@ class INaturalistAuth {
     // Step 1: Get OAuth access token
     const authClient = new INaturalistClient('https://www.inaturalist.org');
     
-    const formData = new URLSearchParams();
-    formData.append('grant_type', 'password');
-    formData.append('username', username);
-    formData.append('password', password);
-    formData.append('client_id', clientId);
-    formData.append('client_secret', clientSecret);
-
-    const oauthResponse = await authClient.authentication.http.post('/oauth/token', formData.toString(), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      }
+    // The SDK automatically handles form-encoding for OAuth requests
+    const oauthResponse = await authClient.authentication.post_oauth_token({
+      grant_type: 'password',
+      username: username,
+      password: password,
+      client_id: clientId,
+      client_secret: clientSecret
     });
 
     this.accessToken = oauthResponse.data.access_token;
