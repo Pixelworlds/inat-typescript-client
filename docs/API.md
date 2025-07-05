@@ -93,6 +93,33 @@ This documentation covers the iNaturalist API endpoints organized by category. T
 
 **Authentication:** Many endpoints require authentication using Bearer tokens. 64 out of 110 endpoints require authentication.
 
+## Authentication
+
+The iNaturalist API uses Bearer token authentication for endpoints that require user authorization. 64 out of 110 endpoints require authentication.
+
+### Getting an Access Token
+
+To authenticate with the API, you need to obtain an access token through OAuth 2.0 flow:
+
+1. **Authorization Request**: Direct users to `/oauth/authorize` with your client credentials
+2. **Token Exchange**: Exchange the authorization code for an access token at `/oauth/token`
+3. **API Requests**: Include the token in the `Authorization` header as `Bearer <token>`
+
+### Using Bearer Tokens
+
+Include your access token in the Authorization header:
+
+```http
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+### Endpoints by Authentication Status
+
+- **🔒 Authentication Required**: These endpoints require a valid Bearer token
+- **🔓 Public Access**: These endpoints can be accessed without authentication
+
+See the [OAuth](#oauth) section for detailed information about the authentication flow.
+
 ## Table of Contents
 
 - [Annotations](#annotations) (4 endpoints)
@@ -2162,7 +2189,7 @@ Add an observation to a project
 | GET | `/projects/{id}/membership` | 🔒 Required | Membership of current user |
 | GET | `/projects/{id}/subscriptions` | 🔒 Required | Project Subscriptions |
 | POST | `/projects/{id}/add` | 🔒 Required | Project Add |
-| DELETE | `/projects/{id}/remove` | 🔒 Required | Project Add |
+| DELETE | `/projects/{id}/remove` | 🔒 Required | Project Remove |
 | GET | `/projects/autocomplete` | 🔓 Optional | Project Autocomplete |
 | POST | `/subscriptions/project/{id}/subscribe` | 🔒 Required | Project Subscribe |
 
@@ -2337,7 +2364,7 @@ Add an observation to a project
 
 #### DELETE /projects/{id}/remove
 
-**Project Add**
+**Project Remove**
 
 Remove an observation from a project
 

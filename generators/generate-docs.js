@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
 class DocumentationGenerator {
   constructor() {
@@ -19,14 +19,14 @@ class DocumentationGenerator {
   async generate() {
     console.log('Loading Swagger specification...');
     const swagger = await this.swaggerLoader.loadSwagger();
-    
+
     console.log('Extracting API information...');
     const apiInfo = this.swaggerLoader.extractApiInfo(swagger);
     console.log(`Found ${apiInfo.categories.length} categories with ${apiInfo.totalEndpoints} endpoints`);
 
     console.log('Generating documentation...');
     this.fileManager.ensureOutputDirectory();
-    
+
     const documentation = this.docBuilder.buildDocumentation(apiInfo);
     this.fileManager.writeDocumentation(documentation);
 
@@ -47,18 +47,18 @@ class SwaggerLoader {
 
     const data = readFileSync(this.config.inputFile, 'utf8');
     const swagger = JSON.parse(data);
-    
+
     // Also load swagger-auth.json if it exists and merge
     if (existsSync(this.config.authInputFile)) {
       const authData = readFileSync(this.config.authInputFile, 'utf8');
       const swaggerAuth = JSON.parse(authData);
-      
+
       // Merge paths
       swagger.paths = {
         ...swagger.paths,
-        ...swaggerAuth.paths
+        ...swaggerAuth.paths,
       };
-      
+
       // Merge tags
       swagger.tags = swagger.tags || [];
       if (swaggerAuth.tags) {
@@ -68,10 +68,10 @@ class SwaggerLoader {
           }
         });
       }
-      
+
       console.log(`Merged ${Object.keys(swaggerAuth.paths || {}).length} paths from swagger-auth.json`);
     }
-    
+
     return swagger;
   }
 
@@ -87,7 +87,7 @@ class SwaggerLoader {
         totalEndpoints++;
         const tags = operation.tags || ['Uncategorized'];
         const requiresAuth = this._requiresAuth(operation);
-        
+
         if (requiresAuth) totalAuthRequired++;
 
         tags.forEach(tag => {
@@ -96,13 +96,13 @@ class SwaggerLoader {
               name: tag,
               endpoints: [],
               authRequired: 0,
-              authOptional: 0
+              authOptional: 0,
             });
           }
 
           const category = categoriesMap.get(tag);
           const endpoint = this._extractEndpoint(path, method, operation);
-          
+
           category.endpoints.push(endpoint);
           if (requiresAuth) {
             category.authRequired++;
@@ -113,14 +113,13 @@ class SwaggerLoader {
       });
     });
 
-    const categories = Array.from(categoriesMap.values())
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const categories = Array.from(categoriesMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 
     return {
       swagger,
       categories,
       totalEndpoints,
-      totalAuthRequired
+      totalAuthRequired,
     };
   }
 
@@ -138,13 +137,13 @@ class SwaggerLoader {
       requiresAuth: this._requiresAuth(operation),
       parameters: this._extractParameters(operation),
       requestBody: this._extractRequestBody(operation),
-      responses: this._extractResponses(operation)
+      responses: this._extractResponses(operation),
     };
   }
 
   _extractParameters(operation) {
     const params = [];
-    
+
     if (operation.parameters) {
       operation.parameters.forEach(param => {
         params.push({
@@ -152,7 +151,7 @@ class SwaggerLoader {
           type: param.in,
           required: param.required || false,
           description: param.description || '',
-          schema: param.schema || { type: param.type }
+          schema: param.schema || { type: param.type },
         });
       });
     }
@@ -167,22 +166,22 @@ class SwaggerLoader {
     if (!bodyParam) return null;
 
     const isFormData = operation.consumes.includes('application/x-www-form-urlencoded');
-    
+
     return {
       type: isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
       schema: bodyParam.schema,
-      required: bodyParam.required || false
+      required: bodyParam.required || false,
     };
   }
 
   _extractResponses(operation) {
     const responses = [];
-    
+
     if (operation.responses) {
       Object.entries(operation.responses).forEach(([code, response]) => {
         responses.push({
           code,
-          description: response.description || ''
+          description: response.description || '',
         });
       });
     }
@@ -196,8 +195,9 @@ class DocumentationBuilder {
     const { swagger, categories, totalEndpoints, totalAuthRequired } = apiInfo;
 
     let markdown = '# iNaturalist API Documentation\n\n';
-    
+
     markdown += this._buildOverview(swagger, categories, totalEndpoints, totalAuthRequired);
+    markdown += this._buildAuthentication(totalAuthRequired, totalEndpoints);
     markdown += this._buildTableOfContents(categories);
     markdown += this._buildCategoryDocumentation(categories);
     markdown += this._buildStatistics(categories, totalEndpoints, totalAuthRequired);
@@ -207,21 +207,50 @@ class DocumentationBuilder {
 
   _buildOverview(swagger, categories, totalEndpoints, totalAuthRequired) {
     let overview = '## Overview\n\n';
-    
+
     if (swagger.info && swagger.info.description) {
       overview += `${swagger.info.description}\n\n`;
     }
-    
+
     overview += `This documentation covers the iNaturalist API endpoints organized by category. `;
     overview += `There are ${categories.length} categories with a total of ${totalEndpoints} endpoints.\n\n`;
-    
+
     overview += `**Version:** ${swagger.info?.version || 'v1'}\n\n`;
-    overview += `**Base URL:** \`${swagger.schemes?.[0] || 'https'}://${swagger.host || 'api.inaturalist.org'}${swagger.basePath || ''}\`\n\n`;
-    
+    overview += `**Base URL:** \`${swagger.schemes?.[0] || 'https'}://${swagger.host || 'api.inaturalist.org'}${
+      swagger.basePath || ''
+    }\`\n\n`;
+
     overview += '**Authentication:** Many endpoints require authentication using Bearer tokens. ';
     overview += `${totalAuthRequired} out of ${totalEndpoints} endpoints require authentication.\n\n`;
-    
+
     return overview;
+  }
+
+  _buildAuthentication(totalAuthRequired, totalEndpoints) {
+    let auth = '## Authentication\n\n';
+
+    auth += 'The iNaturalist API uses Bearer token authentication for endpoints that require user authorization. ';
+    auth += `${totalAuthRequired} out of ${totalEndpoints} endpoints require authentication.\n\n`;
+
+    auth += '### Getting an Access Token\n\n';
+    auth += 'To authenticate with the API, you need to obtain an access token through OAuth 2.0 flow:\n\n';
+    auth += '1. **Authorization Request**: Direct users to `/oauth/authorize` with your client credentials\n';
+    auth += '2. **Token Exchange**: Exchange the authorization code for an access token at `/oauth/token`\n';
+    auth += '3. **API Requests**: Include the token in the `Authorization` header as `Bearer <token>`\n\n';
+
+    auth += '### Using Bearer Tokens\n\n';
+    auth += 'Include your access token in the Authorization header:\n\n';
+    auth += '```http\n';
+    auth += 'Authorization: Bearer YOUR_ACCESS_TOKEN\n';
+    auth += '```\n\n';
+
+    auth += '### Endpoints by Authentication Status\n\n';
+    auth += '- **🔒 Authentication Required**: These endpoints require a valid Bearer token\n';
+    auth += '- **🔓 Public Access**: These endpoints can be accessed without authentication\n\n';
+
+    auth += 'See the [OAuth](#oauth) section for detailed information about the authentication flow.\n\n';
+
+    return auth;
   }
 
   _buildTableOfContents(categories) {
@@ -236,11 +265,11 @@ class DocumentationBuilder {
 
   _buildCategoryDocumentation(categories) {
     let docs = '';
-    
+
     categories.forEach(category => {
       const anchor = category.name.toLowerCase().replace(/\s+/g, '-');
       docs += `## ${category.name}\n\n`;
-      
+
       docs += `**Total Endpoints:** ${category.endpoints.length}  \n`;
       docs += `**Requires Authentication:** ${category.authRequired}  \n`;
       docs += `**Public Access:** ${category.authOptional}  \n\n`;
@@ -266,9 +295,8 @@ class DocumentationBuilder {
 
     endpoints.forEach(endpoint => {
       const auth = endpoint.requiresAuth ? '🔒 Required' : '🔓 Optional';
-      const description = endpoint.summary.length > 60 ? 
-        endpoint.summary.substring(0, 57) + '...' : endpoint.summary;
-      
+      const description = endpoint.summary.length > 60 ? endpoint.summary.substring(0, 57) + '...' : endpoint.summary;
+
       table += `| ${endpoint.method} | \`${endpoint.url}\` | ${auth} | ${description} |\n`;
     });
 
@@ -277,24 +305,24 @@ class DocumentationBuilder {
 
   _buildEndpointDetails(endpoint) {
     let details = `#### ${endpoint.method} ${endpoint.url}\n\n`;
-    
+
     if (endpoint.summary) {
       details += `**${endpoint.summary}**\n\n`;
     }
-    
+
     if (endpoint.description && endpoint.description !== endpoint.summary) {
       details += `${endpoint.description}\n\n`;
     }
-    
+
     details += `**Authentication:** ${endpoint.requiresAuth ? 'Required (Bearer token)' : 'Not required'}\n\n`;
 
     if (endpoint.parameters.length > 0) {
       details += '**Parameters:**\n\n';
-      
+
       const pathParams = endpoint.parameters.filter(p => p.type === 'path');
       const queryParams = endpoint.parameters.filter(p => p.type === 'query');
       const headerParams = endpoint.parameters.filter(p => p.type === 'header');
-      
+
       if (pathParams.length > 0) {
         details += '*Path Parameters:*\n\n';
         details += '| Name | Required | Description |\n';
@@ -305,7 +333,7 @@ class DocumentationBuilder {
         });
         details += '\n';
       }
-      
+
       if (queryParams.length > 0) {
         details += '*Query Parameters:*\n\n';
         details += '| Name | Required | Type | Description |\n';
@@ -317,7 +345,7 @@ class DocumentationBuilder {
         });
         details += '\n';
       }
-      
+
       if (headerParams.length > 0) {
         details += '*Header Parameters:*\n\n';
         details += '| Name | Required | Description |\n';
@@ -334,12 +362,12 @@ class DocumentationBuilder {
       details += '**Request Body:**\n\n';
       details += `- **Content-Type:** \`${endpoint.requestBody.type}\`\n`;
       details += `- **Required:** ${endpoint.requestBody.required ? 'Yes' : 'No'}\n`;
-      
+
       if (endpoint.requestBody.schema && endpoint.requestBody.schema.$ref) {
         const schemaName = endpoint.requestBody.schema.$ref.split('/').pop();
         details += `- **Schema:** [${schemaName}](#schemas)\n`;
       }
-      
+
       details += '\n';
     }
 
@@ -368,7 +396,7 @@ class DocumentationBuilder {
     stats += `| Public Endpoints | ${totalEndpoints - totalAuthRequired} |\n`;
     stats += `| Auth Percentage | ${((totalAuthRequired / totalEndpoints) * 100).toFixed(1)}% |\n`;
     stats += '\n';
-    
+
     stats += '### Endpoints by Method\n\n';
     const methodStats = this._calculateMethodStatistics(categories);
     stats += '| Method | Count | Percentage |\n';
@@ -378,7 +406,7 @@ class DocumentationBuilder {
       stats += `| ${method} | ${count} | ${percentage}% |\n`;
     });
     stats += '\n';
-    
+
     stats += '### Categories by Size\n\n';
     stats += '| Category | Endpoints | Auth Required |\n';
     stats += '|----------|-----------|---------------|\n';
@@ -386,7 +414,7 @@ class DocumentationBuilder {
     sortedCategories.forEach(category => {
       stats += `| ${category.name} | ${category.endpoints.length} | ${category.authRequired} |\n`;
     });
-    
+
     stats += '\n';
     return stats;
   }
