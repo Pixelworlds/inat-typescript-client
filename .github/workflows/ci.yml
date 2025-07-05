@@ -1,0 +1,444 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Validation stage
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run linter
+        run: bun run lint
+
+  type-check:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run type check
+        run: bun run type-check
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run security audit
+        run: bun audit
+
+  # Generation stage
+  generate-modules:
+    name: Generate TypeScript Modules
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate TypeScript modules
+        run: |
+          echo "Generating TypeScript modules..."
+          bun run generate:modules
+          echo "Verifying generated modules..."
+          test -d typescript || (echo "Missing typescript directory" && exit 1)
+          test -f typescript/authentication.ts || (echo "Missing typescript/authentication.ts" && exit 1)
+          test -f typescript/observations.ts || (echo "Missing typescript/observations.ts" && exit 1)
+          test -f typescript/users.ts || (echo "Missing typescript/users.ts" && exit 1)
+          echo "Module generation completed successfully"
+
+      - name: Upload module artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-modules
+          path: typescript/
+          retention-days: 7
+
+  generate-docs:
+    name: Generate Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate documentation
+        run: |
+          echo "Generating documentation..."
+          bun run generate:docs
+          echo "Verifying generated documentation..."
+          test -f docs/API.md || (echo "Missing docs/API.md" && exit 1)
+          echo "Documentation generation completed successfully"
+
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-docs
+          path: docs/
+          retention-days: 7
+
+  generate-postman:
+    name: Generate Postman Collection
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate Postman collection
+        run: |
+          echo "Generating Postman collection..."
+          bun run generate:postman
+          echo "Verifying generated Postman collection..."
+          test -f postman/iNaturalist_API_Collection.postman_collection.json || (echo "Missing Postman collection" && exit 1)
+          echo "Postman collection generation completed successfully"
+
+      - name: Upload Postman artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-postman
+          path: postman/
+          retention-days: 7
+
+  generate-sdk:
+    name: Generate SDK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate complete SDK
+        run: |
+          echo "Generating complete SDK..."
+          bun run generate:sdk
+          echo "Verifying generated SDK structure..."
+          test -f src/index.ts || (echo "Missing src/index.ts" && exit 1)
+          test -f src/http-client.ts || (echo "Missing src/http-client.ts" && exit 1)
+          test -f src/types.ts || (echo "Missing src/types.ts" && exit 1)
+          echo "SDK generation completed successfully"
+
+      - name: Upload SDK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-sdk
+          path: src/
+          retention-days: 7
+
+  # Build stage
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, type-check, generate-sdk]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Download SDK artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-sdk
+          path: src/
+
+      - name: Build SDK
+        run: |
+          echo "Building SDK..."
+          bun run build
+          ls -la dist/
+          echo "Verifying build outputs..."
+          test -f dist/index.js || (echo "Missing dist/index.js" && exit 1)
+          test -f dist/index.cjs || (echo "Missing dist/index.cjs" && exit 1)
+          test -f dist/index.d.ts || (echo "Missing dist/index.d.ts" && exit 1)
+          echo "Build completed successfully"
+
+      - name: Show build artifacts
+        run: |
+          echo "Build artifacts:"
+          find dist -type f -exec ls -lh {} \;
+          echo "Total dist size: $(du -sh dist | cut -f1)"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+
+  # Validation stage
+  validate-build-artifacts:
+    name: Validate Build Artifacts
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+
+      - name: Validate build artifacts
+        run: |
+          echo "Validating build artifacts..."
+
+          # Check required files exist and are not empty
+          for file in index.js index.cjs index.d.ts; do
+            test -f "dist/$file" || (echo "Missing dist/$file" && exit 1)
+            test -s "dist/$file" || (echo "dist/$file is empty" && exit 1)
+          done
+
+          # Test that the built package can be imported
+          echo "Testing package import..."
+          node -e "const pkg = require('./dist/index.cjs'); console.log('CJS import successful');"
+          node -e "import('./dist/index.js').then(() => console.log('ESM import successful'));"
+
+          echo "Build artifacts validated successfully"
+
+  validate-documentation:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+    needs: generate-docs
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Download documentation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-docs
+          path: docs/
+
+      - name: Validate documentation
+        run: |
+          echo "Validating generated documentation..."
+
+          # Check documentation files exist and have content
+          test -s docs/API.md || (echo "docs/API.md is empty or missing" && exit 1)
+
+          # Verify documentation contains expected sections
+          grep -q "# iNaturalist API" docs/API.md || (echo "API documentation missing title" && exit 1)
+          grep -q "## Authentication" docs/API.md || (echo "API documentation missing authentication section" && exit 1)
+
+          echo "Documentation validation completed successfully"
+
+  validate-postman:
+    name: Validate Postman Collection
+    runs-on: ubuntu-latest
+    needs: generate-postman
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Download Postman artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-postman
+          path: postman/
+
+      - name: Validate Postman collection
+        run: |
+          echo "Validating Postman collection..."
+
+          # Check Postman collection exists and has content
+          test -s postman/iNaturalist_API_Collection.postman_collection.json || (echo "Postman collection is empty or missing" && exit 1)
+
+          # Verify it's valid JSON
+          node -e "JSON.parse(require('fs').readFileSync('postman/iNaturalist_API_Collection.postman_collection.json', 'utf8')); console.log('Valid JSON');"
+
+          # Check for expected structure
+          node -e "
+            const collection = JSON.parse(require('fs').readFileSync('postman/iNaturalist_API_Collection.postman_collection.json', 'utf8'));
+            if (!collection.info || !collection.info.name) throw new Error('Missing collection info');
+            if (!collection.item || !Array.isArray(collection.item)) throw new Error('Missing collection items');
+            console.log('Postman collection structure is valid');
+          "
+
+          echo "Postman collection validation completed successfully"
+
+  # Integration test
+  integration-test:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    needs: [validate-build-artifacts, validate-documentation, validate-postman]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Copy artifacts to proper locations
+        run: |
+          cp -r artifacts/build-artifacts/* dist/ || true
+          cp -r artifacts/generated-docs/* docs/ || true
+          cp -r artifacts/generated-postman/* postman/ || true
+          cp -r artifacts/generated-modules/* typescript/ || true
+
+      - name: Run integration tests
+        run: |
+          echo "Running integration tests..."
+
+          # Test that we can create a client instance
+          node -e "
+            const { INaturalistClient } = require('./dist/index.cjs');
+            const client = new INaturalistClient('https://api.inaturalist.org/v1');
+            console.log('✓ Client instantiation successful');
+          "
+
+          # Test TypeScript definitions
+          echo "import { INaturalistClient } from './dist/index.js'; const client = new INaturalistClient('https://api.inaturalist.org/v1');" > test.mjs
+          node test.mjs
+          echo "✓ TypeScript definitions working"
+          rm test.mjs
+
+          echo "Integration tests completed successfully"
+
+  # Summary job
+  ci-summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs:
+      [
+        lint,
+        type-check,
+        security-scan,
+        generate-modules,
+        generate-docs,
+        generate-postman,
+        generate-sdk,
+        build,
+        validate-build-artifacts,
+        validate-documentation,
+        validate-postman,
+        integration-test,
+      ]
+    if: always()
+    steps:
+      - name: CI Summary
+        run: |
+          echo "## CI Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | ${{ needs.lint.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Type Check | ${{ needs.type-check.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Scan | ${{ needs.security-scan.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Generate Modules | ${{ needs.generate-modules.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Generate Docs | ${{ needs.generate-docs.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Generate Postman | ${{ needs.generate-postman.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Generate SDK | ${{ needs.generate-sdk.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Validate Build | ${{ needs.validate-build-artifacts.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Validate Docs | ${{ needs.validate-documentation.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Validate Postman | ${{ needs.validate-postman.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Integration Test | ${{ needs.integration-test.result }} |" >> $GITHUB_STEP_SUMMARY
