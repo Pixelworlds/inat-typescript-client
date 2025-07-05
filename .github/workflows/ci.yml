@@ -383,10 +383,48 @@ jobs:
 
       - name: Copy artifacts to proper locations
         run: |
-          cp -r artifacts/build-artifacts/* dist/ || true
-          cp -r artifacts/generated-docs/* docs/ || true
-          cp -r artifacts/generated-postman/* postman/ || true
-          cp -r artifacts/generated-modules/* typescript/ || true
+          echo "Copying artifacts to proper locations..."
+
+          # Ensure target directories exist
+          mkdir -p dist docs postman typescript
+
+          # Copy build artifacts with verification
+          if [ -d "artifacts/build-artifacts" ]; then
+            echo "Copying build artifacts..."
+            cp -r artifacts/build-artifacts/* dist/ 2>/dev/null || echo "No build artifacts to copy"
+            ls -la dist/
+          else
+            echo "Warning: No build-artifacts directory found"
+          fi
+
+          # Copy documentation with verification
+          if [ -d "artifacts/generated-docs" ]; then
+            echo "Copying documentation..."
+            cp -r artifacts/generated-docs/* docs/ 2>/dev/null || echo "No docs to copy"
+            ls -la docs/
+          else
+            echo "Warning: No generated-docs directory found"
+          fi
+
+          # Copy postman collection with verification
+          if [ -d "artifacts/generated-postman" ]; then
+            echo "Copying Postman collection..."
+            cp -r artifacts/generated-postman/* postman/ 2>/dev/null || echo "No postman artifacts to copy"
+            ls -la postman/
+          else
+            echo "Warning: No generated-postman directory found"
+          fi
+
+          # Copy TypeScript modules with verification
+          if [ -d "artifacts/generated-modules" ]; then
+            echo "Copying TypeScript modules..."
+            cp -r artifacts/generated-modules/* typescript/ 2>/dev/null || echo "No modules to copy"
+            ls -la typescript/
+          else
+            echo "Warning: No generated-modules directory found"
+          fi
+
+          echo "Artifact copying completed"
 
       - name: Run integration tests
         run: |
@@ -435,13 +473,21 @@ jobs:
 
           echo "All artifacts present!"
 
+          # Debug: Show first 20 lines of built CJS file
+          echo "First 20 lines of dist/index.cjs:"
+          head -20 dist/index.cjs
+
           # Test that the built package can be required (CJS)
           echo "Testing CJS import..."
           node -e "
             const pkg = require('./dist/index.cjs');
-            console.log('Available exports:', Object.keys(pkg).slice(0, 5).join(', ') + '...');
+            console.log('Available exports:', Object.keys(pkg));
+            console.log('Export types:', Object.keys(pkg).map(k => k + ': ' + typeof pkg[k]).join(', '));
+            console.log('INaturalistClient type:', typeof pkg.INaturalistClient);
+            console.log('default type:', typeof pkg.default);
             if (typeof pkg.INaturalistClient !== 'function') {
               console.error('INaturalistClient is not a function, got:', typeof pkg.INaturalistClient);
+              console.error('Full pkg object:', pkg);
               process.exit(1);
             }
             console.log('✓ CJS import successful');
