@@ -2164,20 +2164,7 @@ export class Observations {
    * @requires Authentication
    */
   async quality_metric_delete(id: number, metric: 'date' | 'location' | 'wild'): Promise<AxiosResponse<any>> {
-    const formData = new URLSearchParams();
-    if (data) {
-      Object.keys(data).forEach(key => {
-        if (data[key] !== undefined && data[key] !== null) {
-          formData.append(key, data[key].toString());
-        }
-      });
-    }
-    
-    return this.client.delete(`/observations/${id}/quality/${metric}`, formData.toString(), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
+    return this.client.delete(`/observations/${id}/quality/${metric}`);
   }
 
   /**

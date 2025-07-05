@@ -356,9 +356,6 @@ export interface IdentificationSpeciesCountsParams {
 
   /** Source of the taxon for counting */
   taxon_of?: 'identification' | 'observation';
-
-  /** Sort order */
-  order?: 'desc' | 'asc';
 }
 
 export interface IdentificationIdentifiersParams {
