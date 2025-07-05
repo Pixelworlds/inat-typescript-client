@@ -43,7 +43,8 @@ class INaturalistSDKGenerator {
     const modules = [];
 
     // Check if typescript directory exists and has .ts files
-    const shouldGenerateModules = !existsSync(this.typescriptDir) || 
+    const shouldGenerateModules =
+      !existsSync(this.typescriptDir) ||
       (existsSync(this.typescriptDir) && readdirSync(this.typescriptDir).filter(f => f.endsWith('.ts')).length === 0);
 
     if (shouldGenerateModules) {
@@ -72,11 +73,11 @@ class INaturalistSDKGenerator {
     }
 
     console.log(`Found ${modules.length} modules to include`);
-    
+
     if (modules.length === 0) {
       throw new Error('No TypeScript modules found after generation. Please check the module generation process.');
     }
-    
+
     return modules;
   }
 
@@ -352,35 +353,82 @@ export default INaturalistClient;
   }
 
   async generate() {
-    console.log('Starting iNaturalist SDK generation...\n');
+    console.log('Starting iNaturalist SDK generation...\\n');
 
     try {
+      console.log('Step 1: Preparing src directory...');
       this.prepareSrcDirectory();
+      console.log('✓ Src directory prepared');
+
+      console.log('Step 2: Copying modules...');
       const modules = this.copyModules();
+      console.log(`✓ Copied ${modules.length} modules`);
+
+      console.log('Step 3: Generating types...');
       this.generateTypes();
+      console.log('✓ Types generated');
+
+      console.log('Step 4: Generating HTTP client...');
       this.generateHttpClient();
+      console.log('✓ HTTP client generated');
+
+      console.log('Step 5: Generating main index...');
       this.generateMainIndex(modules);
+      console.log('✓ Main index generated');
 
       // Verify all required files exist
       const requiredFiles = ['index.ts', 'http-client.ts', 'types.ts'];
-      console.log('\nVerifying required files...');
+      console.log('\\nStep 6: Verifying required files...');
       for (const file of requiredFiles) {
         const filePath = join(this.srcDir, file);
         if (existsSync(filePath)) {
           console.log(`✓ ${file} exists`);
         } else {
-          console.error(`✗ ${file} missing`);
+          console.error(`✗ ${file} missing at ${filePath}`);
           throw new Error(`Required file missing: ${file}`);
         }
       }
 
-      console.log('\nSDK generation completed successfully!');
+      console.log('\\n✅ SDK generation completed successfully!');
       console.log(`Generated SDK with ${modules.length} modules`);
       console.log('Run "bun run build" to compile the SDK');
     } catch (error) {
-      console.error('SDK generation failed:', error.message);
-      console.error('Error details:', error);
-      process.exit(1);
+      console.error('\\n❌ SDK generation failed:');
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+
+      // Show current directory contents for debugging
+      console.log('\\nDebugging information:');
+      console.log('Current working directory:', process.cwd());
+      console.log('Project root:', this.projectRoot);
+      console.log('Src directory:', this.srcDir);
+      console.log('TypeScript directory:', this.typescriptDir);
+
+      try {
+        console.log('\\nSrc directory contents:');
+        if (existsSync(this.srcDir)) {
+          const srcFiles = readdirSync(this.srcDir);
+          srcFiles.forEach(file => console.log(`  ${file}`));
+        } else {
+          console.log('  Src directory does not exist');
+        }
+      } catch (e) {
+        console.log('  Error reading src directory:', e.message);
+      }
+
+      try {
+        console.log('\\nTypeScript directory contents:');
+        if (existsSync(this.typescriptDir)) {
+          const tsFiles = readdirSync(this.typescriptDir);
+          tsFiles.forEach(file => console.log(`  ${file}`));
+        } else {
+          console.log('  TypeScript directory does not exist');
+        }
+      } catch (e) {
+        console.log('  Error reading typescript directory:', e.message);
+      }
+
+      throw error;
     }
   }
 }
