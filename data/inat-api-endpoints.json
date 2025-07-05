@@ -1,15 +1,15 @@
 {
   "meta": {
-    "totalEndpoints": 40,
-    "extractedAt": "2025-07-04T07:16:25.832Z",
-    "source": "iNaturalist API Documentation",
+    "totalEndpoints": 52,
+    "extractedAt": "2025-07-05T00:00:00.000Z",
+    "source": "iNaturalist API Documentation + Official Swagger/API Reference",
     "methods": [
       "DELETE",
       "GET",
       "POST",
       "PUT"
     ],
-    "authRequired": 25,
+    "authRequired": 32,
     "withPayload": 0,
     "withResponse": 1
   },
@@ -39,6 +39,56 @@
       },
       "metadata": {
         "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications",
+        "method": "GET",
+        "section": "Identifications",
+        "description": "Search identifications with various filters"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications/:id",
+        "method": "GET",
+        "section": "Identifications",
+        "description": "Retrieve identification details"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
         "source": "iNaturalist API Documentation"
       }
     },
@@ -717,6 +767,106 @@
     },
     {
       "endpoint": {
+        "url": "/identifications/categories",
+        "method": "GET",
+        "section": "Identifications",
+        "description": "Get identification categories"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications/species_counts",
+        "method": "GET",
+        "section": "Identifications",
+        "description": "Get species counts for identifications"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications/identifiers",
+        "method": "GET",
+        "section": "Identifications",
+        "description": "Get identification identifiers"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications/observers",
+        "method": "GET",
+        "section": "Identifications",
+        "description": "Get identification observers"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
         "url": "/identifications",
         "method": "POST",
         "section": "Unknown",
@@ -1160,6 +1310,271 @@
       },
       "metadata": {
         "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/controlled_terms",
+        "method": "GET",
+        "section": "Controlled Terms",
+        "description": "Get controlled terms for annotations"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/controlled_terms/for_taxon",
+        "method": "GET",
+        "section": "Controlled Terms",
+        "description": "Get controlled terms for a specific taxon"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/annotations",
+        "method": "POST",
+        "section": "Annotations",
+        "description": "Create an annotation"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/annotations/:id",
+        "method": "DELETE",
+        "section": "Annotations",
+        "description": "Delete an annotation"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/flags",
+        "method": "POST",
+        "section": "Flags",
+        "description": "Create a flag"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/flags/:id",
+        "method": "PUT",
+        "section": "Flags",
+        "description": "Update a flag"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/flags/:id",
+        "method": "DELETE",
+        "section": "Flags",
+        "description": "Delete a flag"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/taxa",
+        "method": "GET",
+        "section": "Taxa",
+        "description": "Search taxa"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/taxa/:id",
+        "method": "GET",
+        "section": "Taxa",
+        "description": "Get taxon details"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/search",
+        "method": "GET",
+        "section": "Search",
+        "description": "Global search across observations, taxa, projects, etc."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-05T00:00:00.000Z",
         "source": "iNaturalist API Documentation"
       }
     }

@@ -486,8 +486,193 @@
       ]
     },
     {
+      "name": "Annotations",
+      "item": [
+        {
+          "name": "annotations - Create an annotation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Create an annotation",
+            "url": "{{inat_base_url}}/annotations",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "annotations/:id - Delete an annotation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Delete an annotation",
+            "url": "{{inat_base_url}}/annotations/:id"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Controlled Terms",
+      "item": [
+        {
+          "name": "controlled_terms - Get controlled terms for annotations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get controlled terms for annotations",
+            "url": "{{inat_base_url}}/controlled_terms",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "controlled_terms/for_taxon - Get controlled terms for a specific taxon",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get controlled terms for a specific taxon",
+            "url": "{{inat_base_url}}/controlled_terms/for_taxon",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Taxa",
+      "item": [
+        {
+          "name": "taxa - Search taxa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Search taxa",
+            "url": "{{inat_base_url}}/taxa",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "taxa/:id - Get taxon details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get taxon details",
+            "url": "{{inat_base_url}}/taxa/:id",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Identifications",
       "item": [
+        {
+          "name": "identifications - Search identifications with various filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Search identifications with various filters",
+            "url": "{{inat_base_url}}/identifications",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "identifications/:id - Retrieve identification details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Retrieve identification details",
+            "url": "{{inat_base_url}}/identifications/:id",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
         {
           "name": "identifications/:id - Auth required",
           "request": {
@@ -506,6 +691,82 @@
             ],
             "description": "Auth required",
             "url": "{{inat_base_url}}/identifications/:id"
+          },
+          "response": []
+        },
+        {
+          "name": "identifications/categories - Get identification categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get identification categories",
+            "url": "{{inat_base_url}}/identifications/categories",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "identifications/species_counts - Get species counts for identifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get species counts for identifications",
+            "url": "{{inat_base_url}}/identifications/species_counts",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "identifications/identifiers - Get identification identifiers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get identification identifiers",
+            "url": "{{inat_base_url}}/identifications/identifiers",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "identifications/observers - Get identification observers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Get identification observers",
+            "url": "{{inat_base_url}}/identifications/observers",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1036,6 +1297,102 @@
       ]
     },
     {
+      "name": "Flags",
+      "item": [
+        {
+          "name": "flags - Create a flag",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Create a flag",
+            "url": "{{inat_base_url}}/flags",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "flags/:id - Update a flag",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Update a flag",
+            "url": "{{inat_base_url}}/flags/:id",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "flags/:id - Delete a flag",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Delete a flag",
+            "url": "{{inat_base_url}}/flags/:id"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Observation Fields",
       "item": [
         {
@@ -1189,6 +1546,30 @@
                   "language": "json"
                 }
               }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "search - Global search across observations, taxa, projects, etc.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Global search across observations, taxa, projects, etc.",
+            "url": "{{inat_base_url}}/search",
+            "auth": {
+              "type": "noauth"
             }
           },
           "response": []

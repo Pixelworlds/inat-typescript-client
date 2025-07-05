@@ -383,7 +383,7 @@ class RequestBuilder {
 class CollectionBuilder {
   constructor() {
     this.endpointGroups = {
-      authentication: ['oauth', 'users/api_token', 'users/edit', 'users/new_updates'],
+      authentication: ['oauth'],
       comments: ['comments'],
       identifications: ['identifications'],
       observation_field_values: ['observation_field_values'],
