@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const swaggerPath = path.join(__dirname, '..', 'data', 'swagger.json');
-const outputPath = path.join(__dirname, '..', 'postman', 'iNaturalist_API_Collection_from_swagger.postman_collection.json');
+const outputPath = path.join(__dirname, '..', 'postman', 'iNaturalist_API_Collection.postman_collection.json');
 
 const swagger = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));
 
@@ -222,7 +222,7 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
 // Create the Postman collection
 const collection = {
   info: {
-    name: "iNaturalist API v1 (Complete from Swagger)",
+    name: "iNaturalist API v1",
     description: swagger.info.description,
     schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
