@@ -2,25 +2,30 @@
 
 ## Overview
 
-This documentation covers the iNaturalist API endpoints organized by category. There are 11 categories with a total of 40 endpoints.
+This documentation covers the iNaturalist API endpoints organized by category. There are 16 categories with a total of 56 endpoints.
 
 **Base URL:** `https://api.inaturalist.org/v1`
 
-**Authentication:** Many endpoints require authentication using Bearer tokens. 24 out of 40 endpoints require authentication.
+**Authentication:** Many endpoints require authentication using Bearer tokens. 29 out of 56 endpoints require authentication.
 
 ## Table of Contents
 
 - [Authentication](#authentication)
 - [Observations](#observations)
+- [Annotations](#annotations)
+- [Controlled Terms](#controlled-terms)
+- [Taxa](#taxa)
 - [Identifications](#identifications)
 - [Users](#users)
 - [Projects](#projects)
 - [Project Observations](#project-observations)
 - [Places](#places)
 - [Comments](#comments)
+- [Flags](#flags)
 - [Observation Fields](#observation-fields)
 - [Observation Field Values](#observation-field-values)
 - [Observation Photos](#observation-photos)
+- [Search](#search)
 
 ## Authentication
 
@@ -338,19 +343,185 @@ pagination info, check the X headers in the response. You should see
 
 ---
 
-## Identifications
+## Annotations
 
-**Endpoints:** 3  
-**Authentication Required:** 3  
+**Endpoints:** 2  
+**Authentication Required:** 2  
 **Authentication Optional:** 0  
 
 ### Endpoints
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
+| POST | `/annotations` | 🔒 Required | Create an annotation |
+| DELETE | `/annotations/:id` | 🔒 Required | Delete an annotation |
+
+#### POST /annotations
+
+**Description:** Create an annotation
+
+**Authentication:** Required
+
+**Request Body:**
+
+- **Content-Type:** `application/json`
+- **Example:**
+```json
+{}
+```
+
+**Headers:**
+
+- `Accept`: application/json
+- `Content-Type`: application/json
+
+
+#### DELETE /annotations/:id
+
+**Description:** Delete an annotation
+
+**Authentication:** Required
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| id | path | Yes | Path parameter: id |
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+---
+
+## Controlled Terms
+
+**Endpoints:** 2  
+**Authentication Required:** 0  
+**Authentication Optional:** 2  
+
+### Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/controlled_terms` | 🔓 Optional | Get controlled terms for annotations |
+| GET | `/controlled_terms/for_taxon` | 🔓 Optional | Get controlled terms for a specific taxon |
+
+#### GET /controlled_terms
+
+**Description:** Get controlled terms for annotations
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+#### GET /controlled_terms/for_taxon
+
+**Description:** Get controlled terms for a specific taxon
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+---
+
+## Taxa
+
+**Endpoints:** 2  
+**Authentication Required:** 0  
+**Authentication Optional:** 2  
+
+### Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/taxa` | 🔓 Optional | Search taxa |
+| GET | `/taxa/:id` | 🔓 Optional | Get taxon details |
+
+#### GET /taxa
+
+**Description:** Search taxa
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+#### GET /taxa/:id
+
+**Description:** Get taxon details
+
+**Authentication:** Optional
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| id | path | Yes | Path parameter: id |
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+---
+
+## Identifications
+
+**Endpoints:** 9  
+**Authentication Required:** 3  
+**Authentication Optional:** 6  
+
+### Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/identifications` | 🔓 Optional | Search identifications with various filters |
+| GET | `/identifications/:id` | 🔓 Optional | Retrieve identification details |
 | DELETE | `/identifications/:id` | 🔒 Required | Auth required |
+| GET | `/identifications/categories` | 🔓 Optional | Get identification categories |
+| GET | `/identifications/species_counts` | 🔓 Optional | Get species counts for identifications |
+| GET | `/identifications/identifiers` | 🔓 Optional | Get identification identifiers |
+| GET | `/identifications/observers` | 🔓 Optional | Get identification observers |
 | POST | `/identifications` | 🔒 Required | Auth required |
 | PUT | `/identifications/:id` | 🔒 Required | Auth required |
+
+#### GET /identifications
+
+**Description:** Search identifications with various filters
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+#### GET /identifications/:id
+
+**Description:** Retrieve identification details
+
+**Authentication:** Optional
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| id | path | Yes | Path parameter: id |
+
+**Headers:**
+
+- `Accept`: application/json
+
 
 #### DELETE /identifications/:id
 
@@ -363,6 +534,50 @@ pagination info, check the X headers in the response. You should see
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | id | path | Yes | Path parameter: id |
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+#### GET /identifications/categories
+
+**Description:** Get identification categories
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+#### GET /identifications/species_counts
+
+**Description:** Get species counts for identifications
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+#### GET /identifications/identifiers
+
+**Description:** Get identification identifiers
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+#### GET /identifications/observers
+
+**Description:** Get identification observers
+
+**Authentication:** Optional
 
 **Headers:**
 
@@ -801,6 +1016,85 @@ pagination info, check the X headers in the response. You should see
 
 ---
 
+## Flags
+
+**Endpoints:** 3  
+**Authentication Required:** 3  
+**Authentication Optional:** 0  
+
+### Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/flags` | 🔒 Required | Create a flag |
+| PUT | `/flags/:id` | 🔒 Required | Update a flag |
+| DELETE | `/flags/:id` | 🔒 Required | Delete a flag |
+
+#### POST /flags
+
+**Description:** Create a flag
+
+**Authentication:** Required
+
+**Request Body:**
+
+- **Content-Type:** `application/json`
+- **Example:**
+```json
+{}
+```
+
+**Headers:**
+
+- `Accept`: application/json
+- `Content-Type`: application/json
+
+
+#### PUT /flags/:id
+
+**Description:** Update a flag
+
+**Authentication:** Required
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| id | path | Yes | Path parameter: id |
+
+**Request Body:**
+
+- **Content-Type:** `application/json`
+- **Example:**
+```json
+{}
+```
+
+**Headers:**
+
+- `Accept`: application/json
+- `Content-Type`: application/json
+
+
+#### DELETE /flags/:id
+
+**Description:** Delete a flag
+
+**Authentication:** Required
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| id | path | Yes | Path parameter: id |
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+---
+
 ## Observation Fields
 
 **Endpoints:** 1  
@@ -940,16 +1234,41 @@ pagination info, check the X headers in the response. You should see
 
 ---
 
+## Search
+
+**Endpoints:** 1  
+**Authentication Required:** 0  
+**Authentication Optional:** 1  
+
+### Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/search` | 🔓 Optional | Global search across observations, taxa, projects, etc. |
+
+#### GET /search
+
+**Description:** Global search across observations, taxa, projects, etc.
+
+**Authentication:** Optional
+
+**Headers:**
+
+- `Accept`: application/json
+
+
+---
+
 ## Statistics
 
 | Metric | Value |
 |--------|-------|
-| Total Categories | 11 |
-| Total Endpoints | 40 |
-| Endpoints Requiring Auth | 24 |
-| Public Endpoints | 16 |
-| GET Endpoints | 18 |
-| POST Endpoints | 10 |
-| DELETE Endpoints | 6 |
-| PUT Endpoints | 6 |
+| Total Categories | 16 |
+| Total Endpoints | 56 |
+| Endpoints Requiring Auth | 29 |
+| Public Endpoints | 27 |
+| GET Endpoints | 29 |
+| POST Endpoints | 12 |
+| DELETE Endpoints | 8 |
+| PUT Endpoints | 7 |
 
