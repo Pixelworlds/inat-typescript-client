@@ -196,8 +196,16 @@ export interface INaturalistConfig {
       if (!existsSync(swaggerTypesTarget)) {
         mkdirSync(swaggerTypesTarget, { recursive: true });
       }
-      copyFileSync(swaggerTypesSource, join(swaggerTypesTarget, 'swagger-types.ts'));
-      console.log('Copied swagger-generated types');
+
+      const targetFile = join(swaggerTypesTarget, 'swagger-types.ts');
+
+      // Only copy if source and destination are different
+      if (swaggerTypesSource !== targetFile) {
+        copyFileSync(swaggerTypesSource, targetFile);
+        console.log('Generated and copied swagger types');
+      } else {
+        console.log('Swagger types already in correct location, no copy needed');
+      }
     } else {
       // Generate the types first if they don't exist
       console.log('Swagger types not found, generating them first...');
@@ -247,8 +255,16 @@ export interface INaturalistConfig {
         if (!existsSync(swaggerTypesTarget)) {
           mkdirSync(swaggerTypesTarget, { recursive: true });
         }
-        copyFileSync(swaggerTypesSource, join(swaggerTypesTarget, 'swagger-types.ts'));
-        console.log('Generated and copied swagger types');
+
+        const targetFile = join(swaggerTypesTarget, 'swagger-types.ts');
+
+        // Only copy if source and destination are different
+        if (swaggerTypesSource !== targetFile) {
+          copyFileSync(swaggerTypesSource, targetFile);
+          console.log('Generated and copied swagger types');
+        } else {
+          console.log('Swagger types already in correct location, no copy needed');
+        }
       } else {
         console.error('Swagger types still not found after generation');
         console.error('Expected location:', swaggerTypesSource);
