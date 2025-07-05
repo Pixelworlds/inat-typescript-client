@@ -1,0 +1,1167 @@
+{
+  "meta": {
+    "totalEndpoints": 40,
+    "extractedAt": "2025-07-04T07:16:25.832Z",
+    "source": "iNaturalist API Documentation",
+    "methods": [
+      "DELETE",
+      "GET",
+      "POST",
+      "PUT"
+    ],
+    "authRequired": 25,
+    "withPayload": 0,
+    "withResponse": 1
+  },
+  "endpoints": [
+    {
+      "endpoint": {
+        "url": "/comments/:id",
+        "method": "DELETE",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications/:id",
+        "method": "DELETE",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observation_field_values/:id",
+        "method": "DELETE",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/:id",
+        "method": "DELETE",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/:id/quality/:metric",
+        "method": "DELETE",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects/:id/leave",
+        "method": "DELETE",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/oauth/authorize",
+        "method": "GET",
+        "section": "Authentication",
+        "description": "OAuth authorization endpoint - redirects user to authorize your application"
+      },
+      "authentication": {
+        "type": "oauth",
+        "required": true
+      },
+      "parameters": {
+        "query": [
+          {
+            "name": "client_id",
+            "type": "string",
+            "description": "The client identifier",
+            "required": true
+          },
+          {
+            "name": "redirect_uri",
+            "type": "string",
+            "description": "Redirect URI after authorization",
+            "required": true
+          },
+          {
+            "name": "response_type",
+            "type": "string",
+            "description": "Response type (code)",
+            "required": true
+          },
+          {
+            "name": "code_challenge",
+            "type": "string",
+            "description": "PKCE code challenge",
+            "required": false
+          },
+          {
+            "name": "code_challenge_method",
+            "type": "string",
+            "description": "PKCE challenge method (S256)",
+            "required": false
+          },
+          {
+            "name": "scope",
+            "type": "string",
+            "description": "Requested scopes",
+            "required": false
+          }
+        ],
+        "total": 6
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observation_fields",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "List / search observation fields. ObservationFields are basically\n      typed data fields that users can attach to observation."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Primary endpoint for retrieving observations. If you're looking for\npagination info, check the X headers in the response. You should see"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/:id",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Retrieve information about an observation"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/:username",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Mostly the same as /observations except filtered by a username."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/project/:id",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Just like /observations except filtered by a project.  :id can be a project ID or slug. CSV response will return some extra project-specific daa."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/taxon_stats",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Retrieve some stats about taxa within a range of observations."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/user_stats",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Retrieve some stats about users within a range of observations.\n      You must include the"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/places",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Retrieve information about places."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Retrieve information about projects on iNaturalist."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects/:id",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Retrieve information about a single project.  :id is the project ID or slug."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects/:id?iframe=true",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "This returns a complete web page without header or footer suitable for use in an IFRAME."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects/:id/contributors.widget",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "JS widget snippet of the top contributors to a project."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects/:id/members",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects/user/:login",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/users/api_token",
+        "method": "GET",
+        "section": "Authentication",
+        "description": "Get user API token for authenticated requests"
+      },
+      "authentication": {
+        "type": "oauth",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.283Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/users/edit",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/users/new_updates",
+        "method": "GET",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/comments",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/oauth/token",
+        "method": "POST",
+        "section": "Authentication",
+        "description": "OAuth token exchange endpoint - exchange authorization code for access token"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [
+          {
+            "name": "client_id",
+            "type": "string",
+            "description": "The client identifier",
+            "required": true
+          },
+          {
+            "name": "code",
+            "type": "string",
+            "description": "Authorization code",
+            "required": true
+          },
+          {
+            "name": "redirect_uri",
+            "type": "string",
+            "description": "Redirect URI used in authorization",
+            "required": true
+          },
+          {
+            "name": "grant_type",
+            "type": "string",
+            "description": "Grant type (authorization_code)",
+            "required": true
+          },
+          {
+            "name": "code_verifier",
+            "type": "string",
+            "description": "PKCE code verifier",
+            "required": false
+          }
+        ],
+        "total": 5
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": {
+          "access_token": "string",
+          "token_type": "bearer",
+          "expires_in": "number or null",
+          "refresh_token": "string or null",
+          "scope": "string"
+        },
+        "format": "application/json"
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observation_field_values",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observation_photos",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/:id/quality/:metric",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/project_observations",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/projects/:id/join",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/users",
+        "method": "POST",
+        "section": "Unknown",
+        "description": "Create a new iNaturalist user"
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/comments/:id",
+        "method": "PUT",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/identifications/:id",
+        "method": "PUT",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.279Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observation_field_values/:id",
+        "method": "PUT",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.281Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/:id",
+        "method": "PUT",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/observations/:id/viewed_updates",
+        "method": "PUT",
+        "section": "Unknown",
+        "description": "Mark updates associated with this observation (e.g. new comment notifications) as viewed. Response should be NO CONTENT."
+      },
+      "authentication": null,
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.280Z",
+        "source": "iNaturalist API Documentation"
+      }
+    },
+    {
+      "endpoint": {
+        "url": "/users/:id",
+        "method": "PUT",
+        "section": "Unknown",
+        "description": "Auth required"
+      },
+      "authentication": {
+        "type": "required",
+        "required": true
+      },
+      "parameters": {
+        "query": [],
+        "total": 0
+      },
+      "request": {
+        "payload": null,
+        "contentType": null
+      },
+      "response": {
+        "example": null,
+        "format": null
+      },
+      "metadata": {
+        "extractedAt": "2025-07-04T07:16:19.282Z",
+        "source": "iNaturalist API Documentation"
+      }
+    }
+  ]
+}
