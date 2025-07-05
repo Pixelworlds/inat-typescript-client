@@ -1,57 +1,57 @@
-import { Annotations } from './annotations';
-import { Authentication } from './authentication';
-import { Comments } from './comments';
-import { ControlledTerms } from './controlled-terms';
-import { Flags } from './flags';
 import { INaturalistHttpClient } from './http-client';
-import { Identifications } from './identifications';
-import { Messages } from './messages';
+import type { INaturalistConfig, HttpClient } from './types';
+
+import { Comments } from './comments';
 import { OAuth } from './oauth';
 import { ObservationFieldValues } from './observation-field-values';
-import { ObservationFields } from './observation-fields';
-import { ObservationPhotos } from './observation-photos';
-import { ObservationTiles } from './observation-tiles';
-import { Observations } from './observations';
 import { Photos } from './photos';
-import { Places } from './places';
-import { PolygonTiles } from './polygon-tiles';
-import { Posts } from './posts';
-import { ProjectObservations } from './project-observations';
+import { Annotations } from './annotations';
+import { ObservationFields } from './observation-fields';
 import { Projects } from './projects';
+import { PolygonTiles } from './polygon-tiles';
 import { Search } from './search';
+import { Messages } from './messages';
+import { Authentication } from './authentication';
 import { Taxa } from './taxa';
-import { Users } from './users';
+import { Identifications } from './identifications';
+import { ProjectObservations } from './project-observations';
+import { ControlledTerms } from './controlled-terms';
+import { Posts } from './posts';
 import { UTFGrid } from './utfgrid';
+import { Observations } from './observations';
+import { Flags } from './flags';
+import { Places } from './places';
+import { ObservationPhotos } from './observation-photos';
+import { Users } from './users';
+import { ObservationTiles } from './observation-tiles';
 
-import type { HttpClient, INaturalistConfig } from './types';
-
-export type { ApiResponse, INaturalistConfig, RequestConfig } from './types';
+export type { INaturalistConfig, RequestConfig, ApiResponse } from './types';
 export * from './types/swagger-types';
 
 export {
-  Annotations,
-  Authentication,
   Comments,
-  ControlledTerms,
-  Flags,
-  Identifications,
-  Messages,
   OAuth,
-  ObservationFields,
   ObservationFieldValues,
-  ObservationPhotos,
-  Observations,
-  ObservationTiles,
   Photos,
-  Places,
-  PolygonTiles,
-  Posts,
-  ProjectObservations,
+  Annotations,
+  ObservationFields,
   Projects,
+  PolygonTiles,
   Search,
+  Messages,
+  Authentication,
   Taxa,
-  Users,
+  Identifications,
+  ProjectObservations,
+  ControlledTerms,
+  Posts,
   UTFGrid,
+  Observations,
+  Flags,
+  Places,
+  ObservationPhotos,
+  Users,
+  ObservationTiles
 };
 
 export class INaturalistClient {
@@ -85,11 +85,11 @@ export class INaturalistClient {
   constructor(config?: INaturalistConfig);
   constructor(configOrBaseURL?: string | INaturalistConfig, apiToken?: string) {
     let config: INaturalistConfig;
-
+    
     if (typeof configOrBaseURL === 'string') {
       config = {
         baseURL: configOrBaseURL,
-        apiToken: apiToken,
+        apiToken: apiToken
       };
     } else {
       config = configOrBaseURL || {};

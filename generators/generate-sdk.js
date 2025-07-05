@@ -43,6 +43,11 @@ class INaturalistSDKGenerator {
     const modules = [];
 
     if (!existsSync(this.typescriptDir)) {
+      console.log('TypeScript modules directory not found, generating modules first...');
+      execSync('bun run generate:modules', { cwd: this.projectRoot });
+    }
+
+    if (!existsSync(this.typescriptDir)) {
       throw new Error(`TypeScript modules directory not found: ${this.typescriptDir}`);
     }
 
@@ -90,6 +95,24 @@ class INaturalistSDKGenerator {
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join('');
+  }
+
+  getActualClassName(moduleName) {
+    const sourceFile = join(this.typescriptDir, `${moduleName}.ts`);
+    if (!existsSync(sourceFile)) {
+      return this.getClassName(moduleName);
+    }
+
+    const content = readFileSync(sourceFile, 'utf8');
+
+    // Look for export class declarations
+    const classMatch = content.match(/export class (\w+)/);
+    if (classMatch) {
+      return classMatch[1];
+    }
+
+    // Fallback to the original method
+    return this.getClassName(moduleName);
   }
 
   copyModules() {
@@ -227,7 +250,7 @@ export class INaturalistHttpClient implements HttpClient {
   generateMainIndex(modules) {
     const imports = modules
       .map(moduleName => {
-        const className = this.getClassName(moduleName);
+        const className = this.getActualClassName(moduleName);
         return `import { ${className} } from './${moduleName}';`;
       })
       .join('\n');
@@ -235,7 +258,7 @@ export class INaturalistHttpClient implements HttpClient {
     const properties = modules
       .map(moduleName => {
         const propertyName = moduleName.replace(/-/g, '_');
-        const className = this.getClassName(moduleName);
+        const className = this.getActualClassName(moduleName);
         return `  public readonly ${propertyName}: ${className};`;
       })
       .join('\n');
@@ -243,7 +266,7 @@ export class INaturalistHttpClient implements HttpClient {
     const initializers = modules
       .map(moduleName => {
         const propertyName = moduleName.replace(/-/g, '_');
-        const className = this.getClassName(moduleName);
+        const className = this.getActualClassName(moduleName);
         return `    this.${propertyName} = new ${className}(this.http);`;
       })
       .join('\n');
@@ -257,7 +280,7 @@ export type { INaturalistConfig, RequestConfig, ApiResponse } from './types';
 export * from './types/swagger-types';
 
 export {
-${modules.map(moduleName => `  ${this.getClassName(moduleName)}`).join(',\n')}
+${modules.map(moduleName => `  ${this.getActualClassName(moduleName)}`).join(',\n')}
 };
 
 export class INaturalistClient {
