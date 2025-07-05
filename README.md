@@ -318,4 +318,4 @@ MIT License - see LICENSE file for details.
 
 ## About the Author
 
-This SDK was created by [Richard Stovall](https://www.inaturalist.org/people/arctic_mongoose), a software developer and amateur photographer who is an active member of the iNaturalist community with over 10,000 observations and 1,999 species documented.
+This SDK was created by [Richard Stovall](https://www.inaturalist.org/people/arctic_mongoose) and iNaturalist member.
