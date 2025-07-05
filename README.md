@@ -1,5 +1,9 @@
 # iNaturalist TypeScript SDK
 
+<div align="center">
+  <img src="logo.png" alt="iNaturalist TypeScript SDK Logo" width="200">
+</div>
+
 A comprehensive TypeScript SDK for the iNaturalist API, providing type-safe access to all API endpoints for observations, identifications, taxa, and more.
 
 ## Documentation
