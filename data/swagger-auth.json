@@ -1,0 +1,344 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "iNaturalist Authentication API",
+    "description": "OAuth 2.0 authentication endpoints for iNaturalist. These endpoints are used to obtain access tokens that can be exchanged for JWT tokens to access the main API.",
+    "version": "1.0.0"
+  },
+  "host": "www.inaturalist.org",
+  "schemes": ["https"],
+  "basePath": "",
+  "produces": ["application/json"],
+  "paths": {
+    "/oauth/authorize": {
+      "get": {
+        "summary": "OAuth Authorization",
+        "description": "Redirects the user to the OAuth authorization page where they can approve or deny your application's access request. Supports both standard Authorization Code flow and PKCE (Proof Key for Code Exchange) flow for mobile/SPA applications.",
+        "tags": ["OAuth"],
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "query",
+            "description": "Your application's client ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "description": "URL to redirect the user after authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "response_type",
+            "in": "query",
+            "description": "OAuth response type",
+            "required": true,
+            "type": "string",
+            "enum": ["code"]
+          },
+          {
+            "name": "code_challenge",
+            "in": "query",
+            "description": "Base64-encoded SHA256 hash of the code_verifier (PKCE flow only)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "code_challenge_method",
+            "in": "query",
+            "description": "Method used to generate code_challenge (PKCE flow only)",
+            "required": false,
+            "type": "string",
+            "enum": ["S256"]
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Space-separated list of scopes",
+            "required": false,
+            "type": "string",
+            "default": "write"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirects to authorization page or redirect_uri with authorization code",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "Redirect URL with code parameter on success"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "post": {
+        "summary": "OAuth Token Exchange",
+        "description": "Exchange authorization code for access token. Supports multiple grant types including Authorization Code, PKCE, and Resource Owner Password Credentials flows.",
+        "tags": ["OAuth"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "grant_type": {
+                  "type": "string",
+                  "description": "OAuth grant type",
+                  "enum": ["authorization_code", "password"]
+                },
+                "client_id": {
+                  "type": "string",
+                  "description": "Your application's client ID"
+                },
+                "client_secret": {
+                  "type": "string",
+                  "description": "Your application's client secret (not required for PKCE flow)"
+                },
+                "code": {
+                  "type": "string",
+                  "description": "Authorization code from /oauth/authorize (authorization_code grant only)"
+                },
+                "redirect_uri": {
+                  "type": "string",
+                  "description": "Must match the redirect_uri used in authorization request (authorization_code grant only)"
+                },
+                "code_verifier": {
+                  "type": "string",
+                  "description": "Plain text code verifier (PKCE flow only)"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "User's iNaturalist username (password grant only)"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "User's iNaturalist password (password grant only)"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access token response",
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "$ref": "#/definitions/OAuthError"
+            }
+          },
+          "401": {
+            "description": "Invalid client or credentials",
+            "schema": {
+              "$ref": "#/definitions/OAuthError"
+            }
+          }
+        }
+      }
+    },
+    "/oauth/assertion_token": {
+      "post": {
+        "summary": "OAuth Assertion Token",
+        "description": "Exchange a third-party access token (Facebook, Google) for an iNaturalist access token. This endpoint is only available to authorized partners.",
+        "tags": ["OAuth"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["client_id", "grant_type", "assertion"],
+              "properties": {
+                "format": {
+                  "type": "string",
+                  "description": "Response format",
+                  "default": "json"
+                },
+                "client_id": {
+                  "type": "string",
+                  "description": "Your application's client ID"
+                },
+                "grant_type": {
+                  "type": "string",
+                  "description": "Third-party provider name",
+                  "enum": ["facebook", "google"]
+                },
+                "assertion": {
+                  "type": "string",
+                  "description": "Third-party access token"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access token response",
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "$ref": "#/definitions/OAuthError"
+            }
+          },
+          "401": {
+            "description": "Invalid assertion or unauthorized partner",
+            "schema": {
+              "$ref": "#/definitions/OAuthError"
+            }
+          }
+        }
+      }
+    },
+    "/users/api_token": {
+      "get": {
+        "summary": "Get JWT API Token",
+        "description": "Exchange an OAuth access token for a JWT (JSON Web Token) that can be used to authenticate API requests. The JWT expires after 24 hours.",
+        "tags": ["Authentication"],
+        "security": [{"oauth2": ["read", "write"]}],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token obtained from OAuth flow",
+            "required": true,
+            "type": "string",
+            "pattern": "^Bearer .+"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JWT token response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "api_token": {
+                  "type": "string",
+                  "description": "JWT token for API authentication"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing OAuth token"
+          }
+        }
+      }
+    },
+    "/users/edit.json": {
+      "get": {
+        "summary": "Get User Edit Profile",
+        "description": "Retrieve the authenticated user's profile data in edit format. This endpoint is used to verify OAuth token functionality.",
+        "tags": ["Users"],
+        "security": [{"oauth2": ["read", "write"]}],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token obtained from OAuth flow",
+            "required": true,
+            "type": "string",
+            "pattern": "^Bearer .+"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile data",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "login": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing OAuth token"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "TokenResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "OAuth access token"
+        },
+        "token_type": {
+          "type": "string",
+          "description": "Token type, always 'bearer'",
+          "default": "bearer"
+        },
+        "expires_in": {
+          "type": "integer",
+          "description": "Token expiration time in seconds (null for non-expiring tokens)"
+        },
+        "refresh_token": {
+          "type": "string",
+          "description": "Refresh token (if applicable)"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Granted scopes",
+          "default": "write"
+        }
+      }
+    },
+    "OAuthError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "OAuth error code",
+          "enum": ["invalid_request", "invalid_client", "invalid_grant", "unauthorized_client", "unsupported_grant_type", "invalid_scope"]
+        },
+        "error_description": {
+          "type": "string",
+          "description": "Human-readable error description"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://www.inaturalist.org/oauth/authorize",
+      "tokenUrl": "https://www.inaturalist.org/oauth/token",
+      "scopes": {
+        "read": "Read access to protected resources",
+        "write": "Write access to protected resources"
+      }
+    }
+  }
+}
