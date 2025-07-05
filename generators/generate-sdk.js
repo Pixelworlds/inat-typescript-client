@@ -153,7 +153,7 @@ class INaturalistSDKGenerator {
     return modules;
   }
 
-  generateTypes() {
+  async generateTypes() {
     const typesContent = `import type { AxiosResponse } from 'axios';
 
 export interface HttpClient {
@@ -235,6 +235,13 @@ export interface INaturalistConfig {
 
       console.log('Checking if swagger types were generated...');
       console.log('Swagger types source exists after generation:', existsSync(swaggerTypesSource));
+
+      // Add a small delay to handle potential race conditions in CI
+      if (!existsSync(swaggerTypesSource)) {
+        console.log('Swagger types not immediately available, waiting 1 second...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('Swagger types source exists after delay:', existsSync(swaggerTypesSource));
+      }
 
       if (existsSync(swaggerTypesSource)) {
         if (!existsSync(swaggerTypesTarget)) {
@@ -418,7 +425,7 @@ export default INaturalistClient;
       console.log(`✓ Copied ${modules.length} modules`);
 
       console.log('Step 3: Generating types...');
-      this.generateTypes();
+      await this.generateTypes();
       console.log('✓ Types generated');
 
       console.log('Step 4: Generating HTTP client...');
