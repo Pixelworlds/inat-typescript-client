@@ -1,4 +1,4 @@
-import type { HttpClient, ApiResponse } from './types';
+import type { ApiResponse, HttpClient } from './types';
 import type * as Types from './types/swagger-types';
 
 export interface TaxonDetailsParams {
@@ -43,11 +43,11 @@ export interface TaxonSearchParams {
   per_page?: string;
 
   /** Locale preference for taxon common names
- */
+   */
   locale?: string;
 
   /** Place preference for regional taxon common names
- */
+   */
   preferred_place_id?: number;
 
   /** Return only the record IDs */
@@ -86,11 +86,11 @@ export interface TaxonAutocompleteParams {
   per_page?: string;
 
   /** Locale preference for taxon common names
- */
+   */
   locale?: string;
 
   /** Place preference for regional taxon common names
- */
+   */
   preferred_place_id?: number;
 
   /** Include all taxon names in the response */
@@ -105,7 +105,7 @@ export class Taxa {
    *
    * Given an ID, or an array of IDs in comma-delimited format, returns
    * corresponding taxa. A maximum of 30 results will be returned
-   * 
+   *
    */
   async taxon_details(id: number[], params?: TaxonDetailsParams): Promise<ApiResponse<Types.TaxaShowResponse>> {
     return this.http.get(`/taxa/${id}`, { params });
@@ -115,7 +115,7 @@ export class Taxa {
    * Taxon Search
    *
    * Given zero to many of following parameters, returns taxa matching the search criteria
-   * 
+   *
    */
   async taxon_search(params?: TaxonSearchParams): Promise<ApiResponse<Types.TaxaShowResponse>> {
     return this.http.get(`/taxa`, { params });
@@ -125,7 +125,7 @@ export class Taxa {
    * Taxon Autocomplete
    *
    * Given an string, returns taxa with names starting with the search term
-   * 
+   *
    */
   async taxon_autocomplete(params: TaxonAutocompleteParams): Promise<ApiResponse<Types.TaxaAutocompleteResponse>> {
     return this.http.get(`/taxa/autocomplete`, { params });

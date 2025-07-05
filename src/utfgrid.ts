@@ -1,4 +1,4 @@
-import type { HttpClient, ApiResponse } from './types';
+import type { ApiResponse, HttpClient } from './types';
 import type * as Types from './types/swagger-types';
 
 export interface ColoredHeatmapTilesUtfgridParams {
@@ -27,7 +27,7 @@ export interface ColoredHeatmapTilesUtfgridParams {
   identified?: boolean;
 
   /** Observations whose taxa are introduced in their location
- */
+   */
   introduced?: boolean;
 
   /** Observations that show on map tiles */
@@ -49,18 +49,18 @@ observations identified by curators of the specified project(s)
   photos?: boolean;
 
   /** Observations that have been favorited by at least one user
- */
+   */
   popular?: boolean;
 
   /** Observations with sounds */
   sounds?: boolean;
 
   /** Observations of active taxon concepts
- */
+   */
   taxon_is_active?: boolean;
 
   /** Observations whose taxa are threatened in their location
- */
+   */
   threatened?: boolean;
 
   /** Observations with a `quality_grade` of either `needs_id` or
@@ -102,7 +102,7 @@ observations identified by curators of the specified project(s)
   rank?: string[];
 
   /** Must be affiliated with the iNaturalist network website with this ID
- */
+   */
   site_id?: string[];
 
   /** Must have at least one sound with this license */
@@ -115,7 +115,7 @@ observations identified by curators of the specified project(s)
   without_taxon_id?: string[];
 
   /** Taxon must have a scientific or common name matching this string
- */
+   */
   taxon_name?: string[];
 
   /** User must have this ID or login */
@@ -157,7 +157,7 @@ with the `term_id` parameter
   term_value_id?: number[];
 
   /** Exclude observations with annotations using this controlled value ID.
- */
+   */
   without_term_id?: number;
 
   /** Exclude observations with annotations using this controlled value ID.
@@ -172,7 +172,7 @@ or be missing this annotation.
   term_id_or_unknown?: number[];
 
   /** Must have an annotation created by this user
- */
+   */
   annotation_user_id?: string[];
 
   /** Must have a positional accuracy above this value (meters) */
@@ -236,14 +236,62 @@ current identifications.
   taxon_geoprivacy?: string[];
 
   /** Must have `geoprivacy` or `taxon_geoprivacy` fields matching these values
- */
+   */
   obscuration?: string[];
 
   /** Taxon must have this rank or lower */
-  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  hrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must have this rank or higher */
-  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  lrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must by within this iconic taxon */
   iconic_taxa?: string[];
@@ -273,19 +321,19 @@ current identifications.
   radius?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelng?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlng?: string;
 
   /** Taxon must be in the list with this ID */
@@ -349,7 +397,7 @@ export interface GridTilesUtfgridParams {
   identified?: boolean;
 
   /** Observations whose taxa are introduced in their location
- */
+   */
   introduced?: boolean;
 
   /** Observations that show on map tiles */
@@ -371,18 +419,18 @@ observations identified by curators of the specified project(s)
   photos?: boolean;
 
   /** Observations that have been favorited by at least one user
- */
+   */
   popular?: boolean;
 
   /** Observations with sounds */
   sounds?: boolean;
 
   /** Observations of active taxon concepts
- */
+   */
   taxon_is_active?: boolean;
 
   /** Observations whose taxa are threatened in their location
- */
+   */
   threatened?: boolean;
 
   /** Observations with a `quality_grade` of either `needs_id` or
@@ -424,7 +472,7 @@ observations identified by curators of the specified project(s)
   rank?: string[];
 
   /** Must be affiliated with the iNaturalist network website with this ID
- */
+   */
   site_id?: string[];
 
   /** Must have at least one sound with this license */
@@ -437,7 +485,7 @@ observations identified by curators of the specified project(s)
   without_taxon_id?: string[];
 
   /** Taxon must have a scientific or common name matching this string
- */
+   */
   taxon_name?: string[];
 
   /** User must have this ID or login */
@@ -479,7 +527,7 @@ with the `term_id` parameter
   term_value_id?: number[];
 
   /** Exclude observations with annotations using this controlled value ID.
- */
+   */
   without_term_id?: number;
 
   /** Exclude observations with annotations using this controlled value ID.
@@ -494,7 +542,7 @@ or be missing this annotation.
   term_id_or_unknown?: number[];
 
   /** Must have an annotation created by this user
- */
+   */
   annotation_user_id?: string[];
 
   /** Must have a positional accuracy above this value (meters) */
@@ -558,14 +606,62 @@ current identifications.
   taxon_geoprivacy?: string[];
 
   /** Must have `geoprivacy` or `taxon_geoprivacy` fields matching these values
- */
+   */
   obscuration?: string[];
 
   /** Taxon must have this rank or lower */
-  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  hrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must have this rank or higher */
-  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  lrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must by within this iconic taxon */
   iconic_taxa?: string[];
@@ -595,19 +691,19 @@ current identifications.
   radius?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelng?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlng?: string;
 
   /** Taxon must be in the list with this ID */
@@ -671,7 +767,7 @@ export interface HeatmapTilesUtfgridParams {
   identified?: boolean;
 
   /** Observations whose taxa are introduced in their location
- */
+   */
   introduced?: boolean;
 
   /** Observations that show on map tiles */
@@ -693,18 +789,18 @@ observations identified by curators of the specified project(s)
   photos?: boolean;
 
   /** Observations that have been favorited by at least one user
- */
+   */
   popular?: boolean;
 
   /** Observations with sounds */
   sounds?: boolean;
 
   /** Observations of active taxon concepts
- */
+   */
   taxon_is_active?: boolean;
 
   /** Observations whose taxa are threatened in their location
- */
+   */
   threatened?: boolean;
 
   /** Observations with a `quality_grade` of either `needs_id` or
@@ -746,7 +842,7 @@ observations identified by curators of the specified project(s)
   rank?: string[];
 
   /** Must be affiliated with the iNaturalist network website with this ID
- */
+   */
   site_id?: string[];
 
   /** Must have at least one sound with this license */
@@ -759,7 +855,7 @@ observations identified by curators of the specified project(s)
   without_taxon_id?: string[];
 
   /** Taxon must have a scientific or common name matching this string
- */
+   */
   taxon_name?: string[];
 
   /** User must have this ID or login */
@@ -801,7 +897,7 @@ with the `term_id` parameter
   term_value_id?: number[];
 
   /** Exclude observations with annotations using this controlled value ID.
- */
+   */
   without_term_id?: number;
 
   /** Exclude observations with annotations using this controlled value ID.
@@ -816,7 +912,7 @@ or be missing this annotation.
   term_id_or_unknown?: number[];
 
   /** Must have an annotation created by this user
- */
+   */
   annotation_user_id?: string[];
 
   /** Must have a positional accuracy above this value (meters) */
@@ -880,14 +976,62 @@ current identifications.
   taxon_geoprivacy?: string[];
 
   /** Must have `geoprivacy` or `taxon_geoprivacy` fields matching these values
- */
+   */
   obscuration?: string[];
 
   /** Taxon must have this rank or lower */
-  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  hrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must have this rank or higher */
-  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  lrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must by within this iconic taxon */
   iconic_taxa?: string[];
@@ -917,19 +1061,19 @@ current identifications.
   radius?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelng?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlng?: string;
 
   /** Taxon must be in the list with this ID */
@@ -993,7 +1137,7 @@ export interface PointsTilesUtfgridParams {
   identified?: boolean;
 
   /** Observations whose taxa are introduced in their location
- */
+   */
   introduced?: boolean;
 
   /** Observations that show on map tiles */
@@ -1015,18 +1159,18 @@ observations identified by curators of the specified project(s)
   photos?: boolean;
 
   /** Observations that have been favorited by at least one user
- */
+   */
   popular?: boolean;
 
   /** Observations with sounds */
   sounds?: boolean;
 
   /** Observations of active taxon concepts
- */
+   */
   taxon_is_active?: boolean;
 
   /** Observations whose taxa are threatened in their location
- */
+   */
   threatened?: boolean;
 
   /** Observations with a `quality_grade` of either `needs_id` or
@@ -1068,7 +1212,7 @@ observations identified by curators of the specified project(s)
   rank?: string[];
 
   /** Must be affiliated with the iNaturalist network website with this ID
- */
+   */
   site_id?: string[];
 
   /** Must have at least one sound with this license */
@@ -1081,7 +1225,7 @@ observations identified by curators of the specified project(s)
   without_taxon_id?: string[];
 
   /** Taxon must have a scientific or common name matching this string
- */
+   */
   taxon_name?: string[];
 
   /** User must have this ID or login */
@@ -1123,7 +1267,7 @@ with the `term_id` parameter
   term_value_id?: number[];
 
   /** Exclude observations with annotations using this controlled value ID.
- */
+   */
   without_term_id?: number;
 
   /** Exclude observations with annotations using this controlled value ID.
@@ -1138,7 +1282,7 @@ or be missing this annotation.
   term_id_or_unknown?: number[];
 
   /** Must have an annotation created by this user
- */
+   */
   annotation_user_id?: string[];
 
   /** Must have a positional accuracy above this value (meters) */
@@ -1202,14 +1346,62 @@ current identifications.
   taxon_geoprivacy?: string[];
 
   /** Must have `geoprivacy` or `taxon_geoprivacy` fields matching these values
- */
+   */
   obscuration?: string[];
 
   /** Taxon must have this rank or lower */
-  hrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  hrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must have this rank or higher */
-  lrank?: 'kingdom' | 'phylum' | 'subphylum' | 'superclass' | 'class' | 'subclass' | 'superorder' | 'order' | 'suborder' | 'infraorder' | 'superfamily' | 'epifamily' | 'family' | 'subfamily' | 'supertribe' | 'tribe' | 'subtribe' | 'genus' | 'genushybrid' | 'species' | 'hybrid' | 'subspecies' | 'variety' | 'form';
+  lrank?:
+    | 'kingdom'
+    | 'phylum'
+    | 'subphylum'
+    | 'superclass'
+    | 'class'
+    | 'subclass'
+    | 'superorder'
+    | 'order'
+    | 'suborder'
+    | 'infraorder'
+    | 'superfamily'
+    | 'epifamily'
+    | 'family'
+    | 'subfamily'
+    | 'supertribe'
+    | 'tribe'
+    | 'subtribe'
+    | 'genus'
+    | 'genushybrid'
+    | 'species'
+    | 'hybrid'
+    | 'subspecies'
+    | 'variety'
+    | 'form';
 
   /** Taxon must by within this iconic taxon */
   iconic_taxa?: string[];
@@ -1239,19 +1431,19 @@ current identifications.
   radius?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   nelng?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlat?: string;
 
   /** Must be within this bounding box (*nelat, *nelng, *swlat, *swlng)
- */
+   */
   swlng?: string;
 
   /** Taxon must be in the list with this ID */
@@ -1298,9 +1490,14 @@ export class UTFGrid {
    * Given zero to many of following parameters, returns a JSON file
    * following the UTFGrid spec, representing observations matching
    * the search criteria
-   * 
+   *
    */
-  async colored_heatmap_tiles_utfgrid(zoom: number, x: number, y: number, params?: ColoredHeatmapTilesUtfgridParams): Promise<ApiResponse<Types.UTFGridResponse>> {
+  async colored_heatmap_tiles_utfgrid(
+    zoom: number,
+    x: number,
+    y: number,
+    params?: ColoredHeatmapTilesUtfgridParams
+  ): Promise<ApiResponse<Types.UTFGridResponse>> {
     return this.http.get(`/colored_heatmap/${zoom}/${x}/${y}.grid.json`, { params });
   }
 
@@ -1310,9 +1507,14 @@ export class UTFGrid {
    * Given zero to many of following parameters, returns a JSON file
    * following the UTFGrid spec, representing observations matching
    * the search criteria
-   * 
+   *
    */
-  async grid_tiles_utfgrid(zoom: number, x: number, y: number, params?: GridTilesUtfgridParams): Promise<ApiResponse<Types.UTFGridResponse>> {
+  async grid_tiles_utfgrid(
+    zoom: number,
+    x: number,
+    y: number,
+    params?: GridTilesUtfgridParams
+  ): Promise<ApiResponse<Types.UTFGridResponse>> {
     return this.http.get(`/grid/${zoom}/${x}/${y}.grid.json`, { params });
   }
 
@@ -1322,9 +1524,14 @@ export class UTFGrid {
    * Given zero to many of following parameters, returns a JSON file
    * following the UTFGrid spec, representing observations matching
    * the search criteria
-   * 
+   *
    */
-  async heatmap_tiles_utfgrid(zoom: number, x: number, y: number, params?: HeatmapTilesUtfgridParams): Promise<ApiResponse<Types.UTFGridResponse>> {
+  async heatmap_tiles_utfgrid(
+    zoom: number,
+    x: number,
+    y: number,
+    params?: HeatmapTilesUtfgridParams
+  ): Promise<ApiResponse<Types.UTFGridResponse>> {
     return this.http.get(`/heatmap/${zoom}/${x}/${y}.grid.json`, { params });
   }
 
@@ -1334,9 +1541,14 @@ export class UTFGrid {
    * Given zero to many of following parameters, returns a JSON file
    * following the UTFGrid spec, representing observations matching
    * the search criteria
-   * 
+   *
    */
-  async points_tiles_utfgrid(zoom: number, x: number, y: number, params?: PointsTilesUtfgridParams): Promise<ApiResponse<Types.UTFGridResponse>> {
+  async points_tiles_utfgrid(
+    zoom: number,
+    x: number,
+    y: number,
+    params?: PointsTilesUtfgridParams
+  ): Promise<ApiResponse<Types.UTFGridResponse>> {
     return this.http.get(`/points/${zoom}/${x}/${y}.grid.json`, { params });
   }
 }

@@ -1,4 +1,4 @@
-import type { HttpClient, ApiResponse } from './types';
+import type { ApiResponse, HttpClient } from './types';
 import type * as Types from './types/swagger-types';
 
 export interface ProjectSearchParams {
@@ -163,7 +163,7 @@ export class Projects {
    *
    * Given zero to many of following parameters, returns projects
    * matching the search criteria
-   * 
+   *
    */
   async project_search(params?: ProjectSearchParams): Promise<ApiResponse<Types.ProjectsResponse>> {
     return this.http.get(`/projects`, { params });
@@ -174,7 +174,7 @@ export class Projects {
    *
    * Given an ID, or an array of IDs in comma-delimited format, returns
    * corresponding projects. A maximum of 100 results will be returned
-   * 
+   *
    */
   async project_details(id: string[], params?: ProjectDetailsParams): Promise<ApiResponse<Types.ProjectsResponse>> {
     return this.http.get(`/projects/${id}`, { params });
@@ -184,7 +184,7 @@ export class Projects {
    * Projects Join
    *
    * Join a project
-   * 
+   *
    * @requires Authentication
    */
   async projects_join(id: number): Promise<ApiResponse<any>> {
@@ -195,7 +195,7 @@ export class Projects {
    * Projects Leave
    *
    * Leave a project
-   * 
+   *
    * @requires Authentication
    */
   async projects_leave(id: number): Promise<ApiResponse<any>> {
@@ -206,7 +206,7 @@ export class Projects {
    * Project Members
    *
    * Given an ID, return members of the project
-   * 
+   *
    */
   async project_members(id: number, params?: ProjectMembersParams): Promise<ApiResponse<Types.ProjectMembersResponse>> {
     return this.http.get(`/projects/${id}/members`, { params });
@@ -217,7 +217,7 @@ export class Projects {
    *
    * Given an ID, or an array of IDs in comma-delimited format, return the details of the
    * authenticated user's membership in these projects
-   * 
+   *
    * @requires Authentication
    */
   async membership_of_current_user(id: number[]): Promise<ApiResponse<any>> {
@@ -229,9 +229,9 @@ export class Projects {
    *
    * [Deprecated] Subscriptions to projects are managed through joining and
    * leaving projects, so this will not return any useful information.
-   * 
+   *
    * Given an ID, return subscription of the current user
-   * 
+   *
    * @requires Authentication
    */
   async project_subscriptions(id: number): Promise<ApiResponse<any>> {
@@ -262,7 +262,7 @@ export class Projects {
    * Project Autocomplete
    *
    * Given an string, returns projects with titles starting with the search term
-   * 
+   *
    */
   async project_autocomplete(params: ProjectAutocompleteParams): Promise<ApiResponse<Types.ProjectsResponse>> {
     return this.http.get(`/projects/autocomplete`, { params });
@@ -274,7 +274,7 @@ export class Projects {
    * Toggles current user's subscription to this project. If the logged-in
    * user is not subscribed, POSTing here will subscribe them. If they are already
    * subscribed, this will remove the subscription
-   * 
+   *
    * @requires Authentication
    */
   async project_subscribe(id: number): Promise<ApiResponse<any>> {

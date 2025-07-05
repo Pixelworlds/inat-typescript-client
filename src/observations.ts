@@ -1,4 +1,4 @@
-import type { HttpClient, ApiResponse } from './types';
+import type { ApiResponse, HttpClient } from './types';
 import type * as Types from './types/swagger-types';
 
 export interface ObservationSearchParams {
@@ -2562,9 +2562,7 @@ export class Observations {
    * maximum of 500 results will be returned
    *
    */
-  async observation_identifiers(
-    params?: ObservationIdentifiersParams
-  ): Promise<ApiResponse<Types.UserCountsResponse>> {
+  async observation_identifiers(params?: ObservationIdentifiersParams): Promise<ApiResponse<Types.UserCountsResponse>> {
     return this.http.get(`/observations/identifiers`, { params });
   }
 
