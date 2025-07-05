@@ -415,6 +415,42 @@ export default INaturalistClient;
   async generate() {
     console.log('Starting iNaturalist SDK generation...\\n');
 
+    // Add comprehensive environment debugging
+    console.log('=== ENVIRONMENT DEBUG INFO ===');
+    console.log('Current working directory:', process.cwd());
+    console.log('Project root:', this.projectRoot);
+    console.log('TypeScript directory:', this.typescriptDir);
+    console.log('Src directory:', this.srcDir);
+    console.log('Node version:', process.version);
+    console.log('Platform:', process.platform);
+    console.log('Architecture:', process.arch);
+
+    // Check if critical directories exist
+    console.log('\\n=== DIRECTORY EXISTENCE CHECK ===');
+    console.log('Project root exists:', existsSync(this.projectRoot));
+    console.log('TypeScript dir exists:', existsSync(this.typescriptDir));
+    console.log('Src dir exists:', existsSync(this.srcDir));
+
+    // Check data files
+    const dataDir = join(this.projectRoot, 'data');
+    console.log('Data dir exists:', existsSync(dataDir));
+    if (existsSync(dataDir)) {
+      console.log('Data directory contents:');
+      const dataFiles = readdirSync(dataDir);
+      dataFiles.forEach(file => console.log(`  ${file}`));
+    }
+
+    // Check root directory contents
+    console.log('\\n=== ROOT DIRECTORY CONTENTS ===');
+    const rootFiles = readdirSync(this.projectRoot);
+    rootFiles.forEach(file => {
+      const filePath = join(this.projectRoot, file);
+      const isDir = statSync(filePath).isDirectory();
+      console.log(`  ${file} ${isDir ? '(directory)' : '(file)'}`);
+    });
+
+    console.log('\\n=== STARTING GENERATION PROCESS ===');
+
     try {
       console.log('Step 1: Preparing src directory...');
       this.prepareSrcDirectory();
@@ -458,7 +494,7 @@ export default INaturalistClient;
       console.error('Error stack:', error.stack);
 
       // Show current directory contents for debugging
-      console.log('\\nDebugging information:');
+      console.log('\\n=== FAILURE DEBUG INFORMATION ===');
       console.log('Current working directory:', process.cwd());
       console.log('Project root:', this.projectRoot);
       console.log('Src directory:', this.srcDir);
@@ -487,6 +523,13 @@ export default INaturalistClient;
       } catch (e) {
         console.log('  Error reading typescript directory:', e.message);
       }
+
+      // Show environment variables that might be relevant
+      console.log('\\n=== ENVIRONMENT VARIABLES ===');
+      console.log('HOME:', process.env.HOME);
+      console.log('PWD:', process.env.PWD);
+      console.log('GITHUB_WORKSPACE:', process.env.GITHUB_WORKSPACE);
+      console.log('RUNNER_WORKSPACE:', process.env.RUNNER_WORKSPACE);
 
       throw error;
     }
