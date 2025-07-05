@@ -7,15 +7,15 @@ export class ObservationFieldValues {
     this.client = client;
   }
 
-  async delete_observationfieldvalues_id(id: string | number): Promise<AxiosResponse<any>> {
+  async delete_observation_field_values_id(id: string | number): Promise<AxiosResponse<any>> {
     return this.client.delete(`/observation_field_values/${id}`, {});
   }
 
-  async post_observationfieldvalues(data?: any): Promise<AxiosResponse<any>> {
+  async post_observation_field_values(data?: any): Promise<AxiosResponse<any>> {
     return this.client.post(`/observation_field_values`, { data });
   }
 
-  async put_observationfieldvalues_id(id: string | number, data?: any): Promise<AxiosResponse<any>> {
+  async put_observation_field_values_id(id: string | number, data?: any): Promise<AxiosResponse<any>> {
     return this.client.put(`/observation_field_values/${id}`, { data });
   }
 }

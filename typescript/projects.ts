@@ -1,9 +1,5 @@
 import type { AxiosInstance, AxiosResponse } from 'axios';
 
-interface Get_projects_idiframetrueParams {
-  iframe?: string;
-}
-
 export class Projects {
   private client: AxiosInstance;
 
@@ -15,21 +11,30 @@ export class Projects {
     return this.client.delete(`/projects/${id}/leave`, {});
   }
 
+  /**
+   * Retrieve information about projects on iNaturalist.
+   */
   async get_projects(): Promise<AxiosResponse<any>> {
     return this.client.get(`/projects`, {});
   }
 
+  /**
+   * Retrieve information about a single project.  :id is the project ID or slug.
+   */
   async get_projects_id(id: string | number): Promise<AxiosResponse<any>> {
     return this.client.get(`/projects/${id}`, {});
   }
 
-  async get_projects_idiframetrue(
-    id: string | number,
-    params?: Get_projects_idiframetrueParams
-  ): Promise<AxiosResponse<any>> {
-    return this.client.get(`/projects/${id}`, { params });
+  /**
+   * This returns a complete web page without header or footer suitable for use in an IFRAME.
+   */
+  async get_projects_idiframetrue(id: string | number): Promise<AxiosResponse<any>> {
+    return this.client.get(`/projects/${id}?iframe=true`, {});
   }
 
+  /**
+   * JS widget snippet of the top contributors to a project.
+   */
   async get_projects_id_contributorswidget(id: string | number): Promise<AxiosResponse<any>> {
     return this.client.get(`/projects/${id}/contributors.widget`, {});
   }

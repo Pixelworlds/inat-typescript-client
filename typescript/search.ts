@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosResponse } from 'axios';
 
-export class Places {
+export class Search {
   private client: AxiosInstance;
 
   constructor(client: AxiosInstance) {
@@ -8,9 +8,9 @@ export class Places {
   }
 
   /**
-   * Retrieve information about places.
+   * Global search across observations, taxa, projects, etc.
    */
-  async get_places(): Promise<AxiosResponse<any>> {
-    return this.client.get(`/places`, {});
+  async get_search(): Promise<AxiosResponse<any>> {
+    return this.client.get(`/search`, {});
   }
 }

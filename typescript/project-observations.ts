@@ -7,7 +7,7 @@ export class ProjectObservations {
     this.client = client;
   }
 
-  async post_projectobservations(data?: any): Promise<AxiosResponse<any>> {
+  async post_project_observations(data?: any): Promise<AxiosResponse<any>> {
     return this.client.post(`/project_observations`, { data });
   }
 }

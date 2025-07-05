@@ -7,7 +7,11 @@ export class ObservationFields {
     this.client = client;
   }
 
-  async get_observationfields(): Promise<AxiosResponse<any>> {
+  /**
+   * List / search observation fields. ObservationFields are basically
+      typed data fields that users can attach to observation.
+   */
+  async get_observation_fields(): Promise<AxiosResponse<any>> {
     return this.client.get(`/observation_fields`, {});
   }
 }

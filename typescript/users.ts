@@ -11,10 +11,13 @@ export class Users {
     return this.client.get(`/users/edit`, {});
   }
 
-  async get_users_newupdates(): Promise<AxiosResponse<any>> {
+  async get_users_new_updates(): Promise<AxiosResponse<any>> {
     return this.client.get(`/users/new_updates`, {});
   }
 
+  /**
+   * Create a new iNaturalist user
+   */
   async post_users(data?: any): Promise<AxiosResponse<any>> {
     return this.client.post(`/users`, { data });
   }
