@@ -29,10 +29,7 @@ import { INaturalistClient } from '@richard-stovall/inat-typescript-client';
 const client = new INaturalistClient('https://api.inaturalist.org/v1');
 
 // For authenticated requests, provide your API token
-const authenticatedClient = new INaturalistClient(
-  'https://api.inaturalist.org/v1', 
-  'your-api-token'
-);
+const authenticatedClient = new INaturalistClient('https://api.inaturalist.org/v1', 'your-api-token');
 
 // Get observations
 const observations = await client.observations.get_observations();
@@ -60,10 +57,7 @@ The iNaturalist API supports multiple authentication methods:
 ### 1. API Token (Recommended)
 
 ```typescript
-const client = new INaturalistClient(
-  'https://api.inaturalist.org/v1',
-  'your-api-token'
-);
+const client = new INaturalistClient('https://api.inaturalist.org/v1', 'your-api-token');
 ```
 
 ### 2. OAuth 2.0 Flow
@@ -77,7 +71,7 @@ const oauthResponse = await client.authentication.post_oauth_token({
   client_id: 'your-client-id',
   client_secret: 'your-client-secret',
   username: 'your-username',
-  password: 'your-password'
+  password: 'your-password',
 });
 
 // Step 2: Get API token using OAuth access token
@@ -103,22 +97,26 @@ client.removeApiToken();
 The SDK organizes endpoints into logical categories:
 
 ### Core Data
+
 - **observations** - Submit, search, and manage observations
 - **identifications** - Add and manage species identifications
 - **users** - User profiles and management
 - **places** - Geographic place data
 
 ### Project Management
+
 - **projects** - iNaturalist projects and challenges
 - **project_observations** - Project-specific observations
 
 ### Data Enhancement
+
 - **comments** - Comments on observations
 - **observation_fields** - Custom data fields for observations
 - **observation_field_values** - Values for custom fields
 - **observation_photos** - Photo management for observations
 
 ### Authentication
+
 - **authentication** - OAuth and API token management
 
 ## Usage Examples
@@ -141,8 +139,8 @@ const newObs = await client.observations.post_observations({
     species_guess: 'Mallard',
     observed_on: '2023-12-01',
     latitude: 40.7128,
-    longitude: -74.0060
-  }
+    longitude: -74.006,
+  },
 });
 ```
 
@@ -154,13 +152,13 @@ const identification = await client.identifications.post_identifications({
   identification: {
     observation_id: 12345,
     taxon_id: 6888,
-    body: 'This looks like a Mallard duck'
-  }
+    body: 'This looks like a Mallard duck',
+  },
 });
 
 // Update identification
 await client.identifications.put_identifications_id(identification.id, {
-  body: 'Updated identification comment'
+  body: 'Updated identification comment',
 });
 ```
 
@@ -186,8 +184,8 @@ const profile = await client.users.get_users_edit();
 // Update user settings (requires authentication)
 await client.users.put_users_id(userId, {
   user: {
-    description: 'Updated bio'
-  }
+    description: 'Updated bio',
+  },
 });
 ```
 
@@ -236,10 +234,7 @@ The collection includes automatic OAuth token exchange and API token retrieval.
 The SDK provides full TypeScript definitions for all endpoints:
 
 ```typescript
-import { 
-  INaturalistClient, 
-  type AxiosResponse 
-} from '@richard-stovall/inat-typescript-client';
+import { INaturalistClient, type AxiosResponse } from '@richard-stovall/inat-typescript-client';
 
 const client = new INaturalistClient();
 
@@ -282,7 +277,7 @@ bun run type-check
 The SDK uses Rollup for building and supports multiple output formats:
 
 - **CommonJS**: `dist/index.cjs` - For Node.js environments
-- **ESM**: `dist/index.js` - For modern JavaScript environments  
+- **ESM**: `dist/index.js` - For modern JavaScript environments
 - **TypeScript Definitions**: `dist/index.d.ts` - For TypeScript support
 
 ## Requirements
@@ -294,6 +289,7 @@ The SDK uses Rollup for building and supports multiple output formats:
 ## API Rate Limits
 
 Please be mindful of iNaturalist's API rate limits:
+
 - Authenticated requests: Higher rate limits
 - Unauthenticated requests: Lower rate limits
 - Consider implementing request throttling for high-volume applications
@@ -314,3 +310,7 @@ MIT License - see LICENSE file for details.
 
 - [iNaturalist](https://www.inaturalist.org/) for providing the comprehensive API
 - Built with [Bun](https://bun.sh) for fast development and building
+
+## About the Author
+
+This SDK was created by [Richard Stovall](https://www.inaturalist.org/people/arctic_mongoose), a software developer and amateur photographer who is an active member of the iNaturalist community with over 10,000 observations and 1,999 species documented.
