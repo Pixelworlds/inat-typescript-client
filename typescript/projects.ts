@@ -253,12 +253,12 @@ export class Projects {
   }
 
   /**
-   * Project Add
+   * Project Remove
    *
    * Remove an observation from a project
    * @requires Authentication
    */
-  async project_add(id: number, data: Types.PostProjectAdd): Promise<AxiosResponse<any>> {
+  async project_remove(id: number, data: Types.PostProjectAdd): Promise<AxiosResponse<any>> {
     return this.client.delete(`/projects/${id}/remove`);
   }
 

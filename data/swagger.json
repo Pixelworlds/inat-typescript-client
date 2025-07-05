@@ -2066,7 +2066,7 @@
     },
     "/projects/{id}/remove": {
       "delete": {
-        "summary": "Project Add",
+        "summary": "Project Remove",
         "description": "Remove an observation from a project",
         "consumes": ["application/json"],
         "parameters": [

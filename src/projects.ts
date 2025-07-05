@@ -1,5 +1,5 @@
 import type { HttpClient, ApiResponse } from './types';
-import type * as Types from '../src/types/swagger-types';
+import type * as Types from './types/swagger-types';
 
 export interface ProjectSearchParams {
   /** Search by name (must start with this value) or by ID (exact match). */
@@ -249,12 +249,12 @@ export class Projects {
   }
 
   /**
-   * Project Add
+   * Project Remove
    *
    * Remove an observation from a project
    * @requires Authentication
    */
-  async project_add(id: number, data: Types.PostProjectAdd): Promise<ApiResponse<any>> {
+  async project_remove(id: number, data: Types.PostProjectAdd): Promise<ApiResponse<any>> {
     return this.http.delete(`/projects/${id}/remove`);
   }
 

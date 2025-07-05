@@ -1,5 +1,5 @@
 import type { HttpClient, ApiResponse } from './types';
-import type * as Types from '../src/types/swagger-types';
+import type * as Types from './types/swagger-types';
 
 export interface PostsSearchParams {
   /** Return posts by this user */

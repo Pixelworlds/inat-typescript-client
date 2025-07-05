@@ -55,6 +55,12 @@ class INaturalistSDKGenerator {
       `import type { HttpClient, ApiResponse } from './types';`
     );
 
+    // Fix swagger-types import path
+    transformedContent = transformedContent.replace(
+      /import type \* as Types from '\.\.\/src\/types\/swagger-types';/,
+      `import type * as Types from './types/swagger-types';`
+    );
+
     transformedContent = transformedContent.replace(/AxiosInstance/g, 'HttpClient');
     transformedContent = transformedContent.replace(/AxiosResponse/g, 'ApiResponse');
 
