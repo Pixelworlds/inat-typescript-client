@@ -90,7 +90,7 @@ jobs:
           bun run generate:modules
           echo "Verifying generated modules..."
           test -d typescript || (echo "Missing typescript directory" && exit 1)
-          test -f typescript/authentication.ts || (echo "Missing typescript/authentication.ts" && exit 1)
+          test -f typescript/oauth.ts || (echo "Missing typescript/oauth.ts" && exit 1)
           test -f typescript/observations.ts || (echo "Missing typescript/observations.ts" && exit 1)
           test -f typescript/users.ts || (echo "Missing typescript/users.ts" && exit 1)
           echo "Module generation completed successfully"
