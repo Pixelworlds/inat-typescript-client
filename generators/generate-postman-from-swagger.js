@@ -91,11 +91,14 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
 
     // Add authentication if required
     if (endpoint.security && endpoint.security.length > 0) {
+      // Special case: /users/api_token uses OAuth access token, not JWT
+      const tokenVariable = path === '/users/api_token' ? '{{inat_access_token}}' : '{{inat_api_token}}';
+      
       request.request.auth = {
         type: "bearer",
         bearer: [{
           key: "token",
-          value: "{{jwt_api_token}}",
+          value: tokenVariable,
           type: "string"
         }]
       };
@@ -254,7 +257,7 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
     const urlParts = postmanPath.split('/').filter(p => p);
     
     // OAuth endpoints should use the full URL
-    const isOAuthEndpoint = path.startsWith('/oauth/') || path === '/users/edit.json';
+    const isOAuthEndpoint = path.startsWith('/oauth/') || path === '/users/edit.json' || path === '/users/api_token';
     
     if (isOAuthEndpoint) {
       request.request.url = {
@@ -306,7 +309,7 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
 // Create the Postman collection
 const collection = {
   info: {
-    name: "iNaturalist API v1",
+    name: "iNaturalist API Collection",
     description: swagger.info.description,
     schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -314,7 +317,7 @@ const collection = {
     type: "bearer",
     bearer: [{
       key: "token",
-      value: "{{jwt_api_token}}",
+      value: "{{inat_api_token}}",
       type: "string"
     }]
   },

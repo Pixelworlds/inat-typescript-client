@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "iNaturalist API v1",
+    "name": "iNaturalist API Collection",
     "description": "# https://api.inaturalist.org/v1/\n\n[iNaturalist](https://www.inaturalist.org/) is a global community of\nnaturalists, scientists, and members of the public sharing over a million\nwildlife sightings to teach one another about the natural world while\ncreating high quality citizen science data for science and conservation.\n\nThese API methods return data in JSON/JSONP and PNG response formats. They\nare meant to supplement the existing [iNaturalist\nAPI](https://www.inaturalist.org/pages/api+reference), implemented in Ruby\non Rails, which has more functionality and supports more write operations,\nbut tends to be slower and have less consistent response formats. Visit our\n[developers page](https://www.inaturalist.org/pages/developers) for more\ninformation. Write operations that expect and return JSON describe a single\n`body` parameter that represents the request body, which should be specified\nas JSON. See the \"Model\" of each body parameter for attributes that we\naccept in these JSON objects.\n\nMultiple values for a single URL parameter should be separated by commas,\ne.g. `taxon_id=1,2,3`.\n\nMap tiles are generated using the\n[node-mapnik](https://github.com/mapnik/node-mapnik) library, following the\nXYZ map tiling scheme. The \"Observation Tile\" methods accept nearly all the\nparameters of the observation search APIs, and will generate map tiles\nreflecting the same observations returned by searches. These\n\"Observation Tile\" methods have corresponding\n[UTFGrid](https://github.com/mapbox/utfgrid-spec) JSON\nresponses which return information needed to make interactive maps.\n\nAuthentication in the Node API is handled via JSON Web Tokens (JWT). To\nobtain one, make an [OAuth-authenticated\nrequest](http://www.inaturalist.org/pages/api+reference#auth) to\nhttps://www.inaturalist.org/users/api_token. Each JWT will expire after 24\nhours. Authentication required for all PUT and POST requests. Some GET\nrequests will also include private information like hidden coordinates if\nthe authenticated user has permission to view them.\n\nPhotos served from https://static.inaturalist.org and\nhttps://inaturalist-open-data.s3.amazonaws.com have multiple size\nvariants and not all size variants are returned in responses. To access\nother sizes, the photo URL can be modified to replace only the size\nqualifier (each variant shares the exact same extension). The domain a photo\nis hosted under reflects the license under which the photo is being shared,\nand the domain may change over time if the license changes. Photos in\nthe `inaturalist-open-data` domain are shared under open licenses. These can\nbe accessed in bulk in the [iNaturalist AWS Open Dataset](\nhttps://registry.opendata.aws/inaturalist-open-data/). Photos in the\n`static.inaturalist.org` domain do not have open licenses.\n\nThe available photo sizes are:\n* original (max 2048px in either dimension)\n* large (max 1024px in either dimension)\n* medium (max 500px in either dimension)\n* small (max 240px in either dimension)\n* thumb (max 100px in either dimension)\n* square (75px square)\n\niNaturalist Website: https://www.inaturalist.org/\n\nOpen Source Software: https://github.com/inaturalist/\n\n## Terms of Use\n\nUse of this API is subject to the iNaturalist\n[Terms of Service](https://www.inaturalist.org/terms) and\n[Privacy Policy](https://www.inaturalist.org/privacy). We will block any\nuse of our API that violates our Terms or Privacy Policy without notice.\nThe API is intended to support application development, not data scraping.\nFor pre- generated data exports, see\nhttps://www.inaturalist.org/pages/developers.\n\nPlease note that we throttle API usage to a max of 100 requests per minute,\nthough we ask that you try to keep it to 60 requests per minute or lower,\nand to keep under 10,000 requests per day. If we notice usage that has\nserious impact on our performance we may institute blocks without\nnotification.\n\nTerms of Service: https://www.inaturalist.org/terms\n\nPrivacy Policy: https://www.inaturalist.org/privacy\n",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -9,7 +9,7 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{jwt_api_token}}",
+        "value": "{{inat_api_token}}",
         "type": "string"
       }
     ]
@@ -52,7 +52,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -96,7 +96,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -139,7 +139,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -185,7 +185,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -234,7 +234,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -284,7 +284,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -328,7 +328,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -436,7 +436,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -486,7 +486,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -530,7 +530,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -612,7 +612,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -656,7 +656,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -689,7 +689,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -2826,7 +2826,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -2859,7 +2859,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -2903,7 +2903,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -2938,7 +2938,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -2966,7 +2966,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -3214,7 +3214,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -3258,7 +3258,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -3291,7 +3291,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -3351,7 +3351,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -3405,7 +3405,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -3432,7 +3432,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -5872,7 +5872,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -5916,7 +5916,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -5952,7 +5952,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -5988,7 +5988,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6024,7 +6024,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6060,7 +6060,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6096,7 +6096,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6144,7 +6144,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6195,7 +6195,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6258,7 +6258,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6301,7 +6301,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6353,7 +6353,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -6996,7 +6996,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -7041,7 +7041,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -9991,7 +9991,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10027,7 +10027,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10408,7 +10408,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10441,7 +10441,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10491,7 +10491,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10535,7 +10535,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10583,7 +10583,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10640,7 +10640,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10684,7 +10684,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10717,7 +10717,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10932,7 +10932,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -10968,7 +10968,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11056,7 +11056,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11092,7 +11092,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11134,7 +11134,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11185,7 +11185,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11347,7 +11347,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11732,7 +11732,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11850,7 +11850,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11886,7 +11886,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11922,7 +11922,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11950,7 +11950,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -11984,7 +11984,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
@@ -12014,9 +12014,9 @@
             ],
             "description": "Exchange an OAuth access token for a JWT (JSON Web Token) that can be used to authenticate API requests. The JWT expires after 24 hours.",
             "url": {
-              "raw": "{{inat_base_url}}/users/api_token",
+              "raw": "https://www.inaturalist.org/users/api_token",
               "host": [
-                "{{inat_base_url}}"
+                "https://www.inaturalist.org"
               ],
               "path": [
                 "users",
@@ -12028,7 +12028,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_access_token}}",
                   "type": "string"
                 }
               ]
@@ -12063,7 +12063,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_api_token}}",
+                  "value": "{{inat_api_token}}",
                   "type": "string"
                 }
               ]
