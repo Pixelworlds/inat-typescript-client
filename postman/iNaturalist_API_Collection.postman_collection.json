@@ -116,7 +116,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID or UUID of the annotation"
                 }
               ]
@@ -159,7 +159,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID or UUID of the annotation"
                 }
               ]
@@ -205,7 +205,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID or UUID of the annotation"
                 }
               ]
@@ -304,7 +304,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -348,7 +348,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -506,7 +506,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -550,7 +550,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -601,7 +601,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "Must have this ID"
                 }
               ]
@@ -632,7 +632,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -676,7 +676,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -2923,7 +2923,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -2958,7 +2958,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -3016,6 +3016,165 @@
       }
     },
     {
+      "name": "OAuth",
+      "description": "",
+      "item": [
+        {
+          "name": "OAuth Authorization",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Redirects the user to the OAuth authorization page where they can approve or deny your application's access request. Supports both standard Authorization Code flow and PKCE (Proof Key for Code Exchange) flow for mobile/SPA applications.",
+            "url": {
+              "raw": "https://www.inaturalist.org/oauth/authorize",
+              "host": [
+                "https://www.inaturalist.org"
+              ],
+              "path": [
+                "oauth",
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "client_id",
+                  "value": "",
+                  "description": "Your application's client ID",
+                  "disabled": false
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "",
+                  "description": "URL to redirect the user after authorization",
+                  "disabled": false
+                },
+                {
+                  "key": "response_type",
+                  "value": "",
+                  "description": "OAuth response type",
+                  "disabled": false
+                },
+                {
+                  "key": "code_challenge",
+                  "value": "",
+                  "description": "Base64-encoded SHA256 hash of the code_verifier (PKCE flow only)",
+                  "disabled": true
+                },
+                {
+                  "key": "code_challenge_method",
+                  "value": "",
+                  "description": "Method used to generate code_challenge (PKCE flow only)",
+                  "disabled": true
+                },
+                {
+                  "key": "scope",
+                  "value": "",
+                  "description": "Space-separated list of scopes",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "OAuth Token Exchange",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "description": "Exchange authorization code for access token. Supports multiple grant types including Authorization Code, PKCE, and Resource Owner Password Credentials flows.",
+            "url": {
+              "raw": "https://www.inaturalist.org/oauth/token",
+              "host": [
+                "https://www.inaturalist.org"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{authorization_code}}",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirect_uri}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "OAuth Assertion Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Exchange a third-party access token (Facebook, Google) for an iNaturalist access token. This endpoint is only available to authorized partners.",
+            "url": {
+              "raw": "https://www.inaturalist.org/oauth/assertion_token",
+              "host": [
+                "https://www.inaturalist.org"
+              ],
+              "path": [
+                "oauth",
+                "assertion_token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{jwt_api_token}}",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
       "name": "Observation Field Values",
       "description": "Create, update, and delete",
       "item": [
@@ -3043,7 +3202,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -3087,7 +3246,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -3180,7 +3339,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -3234,7 +3393,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -3882,17 +4041,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -4461,17 +4620,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -5040,17 +5199,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -5619,17 +5778,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -5670,7 +5829,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "Must have this ID"
                 }
               ]
@@ -5701,7 +5860,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -5745,7 +5904,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -5781,7 +5940,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -5817,7 +5976,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -5853,7 +6012,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -5889,7 +6048,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -5925,7 +6084,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -5968,12 +6127,12 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 },
                 {
                   "key": "metric",
-                  "value": "{{metric}}",
+                  "value": "",
                   "description": "Data quality category"
                 }
               ]
@@ -6019,12 +6178,12 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 },
                 {
                   "key": "metric",
-                  "value": "{{metric}}",
+                  "value": "",
                   "description": "Data quality category"
                 }
               ]
@@ -6060,7 +6219,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -6087,7 +6246,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -6130,7 +6289,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -6182,7 +6341,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -9856,7 +10015,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -9915,7 +10074,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "Must have this ID or slug"
                 }
               ]
@@ -10055,22 +10214,22 @@
               "variable": [
                 {
                   "key": "place_id",
-                  "value": "{{place_id}}",
+                  "value": "",
                   "description": "Place ID"
                 },
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -10106,22 +10265,22 @@
               "variable": [
                 {
                   "key": "taxon_id",
-                  "value": "{{taxon_id}}",
+                  "value": "",
                   "description": "Taxon ID"
                 },
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -10163,22 +10322,22 @@
               "variable": [
                 {
                   "key": "taxon_id",
-                  "value": "{{taxon_id}}",
+                  "value": "",
                   "description": "Taxon ID"
                 },
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -10320,7 +10479,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10364,7 +10523,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10469,7 +10628,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10513,7 +10672,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10735,7 +10894,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "Must have this ID or slug"
                 }
               ]
@@ -10761,7 +10920,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10797,7 +10956,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10859,7 +11018,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10885,7 +11044,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "Must have this ID"
                 }
               ]
@@ -10921,7 +11080,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -10963,7 +11122,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11014,7 +11173,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11176,7 +11335,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11312,7 +11471,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "Must have this ID"
                 }
               ]
@@ -11536,7 +11695,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11561,7 +11720,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11623,7 +11782,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11715,7 +11874,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11751,7 +11910,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "{{id}}",
+                  "value": "",
                   "description": "ID of the record"
                 }
               ]
@@ -11836,6 +11995,76 @@
                   "language": "json"
                 }
               }
+            }
+          }
+        },
+        {
+          "name": "Get JWT API Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text",
+                "description": "Bearer token obtained from OAuth flow"
+              }
+            ],
+            "description": "Exchange an OAuth access token for a JWT (JSON Web Token) that can be used to authenticate API requests. The JWT expires after 24 hours.",
+            "url": {
+              "raw": "{{inat_base_url}}/users/api_token",
+              "host": [
+                "{{inat_base_url}}"
+              ],
+              "path": [
+                "users",
+                "api_token"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_api_token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Edit Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text",
+                "description": "Bearer token obtained from OAuth flow"
+              }
+            ],
+            "description": "Retrieve the authenticated user's profile data in edit format. This endpoint is used to verify OAuth token functionality.",
+            "url": {
+              "raw": "https://www.inaturalist.org/users/edit.json",
+              "host": [
+                "https://www.inaturalist.org"
+              ],
+              "path": [
+                "users",
+                "edit.json"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_api_token}}",
+                  "type": "string"
+                }
+              ]
             }
           }
         }
@@ -12417,17 +12646,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -12996,17 +13225,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -13575,17 +13804,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]
@@ -14154,17 +14383,17 @@
               "variable": [
                 {
                   "key": "zoom",
-                  "value": "{{zoom}}",
+                  "value": "",
                   "description": "Zoom level. Z coordinate in the XYZ tiling scheme"
                 },
                 {
                   "key": "x",
-                  "value": "{{x}}",
+                  "value": "",
                   "description": "X coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 },
                 {
                   "key": "y",
-                  "value": "{{y}}",
+                  "value": "",
                   "description": "Y coordinate in the XYZ tiling scheme. Must be less than 2^zoom"
                 }
               ]

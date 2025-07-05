@@ -85,13 +85,13 @@ Terms of Service: https://www.inaturalist.org/terms
 Privacy Policy: https://www.inaturalist.org/privacy
 
 
-This documentation covers the iNaturalist API endpoints organized by category. There are 20 categories with a total of 105 endpoints.
+This documentation covers the iNaturalist API endpoints organized by category. There are 21 categories with a total of 110 endpoints.
 
 **Version:** 1.3.0
 
 **Base URL:** `http://api.inaturalist.org/v1`
 
-**Authentication:** Many endpoints require authentication using Bearer tokens. 62 out of 105 endpoints require authentication.
+**Authentication:** Many endpoints require authentication using Bearer tokens. 64 out of 110 endpoints require authentication.
 
 ## Table of Contents
 
@@ -101,6 +101,7 @@ This documentation covers the iNaturalist API endpoints organized by category. T
 - [Flags](#flags) (3 endpoints)
 - [Identifications](#identifications) (11 endpoints)
 - [Messages](#messages) (5 endpoints)
+- [OAuth](#oauth) (3 endpoints)
 - [Observation Field Values](#observation-field-values) (3 endpoints)
 - [Observation Photos](#observation-photos) (3 endpoints)
 - [Observation Tiles](#observation-tiles) (4 endpoints)
@@ -113,7 +114,7 @@ This documentation covers the iNaturalist API endpoints organized by category. T
 - [Projects](#projects) (11 endpoints)
 - [Search](#search) (1 endpoints)
 - [Taxa](#taxa) (3 endpoints)
-- [Users](#users) (9 endpoints)
+- [Users](#users) (11 endpoints)
 - [UTFGrid](#utfgrid) (4 endpoints)
 
 ## Annotations
@@ -838,6 +839,100 @@ thread to which the specified message belongs.
 |------|-------------|
 | 200 | Number of unread messages |
 | default | Unexpected error |
+
+
+---
+
+## OAuth
+
+**Total Endpoints:** 3  
+**Requires Authentication:** 0  
+**Public Access:** 3  
+
+### Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/oauth/authorize` | 🔓 Optional | OAuth Authorization |
+| POST | `/oauth/token` | 🔓 Optional | OAuth Token Exchange |
+| POST | `/oauth/assertion_token` | 🔓 Optional | OAuth Assertion Token |
+
+### Endpoint Details
+
+#### GET /oauth/authorize
+
+**OAuth Authorization**
+
+Redirects the user to the OAuth authorization page where they can approve or deny your application's access request. Supports both standard Authorization Code flow and PKCE (Proof Key for Code Exchange) flow for mobile/SPA applications.
+
+**Authentication:** Not required
+
+**Parameters:**
+
+*Query Parameters:*
+
+| Name | Required | Type | Description |
+|------|----------|------|-------------|
+| `client_id` | Yes | string | Your application's client ID |
+| `redirect_uri` | Yes | string | URL to redirect the user after authorization |
+| `response_type` | Yes | string | OAuth response type |
+| `code_challenge` | No | string | Base64-encoded SHA256 hash of the code_verifier (PKCE flow only) |
+| `code_challenge_method` | No | string | Method used to generate code_challenge (PKCE flow only) |
+| `scope` | No | string | Space-separated list of scopes |
+
+**Responses:**
+
+| Code | Description |
+|------|-------------|
+| 302 | Redirects to authorization page or redirect_uri with authorization code |
+
+
+#### POST /oauth/token
+
+**OAuth Token Exchange**
+
+Exchange authorization code for access token. Supports multiple grant types including Authorization Code, PKCE, and Resource Owner Password Credentials flows.
+
+**Authentication:** Not required
+
+**Parameters:**
+
+**Request Body:**
+
+- **Content-Type:** `application/x-www-form-urlencoded`
+- **Required:** Yes
+
+**Responses:**
+
+| Code | Description |
+|------|-------------|
+| 200 | Access token response |
+| 400 | Invalid request |
+| 401 | Invalid client or credentials |
+
+
+#### POST /oauth/assertion_token
+
+**OAuth Assertion Token**
+
+Exchange a third-party access token (Facebook, Google) for an iNaturalist access token. This endpoint is only available to authorized partners.
+
+**Authentication:** Not required
+
+**Parameters:**
+
+**Request Body:**
+
+- **Content-Type:** `application/x-www-form-urlencoded`
+- **Required:** Yes
+
+**Responses:**
+
+| Code | Description |
+|------|-------------|
+| 200 | Access token response |
+| 400 | Invalid request |
+| 401 | Invalid assertion or unauthorized partner |
 
 
 ---
@@ -2433,8 +2528,8 @@ Given an string, returns taxa with names starting with the search term
 
 ## Users
 
-**Total Endpoints:** 9  
-**Requires Authentication:** 6  
+**Total Endpoints:** 11  
+**Requires Authentication:** 8  
 **Public Access:** 3  
 
 ### Endpoints
@@ -2450,6 +2545,8 @@ Given an string, returns taxa with names starting with the search term
 | DELETE | `/users/{id}/mute` | 🔒 Required | Unmute a User |
 | POST | `/users/resend_confirmation` | 🔒 Required | User Resend Confirmation |
 | PUT | `/users/update_session` | 🔒 Required | User Update Session |
+| GET | `/users/api_token` | 🔒 Required | Get JWT API Token |
+| GET | `/users/edit.json` | 🔒 Required | Get User Edit Profile |
 
 ### Endpoint Details
 
@@ -2615,6 +2712,54 @@ Update the logged-in user's session
 | 200 | OK |
 
 
+#### GET /users/api_token
+
+**Get JWT API Token**
+
+Exchange an OAuth access token for a JWT (JSON Web Token) that can be used to authenticate API requests. The JWT expires after 24 hours.
+
+**Authentication:** Required (Bearer token)
+
+**Parameters:**
+
+*Header Parameters:*
+
+| Name | Required | Description |
+|------|----------|-------------|
+| `Authorization` | Yes | Bearer token obtained from OAuth flow |
+
+**Responses:**
+
+| Code | Description |
+|------|-------------|
+| 200 | JWT token response |
+| 401 | Invalid or missing OAuth token |
+
+
+#### GET /users/edit.json
+
+**Get User Edit Profile**
+
+Retrieve the authenticated user's profile data in edit format. This endpoint is used to verify OAuth token functionality.
+
+**Authentication:** Required (Bearer token)
+
+**Parameters:**
+
+*Header Parameters:*
+
+| Name | Required | Description |
+|------|----------|-------------|
+| `Authorization` | Yes | Bearer token obtained from OAuth flow |
+
+**Responses:**
+
+| Code | Description |
+|------|-------------|
+| 200 | User profile data |
+| 401 | Invalid or missing OAuth token |
+
+
 ---
 
 ## UTFGrid
@@ -2730,20 +2875,20 @@ the search criteria
 
 | Metric | Value |
 |--------|-------|
-| Total Categories | 20 |
-| Total Endpoints | 105 |
-| Authenticated Endpoints | 62 |
-| Public Endpoints | 43 |
-| Auth Percentage | 59.0% |
+| Total Categories | 21 |
+| Total Endpoints | 110 |
+| Authenticated Endpoints | 64 |
+| Public Endpoints | 46 |
+| Auth Percentage | 58.2% |
 
 ### Endpoints by Method
 
 | Method | Count | Percentage |
 |--------|-------|------------|
-| POST | 22 | 21.0% |
-| DELETE | 18 | 17.1% |
-| PUT | 11 | 10.5% |
-| GET | 54 | 51.4% |
+| POST | 24 | 21.8% |
+| DELETE | 18 | 16.4% |
+| PUT | 11 | 10.0% |
+| GET | 57 | 51.8% |
 
 ### Categories by Size
 
@@ -2752,7 +2897,7 @@ the search criteria
 | Observations | 24 | 16 |
 | Identifications | 11 | 3 |
 | Projects | 11 | 7 |
-| Users | 9 | 6 |
+| Users | 11 | 8 |
 | Messages | 5 | 5 |
 | Posts | 5 | 5 |
 | Annotations | 4 | 4 |
@@ -2760,6 +2905,7 @@ the search criteria
 | UTFGrid | 4 | 0 |
 | Comments | 3 | 3 |
 | Flags | 3 | 3 |
+| OAuth | 3 | 0 |
 | Observation Field Values | 3 | 3 |
 | Observation Photos | 3 | 3 |
 | Places | 3 | 0 |

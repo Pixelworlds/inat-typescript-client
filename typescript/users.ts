@@ -131,4 +131,24 @@ export class Users {
   async user_update_session(data: Types.PostUserUpdateSession): Promise<AxiosResponse<any>> {
     return this.client.put(`/users/update_session`, data);
   }
+
+  /**
+   * Get JWT API Token
+   *
+   * Exchange an OAuth access token for a JWT (JSON Web Token) that can be used to authenticate API requests. The JWT expires after 24 hours.
+   * @requires Authentication
+   */
+  async get_jwt_api_token(): Promise<AxiosResponse<any>> {
+    return this.client.get(`/users/api_token`);
+  }
+
+  /**
+   * Get User Edit Profile
+   *
+   * Retrieve the authenticated user's profile data in edit format. This endpoint is used to verify OAuth token functionality.
+   * @requires Authentication
+   */
+  async get_user_edit_profile(): Promise<AxiosResponse<any>> {
+    return this.client.get(`/users/edit.json`);
+  }
 }

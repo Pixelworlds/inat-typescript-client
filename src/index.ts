@@ -2,6 +2,7 @@ import { INaturalistHttpClient } from './http-client';
 import type { INaturalistConfig, HttpClient } from './types';
 
 import { Comments } from './comments';
+import { Oauth } from './oauth';
 import { ObservationFieldValues } from './observation-field-values';
 import { Photos } from './photos';
 import { Annotations } from './annotations';
@@ -16,7 +17,7 @@ import { Identifications } from './identifications';
 import { ProjectObservations } from './project-observations';
 import { ControlledTerms } from './controlled-terms';
 import { Posts } from './posts';
-import { UTFGrid } from './utfgrid';
+import { Utfgrid } from './utfgrid';
 import { Observations } from './observations';
 import { Flags } from './flags';
 import { Places } from './places';
@@ -29,6 +30,7 @@ export * from './types/swagger-types';
 
 export {
   Comments,
+  Oauth,
   ObservationFieldValues,
   Photos,
   Annotations,
@@ -43,7 +45,7 @@ export {
   ProjectObservations,
   ControlledTerms,
   Posts,
-  UTFGrid,
+  Utfgrid,
   Observations,
   Flags,
   Places,
@@ -56,6 +58,7 @@ export class INaturalistClient {
   private http: HttpClient;
 
   public readonly comments: Comments;
+  public readonly oauth: Oauth;
   public readonly observation_field_values: ObservationFieldValues;
   public readonly photos: Photos;
   public readonly annotations: Annotations;
@@ -70,7 +73,7 @@ export class INaturalistClient {
   public readonly project_observations: ProjectObservations;
   public readonly controlled_terms: ControlledTerms;
   public readonly posts: Posts;
-  public readonly utfgrid: UTFGrid;
+  public readonly utfgrid: Utfgrid;
   public readonly observations: Observations;
   public readonly flags: Flags;
   public readonly places: Places;
@@ -95,6 +98,7 @@ export class INaturalistClient {
     this.http = new INaturalistHttpClient(config);
 
     this.comments = new Comments(this.http);
+    this.oauth = new Oauth(this.http);
     this.observation_field_values = new ObservationFieldValues(this.http);
     this.photos = new Photos(this.http);
     this.annotations = new Annotations(this.http);
@@ -109,7 +113,7 @@ export class INaturalistClient {
     this.project_observations = new ProjectObservations(this.http);
     this.controlled_terms = new ControlledTerms(this.http);
     this.posts = new Posts(this.http);
-    this.utfgrid = new UTFGrid(this.http);
+    this.utfgrid = new Utfgrid(this.http);
     this.observations = new Observations(this.http);
     this.flags = new Flags(this.http);
     this.places = new Places(this.http);

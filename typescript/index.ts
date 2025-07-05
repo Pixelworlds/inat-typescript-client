@@ -21,6 +21,7 @@ import { Users } from './users';
 import { ObservationTiles } from './observation-tiles';
 import { UTFGrid } from './utfgrid';
 import { PolygonTiles } from './polygon-tiles';
+import { OAuth } from './oauth';
 
 export class INaturalistClient {
   private client: AxiosInstance;
@@ -44,6 +45,7 @@ export class INaturalistClient {
   public observation_tiles: ObservationTiles;
   public utfgrid: UTFGrid;
   public polygon_tiles: PolygonTiles;
+  public oauth: OAuth;
 
   constructor(baseURL: string = 'https://api.inaturalist.org/v1', apiToken?: string) {
     this.client = axios.create({
@@ -75,6 +77,7 @@ export class INaturalistClient {
     this.observation_tiles = new ObservationTiles(this.client);
     this.utfgrid = new UTFGrid(this.client);
     this.polygon_tiles = new PolygonTiles(this.client);
+    this.oauth = new OAuth(this.client);
   }
 
   setApiToken(token: string): void {
@@ -86,4 +89,4 @@ export class INaturalistClient {
   }
 }
 
-export { Annotations, Comments, ControlledTerms, Flags, Identifications, Messages, Observations, ObservationFieldValues, ObservationPhotos, Photos, Places, Posts, ProjectObservations, Projects, Search, Taxa, Users, ObservationTiles, UTFGrid, PolygonTiles };
+export { Annotations, Comments, ControlledTerms, Flags, Identifications, Messages, Observations, ObservationFieldValues, ObservationPhotos, Photos, Places, Posts, ProjectObservations, Projects, Search, Taxa, Users, ObservationTiles, UTFGrid, PolygonTiles, OAuth };

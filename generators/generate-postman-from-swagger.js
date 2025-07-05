@@ -6,9 +6,48 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const swaggerPath = path.join(__dirname, '..', 'data', 'swagger.json');
+const swaggerAuthPath = path.join(__dirname, '..', 'data', 'swagger-auth.json');
 const outputPath = path.join(__dirname, '..', 'postman', 'iNaturalist_API_Collection.postman_collection.json');
 
 const swagger = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));
+const swaggerAuth = JSON.parse(fs.readFileSync(swaggerAuthPath, 'utf8'));
+
+// Merge swagger files
+swagger.paths = {
+  ...swagger.paths,
+  ...swaggerAuth.paths
+};
+
+// Merge tags
+swagger.tags = swagger.tags || [];
+if (swaggerAuth.tags) {
+  swaggerAuth.tags.forEach(tag => {
+    if (!swagger.tags.find(t => t.name === tag.name)) {
+      swagger.tags.push(tag);
+    }
+  });
+}
+
+// Also ensure tags are created for any paths that have tags
+Object.entries(swaggerAuth.paths || {}).forEach(([path, methods]) => {
+  Object.entries(methods).forEach(([method, endpoint]) => {
+    if (endpoint.tags) {
+      endpoint.tags.forEach(tag => {
+        if (!swagger.tags.find(t => t.name === tag)) {
+          swagger.tags.push({ name: tag, description: '' });
+        }
+      });
+    }
+  });
+});
+
+// Merge definitions for parameter references
+swagger.definitions = {
+  ...swagger.definitions,
+  ...swaggerAuth.definitions
+};
+
+console.log('Tags after merge:', swagger.tags.map(t => t.name || t));
 
 // Create folders for each tag
 const folders = {};
@@ -91,7 +130,7 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
           case 'path':
             pathParams.push({
               key: param.name,
-              value: `{{${param.name}}}`,
+              value: '',
               description: param.description || ''
             });
             break;
@@ -181,12 +220,25 @@ Object.entries(swagger.paths).forEach(([path, methods]) => {
 
     // Build the URL object
     const urlParts = postmanPath.split('/').filter(p => p);
-    request.request.url = {
-      raw: `{{inat_base_url}}${postmanPath}`,
-      host: ['{{inat_base_url}}'],
-      path: urlParts,
-      query: queryParams.length > 0 ? queryParams : undefined
-    };
+    
+    // OAuth endpoints should use the full URL
+    const isOAuthEndpoint = path.startsWith('/oauth/') || path === '/users/edit.json';
+    
+    if (isOAuthEndpoint) {
+      request.request.url = {
+        raw: `https://www.inaturalist.org${postmanPath}`,
+        host: ['https://www.inaturalist.org'],
+        path: urlParts,
+        query: queryParams.length > 0 ? queryParams : undefined
+      };
+    } else {
+      request.request.url = {
+        raw: `{{inat_base_url}}${postmanPath}`,
+        host: ['{{inat_base_url}}'],
+        path: urlParts,
+        query: queryParams.length > 0 ? queryParams : undefined
+      };
+    }
 
     // Add headers
     if (headerParams.length > 0) {

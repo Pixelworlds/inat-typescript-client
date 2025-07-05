@@ -211,7 +211,7 @@
       "get": {
         "summary": "Get JWT API Token",
         "description": "Exchange an OAuth access token for a JWT (JSON Web Token) that can be used to authenticate API requests. The JWT expires after 24 hours.",
-        "tags": ["Authentication"],
+        "tags": ["Users"],
         "security": [{"oauth2": ["read", "write"]}],
         "parameters": [
           {

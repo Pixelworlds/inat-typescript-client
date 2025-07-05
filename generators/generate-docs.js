@@ -7,6 +7,7 @@ class DocumentationGenerator {
   constructor() {
     this.config = {
       inputFile: join(process.cwd(), 'data', 'swagger.json'),
+      authInputFile: join(process.cwd(), 'data', 'swagger-auth.json'),
       outputDir: join(process.cwd(), 'docs'),
     };
 
@@ -45,7 +46,33 @@ class SwaggerLoader {
     }
 
     const data = readFileSync(this.config.inputFile, 'utf8');
-    return JSON.parse(data);
+    const swagger = JSON.parse(data);
+    
+    // Also load swagger-auth.json if it exists and merge
+    if (existsSync(this.config.authInputFile)) {
+      const authData = readFileSync(this.config.authInputFile, 'utf8');
+      const swaggerAuth = JSON.parse(authData);
+      
+      // Merge paths
+      swagger.paths = {
+        ...swagger.paths,
+        ...swaggerAuth.paths
+      };
+      
+      // Merge tags
+      swagger.tags = swagger.tags || [];
+      if (swaggerAuth.tags) {
+        swaggerAuth.tags.forEach(tag => {
+          if (!swagger.tags.find(t => t.name === tag.name)) {
+            swagger.tags.push(tag);
+          }
+        });
+      }
+      
+      console.log(`Merged ${Object.keys(swaggerAuth.paths || {}).length} paths from swagger-auth.json`);
+    }
+    
+    return swagger;
   }
 
   extractApiInfo(swagger) {
