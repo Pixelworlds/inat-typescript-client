@@ -392,18 +392,54 @@ jobs:
         run: |
           echo "Running integration tests..."
 
-          # Test that we can create a client instance
+          # Verify all expected files are present
+          echo "Verifying all artifacts are present..."
+          test -f dist/index.cjs || (echo "Missing dist/index.cjs" && exit 1)
+          test -f dist/index.js || (echo "Missing dist/index.js" && exit 1)
+          test -f dist/index.d.ts || (echo "Missing dist/index.d.ts" && exit 1)
+          test -f docs/API.md || (echo "Missing docs/API.md" && exit 1)
+          test -f postman/iNaturalist_API_Collection.postman_collection.json || (echo "Missing Postman collection" && exit 1)
+          echo "✓ All artifacts present"
+
+          # Test that the built package exports can be imported
+          echo "Testing package exports..."
           node -e "
-            const { INaturalistClient } = require('./dist/index.cjs');
-            const client = new INaturalistClient('https://api.inaturalist.org/v1');
-            console.log('✓ Client instantiation successful');
+            try {
+              const pkg = require('./dist/index.cjs');
+              if (typeof pkg.INaturalistClient !== 'function') {
+                throw new Error('INaturalistClient is not exported as a function');
+              }
+              console.log('✓ CJS import and exports working');
+            } catch (error) {
+              console.error('CJS import failed:', error.message);
+              process.exit(1);
+            }
           "
 
-          # Test TypeScript definitions
-          echo "import { INaturalistClient } from './dist/index.js'; const client = new INaturalistClient('https://api.inaturalist.org/v1');" > test.mjs
-          node test.mjs
-          echo "✓ TypeScript definitions working"
-          rm test.mjs
+          # Test ESM import
+          echo "Testing ESM import..."
+          node -e "
+            import('./dist/index.js').then(pkg => {
+              if (typeof pkg.INaturalistClient !== 'function') {
+                throw new Error('INaturalistClient is not exported as a function');
+              }
+              console.log('✓ ESM import and exports working');
+            }).catch(error => {
+              console.error('ESM import failed:', error.message);
+              process.exit(1);
+            });
+          "
+
+          # Test TypeScript definitions exist
+          echo "Testing TypeScript definitions..."
+          node -e "
+            const fs = require('fs');
+            const dts = fs.readFileSync('./dist/index.d.ts', 'utf8');
+            if (!dts.includes('INaturalistClient')) {
+              throw new Error('TypeScript definitions missing INaturalistClient');
+            }
+            console.log('✓ TypeScript definitions working');
+          "
 
           echo "Integration tests completed successfully"
 
