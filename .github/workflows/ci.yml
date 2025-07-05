@@ -392,52 +392,105 @@ jobs:
         run: |
           echo "Running integration tests..."
 
+          # Show current directory structure for debugging
+          echo "Current directory structure:"
+          ls -la
+          echo "Artifacts directory:"
+          ls -la artifacts/ || echo "No artifacts directory"
+          echo "Dist directory:"
+          ls -la dist/ || echo "No dist directory"
+
           # Verify all expected files are present
           echo "Verifying all artifacts are present..."
-          test -f dist/index.cjs || (echo "Missing dist/index.cjs" && exit 1)
-          test -f dist/index.js || (echo "Missing dist/index.js" && exit 1)
-          test -f dist/index.d.ts || (echo "Missing dist/index.d.ts" && exit 1)
-          test -f docs/API.md || (echo "Missing docs/API.md" && exit 1)
-          test -f postman/iNaturalist_API_Collection.postman_collection.json || (echo "Missing Postman collection" && exit 1)
-          echo "✓ All artifacts present"
+
+          if [ ! -f dist/index.cjs ]; then
+            echo "Missing dist/index.cjs"
+            exit 1
+          fi
+          echo "✓ dist/index.cjs found"
+
+          if [ ! -f dist/index.js ]; then
+            echo "Missing dist/index.js"
+            exit 1
+          fi
+          echo "✓ dist/index.js found"
+
+          if [ ! -f dist/index.d.ts ]; then
+            echo "Missing dist/index.d.ts"
+            exit 1
+          fi
+          echo "✓ dist/index.d.ts found"
+
+          if [ ! -f docs/API.md ]; then
+            echo "Missing docs/API.md"
+            exit 1
+          fi
+          echo "✓ docs/API.md found"
+
+          if [ ! -f postman/iNaturalist_API_Collection.postman_collection.json ]; then
+            echo "Missing Postman collection"
+            exit 1
+          fi
+          echo "✓ Postman collection found"
+
+          echo "All artifacts present!"
 
           # Test that the built package can be required (CJS)
           echo "Testing CJS import..."
           node -e "
-            try {
-              const pkg = require('./dist/index.cjs');
-              console.log('Available exports:', Object.keys(pkg).join(', '));
-              if (!pkg.INaturalistClient) {
-                throw new Error('INaturalistClient not found in exports');
-              }
-              if (typeof pkg.INaturalistClient !== 'function') {
-                throw new Error('INaturalistClient is not a function');
-              }
-              console.log('✓ CJS import successful');
-            } catch (error) {
-              console.error('CJS import failed:', error.message);
+            const pkg = require('./dist/index.cjs');
+            console.log('Available exports:', Object.keys(pkg).slice(0, 5).join(', ') + '...');
+            if (typeof pkg.INaturalistClient !== 'function') {
+              console.error('INaturalistClient is not a function, got:', typeof pkg.INaturalistClient);
               process.exit(1);
             }
+            console.log('✓ CJS import successful');
           "
 
           # Test file contents and structure
           echo "Testing file structure..."
 
           # Check that built files are not empty
-          test -s dist/index.cjs || (echo "dist/index.cjs is empty" && exit 1)
-          test -s dist/index.js || (echo "dist/index.js is empty" && exit 1)
-          test -s dist/index.d.ts || (echo "dist/index.d.ts is empty" && exit 1)
+          if [ ! -s dist/index.cjs ]; then
+            echo "dist/index.cjs is empty"
+            exit 1
+          fi
+          echo "✓ dist/index.cjs is not empty"
+
+          if [ ! -s dist/index.js ]; then
+            echo "dist/index.js is empty"
+            exit 1
+          fi
+          echo "✓ dist/index.js is not empty"
+
+          if [ ! -s dist/index.d.ts ]; then
+            echo "dist/index.d.ts is empty"
+            exit 1
+          fi
+          echo "✓ dist/index.d.ts is not empty"
 
           # Check TypeScript definitions contain expected exports
-          grep -q "INaturalistClient" dist/index.d.ts || (echo "TypeScript definitions missing INaturalistClient" && exit 1)
+          if ! grep -q "INaturalistClient" dist/index.d.ts; then
+            echo "TypeScript definitions missing INaturalistClient"
+            echo "First few lines of dist/index.d.ts:"
+            head -10 dist/index.d.ts
+            exit 1
+          fi
+          echo "✓ TypeScript definitions contain INaturalistClient"
 
           # Check documentation contains expected content
-          grep -q "iNaturalist API" docs/API.md || (echo "API documentation missing expected content" && exit 1)
+          if ! grep -q "iNaturalist API" docs/API.md; then
+            echo "API documentation missing expected content"
+            echo "First few lines of docs/API.md:"
+            head -10 docs/API.md
+            exit 1
+          fi
+          echo "✓ Documentation contains expected content"
 
           # Check Postman collection is valid JSON
           node -e "
+            const fs = require('fs');
             try {
-              const fs = require('fs');
               const collection = JSON.parse(fs.readFileSync('postman/iNaturalist_API_Collection.postman_collection.json', 'utf8'));
               if (!collection.info || !collection.info.name) {
                 throw new Error('Invalid Postman collection structure');
@@ -449,7 +502,7 @@ jobs:
             }
           "
 
-          echo "✓ All integration tests passed successfully"
+          echo "✓ All integration tests passed successfully!"
 
   # Summary job
   ci-summary:
