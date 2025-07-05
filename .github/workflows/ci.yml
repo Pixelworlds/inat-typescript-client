@@ -418,16 +418,17 @@ jobs:
 
           # Test ESM import
           echo "Testing ESM import..."
-          node -e "
-            import('./dist/index.js').then(pkg => {
+          node --input-type=module -e "
+            try {
+              const pkg = await import('./dist/index.js');
               if (typeof pkg.INaturalistClient !== 'function') {
                 throw new Error('INaturalistClient is not exported as a function');
               }
               console.log('✓ ESM import and exports working');
-            }).catch(error => {
+            } catch (error) {
               console.error('ESM import failed:', error.message);
               process.exit(1);
-            });
+            }
           "
 
           # Test TypeScript definitions exist
