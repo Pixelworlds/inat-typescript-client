@@ -1,4 +1,4 @@
-import type { ApiResponse, HttpClient } from './types';
+import type { HttpClient, ApiResponse } from './types';
 import type * as Types from './types/swagger-types';
 
 export interface IdentificationSearchParams {

@@ -1,7 +1,18 @@
 #!/usr/bin/env bun
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, rmSync, statSync, readdirSync, unlinkSync, copyFileSync } from 'fs';
-import { dirname, join, resolve } from 'path';
+import { execSync } from 'child_process';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from 'fs';
+import { join, resolve } from 'path';
 
 class INaturalistSDKGenerator {
   constructor() {
@@ -30,7 +41,7 @@ class INaturalistSDKGenerator {
 
   getAllModules() {
     const modules = [];
-    
+
     if (!existsSync(this.typescriptDir)) {
       throw new Error(`TypeScript modules directory not found: ${this.typescriptDir}`);
     }
@@ -131,17 +142,29 @@ export interface INaturalistConfig {
 
     writeFileSync(join(this.srcDir, 'types.ts'), typesContent);
     console.log('Generated shared types');
-    
+
     // Also copy swagger types if they exist
     const swaggerTypesSource = join(this.projectRoot, 'src', 'types', 'swagger-types.ts');
     const swaggerTypesTarget = join(this.srcDir, 'types');
-    
+
     if (existsSync(swaggerTypesSource)) {
       if (!existsSync(swaggerTypesTarget)) {
         mkdirSync(swaggerTypesTarget, { recursive: true });
       }
       copyFileSync(swaggerTypesSource, join(swaggerTypesTarget, 'swagger-types.ts'));
       console.log('Copied swagger-generated types');
+    } else {
+      // Generate the types first if they don't exist
+      console.log('Swagger types not found, generating them first...');
+      execSync('bun run generate:types', { cwd: this.projectRoot });
+
+      if (existsSync(swaggerTypesSource)) {
+        if (!existsSync(swaggerTypesTarget)) {
+          mkdirSync(swaggerTypesTarget, { recursive: true });
+        }
+        copyFileSync(swaggerTypesSource, join(swaggerTypesTarget, 'swagger-types.ts'));
+        console.log('Generated and copied swagger types');
+      }
     }
   }
 
