@@ -6,12 +6,10 @@ import { OAuth } from './oauth';
 import { ObservationFieldValues } from './observation-field-values';
 import { Photos } from './photos';
 import { Annotations } from './annotations';
-import { ObservationFields } from './observation-fields';
 import { Projects } from './projects';
 import { PolygonTiles } from './polygon-tiles';
 import { Search } from './search';
 import { Messages } from './messages';
-import { Authentication } from './authentication';
 import { Taxa } from './taxa';
 import { Identifications } from './identifications';
 import { ProjectObservations } from './project-observations';
@@ -34,12 +32,10 @@ export {
   ObservationFieldValues,
   Photos,
   Annotations,
-  ObservationFields,
   Projects,
   PolygonTiles,
   Search,
   Messages,
-  Authentication,
   Taxa,
   Identifications,
   ProjectObservations,
@@ -62,12 +58,10 @@ export class INaturalistClient {
   public readonly observation_field_values: ObservationFieldValues;
   public readonly photos: Photos;
   public readonly annotations: Annotations;
-  public readonly observation_fields: ObservationFields;
   public readonly projects: Projects;
   public readonly polygon_tiles: PolygonTiles;
   public readonly search: Search;
   public readonly messages: Messages;
-  public readonly authentication: Authentication;
   public readonly taxa: Taxa;
   public readonly identifications: Identifications;
   public readonly project_observations: ProjectObservations;
@@ -102,12 +96,10 @@ export class INaturalistClient {
     this.observation_field_values = new ObservationFieldValues(this.http);
     this.photos = new Photos(this.http);
     this.annotations = new Annotations(this.http);
-    this.observation_fields = new ObservationFields(this.http);
     this.projects = new Projects(this.http);
     this.polygon_tiles = new PolygonTiles(this.http);
     this.search = new Search(this.http);
     this.messages = new Messages(this.http);
-    this.authentication = new Authentication(this.http);
     this.taxa = new Taxa(this.http);
     this.identifications = new Identifications(this.http);
     this.project_observations = new ProjectObservations(this.http);

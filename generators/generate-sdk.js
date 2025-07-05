@@ -42,8 +42,12 @@ class INaturalistSDKGenerator {
   getAllModules() {
     const modules = [];
 
-    if (!existsSync(this.typescriptDir)) {
-      console.log('TypeScript modules directory not found, generating modules first...');
+    // Check if typescript directory exists and has .ts files
+    const shouldGenerateModules = !existsSync(this.typescriptDir) || 
+      (existsSync(this.typescriptDir) && readdirSync(this.typescriptDir).filter(f => f.endsWith('.ts')).length === 0);
+
+    if (shouldGenerateModules) {
+      console.log('TypeScript modules not found, generating modules first...');
       try {
         execSync('bun run generate:modules', {
           cwd: this.projectRoot,
@@ -68,6 +72,11 @@ class INaturalistSDKGenerator {
     }
 
     console.log(`Found ${modules.length} modules to include`);
+    
+    if (modules.length === 0) {
+      throw new Error('No TypeScript modules found after generation. Please check the module generation process.');
+    }
+    
     return modules;
   }
 

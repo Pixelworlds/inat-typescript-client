@@ -188,6 +188,10 @@ jobs:
       - name: Generate complete SDK
         run: |
           echo "Generating complete SDK..."
+          echo "Checking typescript directory contents:"
+          ls -la typescript/ || echo "typescript directory not found"
+          echo "Number of .ts files in typescript/:"
+          find typescript -name "*.ts" -type f | wc -l || echo "0"
           bun run generate:sdk
           echo "Verifying generated SDK structure..."
           test -f src/index.ts || (echo "Missing src/index.ts" && exit 1)
