@@ -1,6 +1,6 @@
 {
   "name": "@richard-stovall/inat-typescript-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript client for iNaturalist API",
   "type": "module",
   "homepage": "https://github.com/richard-stovall/inat-typescript-client#readme",
