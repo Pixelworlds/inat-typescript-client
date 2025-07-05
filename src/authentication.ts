@@ -21,6 +21,19 @@ export class Authentication {
    * OAuth token exchange endpoint - exchange authorization code for access token
    */
   async post_oauth_token(data?: any): Promise<ApiResponse<any>> {
-    return this.http.post(`/oauth/token`, { data });
+    const formData = new URLSearchParams();
+    if (data) {
+      Object.keys(data).forEach(key => {
+        if (data[key] !== undefined && data[key] !== null) {
+          formData.append(key, data[key].toString());
+        }
+      });
+    }
+    
+    return this.http.post(`/oauth/token`, formData.toString(), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
   }
 }
