@@ -44,7 +44,15 @@ class INaturalistSDKGenerator {
 
     if (!existsSync(this.typescriptDir)) {
       console.log('TypeScript modules directory not found, generating modules first...');
-      execSync('bun run generate:modules', { cwd: this.projectRoot });
+      try {
+        execSync('bun run generate:modules', {
+          cwd: this.projectRoot,
+          stdio: 'inherit',
+        });
+      } catch (error) {
+        console.error('Failed to generate TypeScript modules:', error.message);
+        throw new Error('TypeScript module generation failed');
+      }
     }
 
     if (!existsSync(this.typescriptDir)) {
@@ -179,7 +187,15 @@ export interface INaturalistConfig {
     } else {
       // Generate the types first if they don't exist
       console.log('Swagger types not found, generating them first...');
-      execSync('bun run generate:types', { cwd: this.projectRoot });
+      try {
+        execSync('bun run generate:types', {
+          cwd: this.projectRoot,
+          stdio: 'inherit',
+        });
+      } catch (error) {
+        console.error('Failed to generate swagger types:', error.message);
+        throw new Error('Swagger types generation failed');
+      }
 
       if (existsSync(swaggerTypesSource)) {
         if (!existsSync(swaggerTypesTarget)) {
@@ -187,6 +203,9 @@ export interface INaturalistConfig {
         }
         copyFileSync(swaggerTypesSource, join(swaggerTypesTarget, 'swagger-types.ts'));
         console.log('Generated and copied swagger types');
+      } else {
+        console.error('Swagger types still not found after generation');
+        throw new Error('Failed to generate swagger types');
       }
     }
   }
@@ -333,11 +352,25 @@ export default INaturalistClient;
       this.generateHttpClient();
       this.generateMainIndex(modules);
 
+      // Verify all required files exist
+      const requiredFiles = ['index.ts', 'http-client.ts', 'types.ts'];
+      console.log('\nVerifying required files...');
+      for (const file of requiredFiles) {
+        const filePath = join(this.srcDir, file);
+        if (existsSync(filePath)) {
+          console.log(`✓ ${file} exists`);
+        } else {
+          console.error(`✗ ${file} missing`);
+          throw new Error(`Required file missing: ${file}`);
+        }
+      }
+
       console.log('\nSDK generation completed successfully!');
       console.log(`Generated SDK with ${modules.length} modules`);
       console.log('Run "bun run build" to compile the SDK');
     } catch (error) {
       console.error('SDK generation failed:', error.message);
+      console.error('Error details:', error);
       process.exit(1);
     }
   }
